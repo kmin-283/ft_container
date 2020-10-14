@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:41:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/12 16:53:08 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/14 13:54:20 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ namespace ft
         const Node<T> *mNode;
         std::string mIteratorCategory;
     public:
-        
+
         typedef T value_type;
         typedef const T* pointer;
         typedef const T& reference;
@@ -90,22 +90,6 @@ namespace ft
         bool operator!=(const _Self &rhs) const
         {
             return (this->mNode != rhs.mNode);
-        }
-        bool operator>(const _Self &rhs) const
-        {
-            return (this->mNode > rhs.mNode);
-        }
-        bool operator>=(const _Self &rhs) const
-        {
-            return (this->mNode >= rhs.mNode);
-        }
-        bool operator<(const _Self &rhs) const
-        {
-            return (this->mNode < rhs.mNode);
-        }
-        bool operator<=(const _Self &rhs) const
-        {
-            return (this->mNode <= rhs.mNode);
         }
         virtual ~ConstIterator() {}
     };
