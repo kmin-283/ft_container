@@ -10,12 +10,35 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "Iterator/ConstIterator.hpp"
-#include "List/List.hpp"
+// #include <list>
+// #include "List/List.hpp"
 #include <iostream>
-#include <string>
+struct A
+{
+    int b;
+};
+
+struct B : public A
+{
+    B(A b)
+        : A(b)
+    {}
+};
+
+struct C : public B
+{
+    C();
+    C(A b)
+        : B(b)
+    {}
+};
+
 
 int main()
 {
+    struct A a;
+    struct C c(a);
+    c.b = 1;
+    std::cout << c.b << std::endl;
     return (0);
 }

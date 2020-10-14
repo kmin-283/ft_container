@@ -1,0 +1,15 @@
+{
+    "files.associations": {
+        "memory": "cpp",
+        "list": "cpp",
+        "__config": "cpp",
+        "memory_resource": "cpp",
+        "iterator": "cpp",
+        "new": "cpp",
+        "type_traits": "cpp",
+        "array": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "vector": "cpp"
+    }
+}

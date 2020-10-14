@@ -167,29 +167,29 @@ namespace ft
 template <typename Val>
 inline bool operator==(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
 {
-    return (x.mNode->getSelf() == y.mNode->getSelf());
+    return (x.mNode == y.mNode);
 }
 template <typename Val>
 inline bool operator!=(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
 {
-    return (x.mNode->getSelf() != y.mNode->getSelf());
+    return (x.mNode != y.mNode);
 }
 template <typename Val>
 inline bool operator>(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
 {
-    return (x.mNode->getSelf() > y.mNode->getSelf());
+    return (x.mNode > y.mNode);
 }
 template <typename Val>
 inline bool operator>=(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
 {
-    return (x.mNode->getSelf() >= y.mNode->getSelf());
+    return (x.mNode >= y.mNode);
 }template <typename Val>
 inline bool operator<(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
 {
-    return (x.mNode->getSelf() < y.mNode->getSelf());
+    return (x.mNode < y.mNode);
 }
 template <typename Val>
 inline bool operator<=(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
 {
-    return (x.mNode->getSelf() <= y.mNode->getSelf());
+    return (x.mNode <= y.mNode);
 }

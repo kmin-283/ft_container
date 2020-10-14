@@ -1,10 +1,9 @@
 NAME = container
 
 CC = clang++
-CFLAGS = -Wall -Werror -Wextra
+CFLAGS = -std=c++98 -Wall -Werror -Wextra
 
-INCS =	Node/Node.hpp Iterator/Iterator.hpp ConstIterator/ConstIterator.hpp\
-		List/List.hpp
+INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 SRCS = main.cpp
 
 OBJS = $(SRCS:%.cpp=%.o)
