@@ -25,7 +25,7 @@ namespace ft
     class Iterator
     {
     public:
-        Node_base *mNode;
+        NodeBase *mNode;
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;
@@ -39,7 +39,7 @@ namespace ft
             : mNode()
         {
         }
-        Iterator(_Node *other)
+        Iterator(NodeBase *other)
             : mNode(other)
         {
         }
@@ -93,7 +93,7 @@ namespace ft
     class ConstIterator
     {
     public:
-        const Node_base *mNode;
+        const NodeBase *mNode;
 
         typedef T value_type;
         typedef const T* pointer;
@@ -109,7 +109,7 @@ namespace ft
             : mNode()
         {
         }
-        ConstIterator(const _Node *other)
+        ConstIterator(const NodeBase *other)
             : mNode(other)
         {
         }

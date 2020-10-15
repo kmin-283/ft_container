@@ -10,35 +10,31 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <list>
-// #include "List/List.hpp"
+#include <list>
+#include "List/List.hpp"
 #include <iostream>
-struct A
-{
-    int b;
-};
-
-struct B : public A
-{
-    B(A b)
-        : A(b)
-    {}
-};
-
-struct C : public B
-{
-    C();
-    C(A b)
-        : B(b)
-    {}
-};
-
 
 int main()
 {
-    struct A a;
-    struct C c(a);
-    c.b = 1;
-    std::cout << c.b << std::endl;
+    ft::list<int> lst;
+    std::list<int> lst2;
+    lst.push_back(1);
+    std::cout << lst.front() << std::endl;
+    lst.push_back(12);
+    std::cout << lst.front() << std::endl;
+    lst.push_back(13);
+    lst.push_back(17);
+    std::cout << lst.front() << std::endl;
+    std::cout << lst.back() << std::endl;
+    
+    lst2.push_back(1);
+    std::cout << lst2.front() << std::endl;
+    lst2.push_back(12);
+    std::cout << lst2.front() << std::endl;
+    lst2.push_back(13);
+    std::cout << lst2.front() << std::endl;
+    std::cout << lst2.back() << std::endl;
+    
+
     return (0);
 }

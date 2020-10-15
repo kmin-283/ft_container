@@ -22,11 +22,11 @@ namespace ft
     {
     protected:
         typedef typename _Alloc::template rebind<Node<T> >::other _Node_Alloc_type;
-        struct ListImpl : public _Node_Alloc_type // node<T>를 상속받음
+        struct ListImpl : public _Node_Alloc_type // NodeBase allocator를 상속받음
         {
-            Node_base mNode; //Node와 Node_Base는 다름
-            ListImpl(const _Node_Alloc_type &__a) // Node<T> __a를 받아서
-                : _Node_Alloc_type(__a) // 동일한 Node<T> __a 를 생성
+            NodeBase mNode;
+            ListImpl(const _Node_Alloc_type &__a) // NodeBase allocator object를 받아서
+                : _Node_Alloc_type(__a) // NodeBase allocator object 생성.
             {
             }
         };
@@ -101,6 +101,7 @@ namespace ft
             catch (...)
             {
                 this->mPutNode(__p);
+                throw;
             }
             return (__p);
         }
@@ -114,36 +115,37 @@ namespace ft
             catch(...)
             {
                 this->mPutNode(__p);
+                throw;
             }
             return (__p);
         }
     public:
-        explicit list(const allocator_type &__a = allocator_type())
+        explicit list(const allocator_type &__a = allocator_type()) // default constructor
             : _Base(__a)
         {
         }
-        list(size_type __n, const value_type &__value, const allocator_type &__a = allocator_type())
+        list(size_type __n, const value_type &__value, const allocator_type &__a = allocator_type()) // fill constructor
             : _Base(__a)
         {
             this->insert(begin(), __n, __value);
         }
-        explicit list(size_type __n)
+        explicit list(size_type __n) // size constructor?
             : _Base(allocator_type())
         {
             this->insert(begin(), __n, value_type());
         }
-        list(const list &__x)
+        list(const list &__x) // copy constructor
             : _Base(__x.getAllocator())
         {
             this->insert(begin(), __x.begin(), __x.end());
         }
         template <typename _InputIterator>
-        list(_InputIterator __first, _InputIterator __last, const allocator_type &__a = allocator_type())
+        list(_InputIterator __first, _InputIterator __last, const allocator_type &__a = allocator_type()) // range constructor
             : _Base(__a)
         {
             this->insert(begin(), __first, __last);
         }
-        list &operator=(const list &__x)
+        list &operator=(const list &__x) // assign operator
         {
             // iterator로 반복을 돌면서 __x의 크기만큼 Node<T>생성 //
             (void)__x;
@@ -207,6 +209,182 @@ namespace ft
         {
             return (size_type(-1));
         }
-        ~list();
+        void resize(size_type __new_size, const value_type &__x)
+        {
+            (void)__new_size;
+            (void)__x;
+        }
+        void resize(size_type __new_size)
+        {
+            this->resize(__new_size, value_type());
+        }
+        reference front()
+        {
+            return (*begin());
+        }
+        const_reference front() const
+        {
+            return (*begin());
+        }
+        reference back()
+        {
+            return *(--end());
+        }
+        const_reference back() const
+        {
+            return *(--end());
+        }
+        void push_front(const value_type &__x)
+        {
+            this->mInsert(begin(), __x);
+        }
+        void pop_front()
+        {
+            this->mErase(begin());
+        }
+        void push_back(const value_type &__x)
+        {
+            this->mInsert(end(), __x);
+        }
+        void pop_back()
+        {
+            this->mErase(this->mImpl.mNode.mPrev);
+        }
+        iterator insert(iterator __position, const value_type &__x)
+        {
+            (void)__position;
+            (void)__x;
+        }
+        void insert(iterator __position, size_type __n, const value_type &__x)
+        {
+            mFillInsert(__position, __n, __x);
+        }
+        template <typename _InputIterator>
+        void insert(iterator __position, _InputIterator __first, _InputIterator __last)
+        {
+            typedef typename std::numeric_limits<_InputIterator>::is_integer _Integral;
+            mInsertDispatch(__position, __first, __last, _Integral());
+        }
+        iterator erase(iterator __position)
+        {
+            (void)__position;
+        }
+        iterator erase(iterator __first, iterator __last)
+        {
+            while (__first != __last)
+                __first = erase(__first);
+            return (__last);
+        }
+        void clear()
+        {
+            _Base::mClear();
+            _Base::mInit();
+        }
+        void splice(iterator __position, list &__x)
+        {
+            (void)__position;
+            (void)__x;
+        }
+        void splice(iterator __position, list &__x, iterator __i)
+        {
+            (void)__position;
+            (void)__x;
+            (void)__i;
+        }
+        void splice(iterator __position, list &, iterator __first, iterator __last)
+        {
+            (void)__position;
+            (void)__first;
+            (void)__last;
+        }
+        void remove(const T &value)
+        {
+            (void)value;
+        }
+        template <typename _Predicate>
+        void remove_if(_Predicate __value)
+        {
+            (void)__value;
+        }
+        void unique()
+        {
+
+        }
+        void merge(list &__x)
+        {
+            (void)__x;
+        }
+        template <typename _StrictWeakOrdering>
+        void merge(list &a, _StrictWeakOrdering b)
+        {
+            (void)a;
+            (void)b;
+        }
+        void reverse()
+        {
+            this->mImpl.mNode.reverse();
+        }
+        void sort()
+        {
+
+        }
+        template <typename _StrictWeakOrdering>
+        void sort(_StrictWeakOrdering a)
+        {
+            (void)a;
+        }
+        virtual ~list() {}
+    protected:
+        template <typename _Integer>
+        void mAssignDispatch(_Integer __n, _Integer __val, std::true_type)
+        {
+            mFillAssign(static_cast<size_type>(__n), static_cast<value_type>(__val));
+        }
+        template <typename _InputIterator>
+        void mAssignDispatch(_InputIterator __first, _InputIterator __last, std::false_type)
+        {
+            (void)__first;
+            (void)__last;
+        }
+        void mFillAssign(size_type __n, const value_type &__val)
+        {
+            (void)__n;
+            (void)__val;
+        }
+        template<typename _Integer>
+        void mInsertDispatch(iterator __pos, _Integer __n, _Integer __x, std::true_type)
+        {
+            mFillAssign(__pos, static_cast<size_type>(__n), static_cast<value_type>(__x));
+        }
+        template <typename _InputIterator>
+        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last, std::false_type)
+        {
+            for (; __first != __last; __first++)
+                mInsert(__pos, *__first);
+        }
+        void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
+        {
+            for (; __n > 0; __n--)
+                mInsert(__pos, __x);
+        }
+        void mTransfer(iterator __position, iterator __first, iterator __last)
+        {
+            (void)__position;
+            (void)__first;
+            (void)__last;
+        }
+        void mInsert(iterator __position, const value_type &__x)
+        {
+            _Node *__tmp = mCreateNode(__x);
+            __tmp->hook(__position.mNode);
+        }
+        void mErase(iterator __position)
+        {
+            // __position.mNode->unhook();
+            // _Node * __n = __position.mNode;
+            // std::Destroy(&__n->mData);
+            // mPutNode(__n);
+            (void)__position;
+        }
     };
 } // namespace ft

@@ -11,18 +11,28 @@
 /* ************************************************************************** */
 
 #pragma once
+#include <iostream>
 
 namespace ft
 {
-    struct Node_base
+    struct NodeBase
     {
-        Node_base *mPrev;
-        Node_base *mNext;
-    };
+        NodeBase *mNext;
+        NodeBase *mPrev;
 
-	template <typename T>
-	struct Node : public Node_base
-	{
-		T mData;
-	};
+        void hook(NodeBase * const __position)
+        {
+            if (__position == __position->mNext)
+                __position->mNext = this;
+            this->mPrev = __position;
+            this->mNext = __position->mPrev;
+            __position->mPrev = this;
+        }
+    };
+    
+    template <typename T>
+    struct Node : public NodeBase
+    {
+        T mData;
+    };
 } // namespace ft
