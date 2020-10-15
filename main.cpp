@@ -17,24 +17,20 @@
 int main()
 {
     ft::list<int> lst;
-    std::list<int> lst2;
     lst.push_back(1);
     std::cout << lst.front() << std::endl;
     lst.push_back(12);
+    lst.push_back(122);
+    lst.push_back(11562);
     std::cout << lst.front() << std::endl;
     lst.push_back(13);
     lst.push_back(17);
     std::cout << lst.front() << std::endl;
     std::cout << lst.back() << std::endl;
+    std::cout << "======================" << std::endl;
     
-    lst2.push_back(1);
-    std::cout << lst2.front() << std::endl;
-    lst2.push_back(12);
-    std::cout << lst2.front() << std::endl;
-    lst2.push_back(13);
-    std::cout << lst2.front() << std::endl;
-    std::cout << lst2.back() << std::endl;
-    
+    for (ft::list<int>::iterator iter = lst.begin(); iter != lst.end(); iter++)
+        std::cout << *iter << std::endl;
 
     return (0);
 }

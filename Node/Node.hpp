@@ -24,8 +24,12 @@ namespace ft
         {
             if (__position == __position->mNext)
                 __position->mNext = this;
+            else
+            {
+                __position->mPrev->mNext = this;
+            }
             this->mPrev = __position;
-            this->mNext = __position->mPrev;
+            this->mNext = __position;
             __position->mPrev = this;
         }
     };
