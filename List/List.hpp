@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/16 20:58:44 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/16 21:30:51 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,8 +141,7 @@ namespace ft
         {
             this->insert(begin(), __x.begin(), __x.end());
         }
-        template <typename _InputIterator>
-        list(_InputIterator __first, _InputIterator __last, const allocator_type &__a = allocator_type()) // range constructor
+        list(const_iterator __first, const_iterator __last, const allocator_type &__a = allocator_type()) // range constructor
             : _Base(__a)
         {
             this->insert(begin(), __first, __last);
@@ -363,8 +362,7 @@ namespace ft
             (void)__n;
             (void)__val;
         }
-        template <typename _InputIterator>
-        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last) // mac에서는 std::false_type
+        void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
         {
             for (; __first != __last; __first++)
                 mInsert(__pos, *__first);
