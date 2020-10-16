@@ -6,12 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/14 13:59:13 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/16 16:59:03 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-#include <iostream>
 
 namespace ft
 {
@@ -28,7 +27,7 @@ namespace ft
             {
                 __position->mPrev->mNext = this;
             }
-            this->mPrev = __position;
+            this->mPrev = __position->mPrev;
             this->mNext = __position;
             __position->mPrev = this;
         }

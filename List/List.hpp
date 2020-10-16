@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/12 18:50:51 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/16 20:58:44 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <memory>
 #include <limits>
 #include "../Iterator/Iterator.hpp"
+#include <iostream>
 
 namespace ft
 {
@@ -79,10 +80,11 @@ namespace ft
         typedef typename _Alloc::const_reference        const_reference;
         typedef Iterator<T>                             iterator;
         typedef ConstIterator<T>                        const_iterator;
-        typedef std::reverse_iterator<iterator>         reverse_iterator;
-        typedef std::reverse_iterator<const_iterator>   const_reverse_iterator;
-        typedef size_t                                  size_type;
-        typedef ptrdiff_t                               difference_type;
+        typedef ReverseIterator<T>                      reverse_iterator;
+        typedef ConstReverseIterator<T>                 const_reverse_iterator;
+        typedef __gnu_cxx::size_t                                  size_type;
+        // typedef ptrdiff_t                               difference_type; // mac에서 사용할 때
+        typedef __gnu_cxx::ptrdiff_t difference_type;
         typedef typename _Base::allocator_type          allocator_type;
     protected:
         typedef Node<T>                                 _Node;
@@ -158,8 +160,12 @@ namespace ft
         template <typename _InputIterator>
         void assign(_InputIterator __first, _InputIterator __last)
         {
-            typedef typename std::is_integral<_InputIterator>::_Integral _Integral;
-            mAssignDispatch(__first, __last, _Integral());
+            bool _Integral = std::numeric_limits<_InputIterator>::is_integer;
+            
+            if (_Integral == true)
+                mAssignDispatchInt(__first, __last);
+            else
+                mAssignDispatchIter(__first, __last);
         }
         allocator_type getAllocator() const
         {
@@ -203,7 +209,14 @@ namespace ft
         }
         size_type size() const
         {
-            return (std::distance(begin(), end()));
+            size_type ret = 0;
+            const_iterator start = begin();
+            while (start != end())
+            {
+                ret++;
+                start++;
+            }
+            return (ret);
         }
         size_type max_size() const
         {
@@ -262,8 +275,7 @@ namespace ft
         template <typename _InputIterator>
         void insert(iterator __position, _InputIterator __first, _InputIterator __last)
         {
-            typedef typename std::numeric_limits<_InputIterator>::is_integer _Integral;
-            mInsertDispatch(__position, __first, __last, _Integral());
+            mInsertDispatch(__position, __first, __last);
         }
         iterator erase(iterator __position)
         {
@@ -336,12 +348,12 @@ namespace ft
         virtual ~list() {}
     protected:
         template <typename _Integer>
-        void mAssignDispatch(_Integer __n, _Integer __val, std::true_type)
+        void mAssignDispatchInt(_Integer __n, _Integer __val) // mac에서는 std::true_type, wsl에서는 std::__true_type
         {
             mFillAssign(static_cast<size_type>(__n), static_cast<value_type>(__val));
         }
         template <typename _InputIterator>
-        void mAssignDispatch(_InputIterator __first, _InputIterator __last, std::false_type)
+        void mAssignDispatchIter(_InputIterator __first, _InputIterator __last) //mac에서는 std::__false_type, wsl에서는 std::__false_type
         {
             (void)__first;
             (void)__last;
@@ -351,13 +363,8 @@ namespace ft
             (void)__n;
             (void)__val;
         }
-        template<typename _Integer>
-        void mInsertDispatch(iterator __pos, _Integer __n, _Integer __x, std::true_type)
-        {
-            mFillAssign(__pos, static_cast<size_type>(__n), static_cast<value_type>(__x));
-        }
         template <typename _InputIterator>
-        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last, std::false_type)
+        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last) // mac에서는 std::false_type
         {
             for (; __first != __last; __first++)
                 mInsert(__pos, *__first);
@@ -365,7 +372,7 @@ namespace ft
         void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
         {
             for (; __n > 0; __n--)
-                mInsert(__pos, __x);
+                mInsert(__pos, __x);   
         }
         void mTransfer(iterator __position, iterator __first, iterator __last)
         {

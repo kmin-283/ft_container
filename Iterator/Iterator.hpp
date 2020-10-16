@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:41:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/14 13:54:18 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/16 17:17:40 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,8 @@ namespace ft
         typedef Iterator<T> _Self;
         typedef Node<T> _Node;
 
-        typedef ptrdiff_t difference_type;
+        // typedef ptrdiff_t difference_type; //mac에서 사용할 때
+        typedef __gnu_cxx::ptrdiff_t difference_type;
 
         Iterator()
             : mNode()
@@ -89,7 +90,7 @@ namespace ft
         virtual ~Iterator() {}
     };
 
-    template <typename T, typename Category = bidirectional_iterator_tag>
+    template <typename T, typename Category = bidirectional_iterator_tag>    
     class ConstIterator
     {
     public:
@@ -103,7 +104,8 @@ namespace ft
         typedef const Node<T> _Node;
         typedef Iterator<T> iterator;
 
-        typedef ptrdiff_t difference_type;
+        // typedef ptrdiff_t difference_type; //mac에서 사용할 때
+        typedef __gnu_cxx::ptrdiff_t difference_type;
 
         ConstIterator()
             : mNode()
@@ -161,6 +163,144 @@ namespace ft
             return (this->mNode != rhs.mNode);
         }
         virtual ~ConstIterator() {}
+    };
+
+    template <typename T, typename Category = bidirectional_iterator_tag>    
+    class ReverseIterator
+    {
+    public:
+        NodeBase *mNode;
+        typedef T value_type;
+        typedef T* pointer;
+        typedef T& reference;
+
+        typedef ReverseIterator<T> _Self;
+        typedef Node<T> _Node;
+
+        // typedef ptrdiff_t difference_type; //mac에서 사용할 때
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+
+        ReverseIterator()
+            : mNode()
+        {
+        }
+        ReverseIterator(NodeBase *other)
+            : mNode(other)
+        {
+        }
+        _Self &operator=(const _Self &rhs)
+        {
+            this->mNode = rhs.mNode;
+            return (*this);
+        }
+        reference operator*() const
+        {
+            return (static_cast<_Node *>(mNode)->mData);
+        }
+        pointer operator->() const
+        {
+            return (&static_cast<_Node *>(mNode)->mData);
+        }
+        _Self &operator++()
+        {
+            this->mNode = this->mNode->mPrev;
+            return (*this);
+        }
+        _Self operator++(int)
+        {
+            _Self temp = *this;
+            this->mNode = this->mNode->mPrev;
+            return (temp);
+        }
+        _Self &operator--()
+        {
+            this->mNode = this->mNode->mNext;
+            return (*this);
+        }
+        _Self operator--(int)
+        {
+            _Self temp = *this;
+            this->mNode = this->mNode->mNext;
+            return (temp);
+        }
+        bool operator==(const _Self &rhs) const
+        {
+            return (this->mNode == rhs.mNode);
+        }
+        bool operator!=(const _Self &rhs) const
+        {
+            return (this->mNode != rhs.mNode);
+        }
+        virtual ~ReverseIterator() {}
+    };
+
+    template <typename T, typename Category = bidirectional_iterator_tag>    
+    class ConstReverseIterator
+    {
+    public:
+        const NodeBase *mNode;
+        typedef T value_type;
+        typedef const T* pointer;
+        typedef const T& reference;
+
+        typedef ConstReverseIterator<T> _Self;
+        typedef const Node<T> _Node;
+
+        // typedef ptrdiff_t difference_type; //mac에서 사용할 때
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+
+        ConstReverseIterator()
+            : mNode()
+        {
+        }
+        ConstReverseIterator(NodeBase *other)
+            : mNode(other)
+        {
+        }
+        _Self &operator=(const _Self &rhs)
+        {
+            this->mNode = rhs.mNode;
+            return (*this);
+        }
+        reference operator*() const
+        {
+            return (static_cast<_Node *>(mNode)->mData);
+        }
+        pointer operator->() const
+        {
+            return (&static_cast<_Node *>(mNode)->mData);
+        }
+        _Self &operator++()
+        {
+            this->mNode = this->mNode->mPrev;
+            return (*this);
+        }
+        _Self operator++(int)
+        {
+            _Self temp = *this;
+            this->mNode = this->mNode->mPrev;
+            return (temp);
+        }
+        _Self &operator--()
+        {
+            this->mNode = this->mNode->mNext;
+            return (*this);
+        }
+        _Self operator--(int)
+        {
+            _Self temp = *this;
+            this->mNode = this->mNode->mNext;
+            return (temp);
+        }
+        bool operator==(const _Self &rhs) const
+        {
+            return (this->mNode == rhs.mNode);
+        }
+        bool operator!=(const _Self &rhs) const
+        {
+            return (this->mNode != rhs.mNode);
+        }
+        virtual ~ConstReverseIterator() {}
     };
 } // namespace ft
 
