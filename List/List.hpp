@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/17 19:19:52 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/17 21:28:35 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -267,8 +267,8 @@ namespace ft
         }
         iterator insert(iterator __position, const value_type &__x)
         {
-            (void)__position;
-            (void)__x;
+            mInsert(__position, __x);
+            return (begin());
         }
         void insert(iterator __position, size_type __n, const value_type &__x)
         {
@@ -281,7 +281,9 @@ namespace ft
         }
         iterator erase(iterator __position)
         {
-            (void)__position;
+            iterator ret = ++__position;
+            mErase(--__position);
+            return (ret);
         }
         iterator erase(iterator __first, iterator __last)
         {
@@ -356,28 +358,13 @@ namespace ft
         }
         void mFillAssign(size_type __n, const value_type &__val)
         {
-            size_type thisSize = this->size();
-            iterator iter = this->begin();
-            if (thisSize > __n)
-            {
-                for (size_type i = 0; i < thisSize - __n; i++)
-                {
-                    *iter = __val;
-                    iter++;
-                }
-                for (; thisSize - __n > 0; __n++)
-                    pop_back();
-            }
+            iterator i = begin();
+            for (;i != end() && __n > 0; i++, __n--)
+                *i = __val;
+            if (__n)
+                insert(end(), __n, __val);
             else
-            {
-                for (size_type i = 0; i < __n; i++)
-                {
-                    *iter = __val;
-                    iter++;
-                }
-                for (; __n - thisSize > 0; __n--)
-                    push_back(__val);
-            }   
+                erase(i, end());
         }
         void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
         {
