@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/16 21:30:51 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/17 19:19:52 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,22 +149,16 @@ namespace ft
         list &operator=(const list &__x) // assign operator
         {
             // iterator로 반복을 돌면서 __x의 크기만큼 Node<T>생성 //
-            (void)__x;
+            this->insert(begin(), __x.begin(), __x.end());
             return (*this);
         }
         void assign(size_type __n, const value_type &__val)
         {
             mFillAssign(__n, __val);
         }
-        template <typename _InputIterator>
-        void assign(_InputIterator __first, _InputIterator __last)
+        void assign(const_iterator __first, const_iterator __last)
         {
-            bool _Integral = std::numeric_limits<_InputIterator>::is_integer;
-            
-            if (_Integral == true)
-                mAssignDispatchInt(__first, __last);
-            else
-                mAssignDispatchIter(__first, __last);
+            mAssignDispatch(__first, __last);
         }
         allocator_type getAllocator() const
         {
@@ -223,8 +217,17 @@ namespace ft
         }
         void resize(size_type __new_size, const value_type &__x)
         {
-            (void)__new_size;
-            (void)__x;
+            size_type thisSize = this->size();
+            if (thisSize > __new_size)
+            {
+                for (size_type i = 0; i < thisSize - __new_size; i++)
+                    pop_back();
+            }
+            else
+            {
+                for (size_type i = 0; i < __new_size - thisSize; i++)
+                    push_back(__x);
+            }
         }
         void resize(size_type __new_size)
         {
@@ -346,21 +349,35 @@ namespace ft
         }
         virtual ~list() {}
     protected:
-        template <typename _Integer>
-        void mAssignDispatchInt(_Integer __n, _Integer __val) // mac에서는 std::true_type, wsl에서는 std::__true_type
-        {
-            mFillAssign(static_cast<size_type>(__n), static_cast<value_type>(__val));
-        }
-        template <typename _InputIterator>
-        void mAssignDispatchIter(_InputIterator __first, _InputIterator __last) //mac에서는 std::__false_type, wsl에서는 std::__false_type
+        void mAssignDispatch(const_iterator __first, const_iterator __last) //mac에서는 std::__false_type, wsl에서는 std::__false_type
         {
             (void)__first;
             (void)__last;
         }
         void mFillAssign(size_type __n, const value_type &__val)
         {
-            (void)__n;
-            (void)__val;
+            size_type thisSize = this->size();
+            iterator iter = this->begin();
+            if (thisSize > __n)
+            {
+                for (size_type i = 0; i < thisSize - __n; i++)
+                {
+                    *iter = __val;
+                    iter++;
+                }
+                for (; thisSize - __n > 0; __n++)
+                    pop_back();
+            }
+            else
+            {
+                for (size_type i = 0; i < __n; i++)
+                {
+                    *iter = __val;
+                    iter++;
+                }
+                for (; __n - thisSize > 0; __n--)
+                    push_back(__val);
+            }   
         }
         void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
         {
@@ -385,11 +402,10 @@ namespace ft
         }
         void mErase(iterator __position)
         {
-            // __position.mNode->unhook();
-            // _Node * __n = __position.mNode;
-            // std::Destroy(&__n->mData);
-            // mPutNode(__n);
-            (void)__position;
+            __position.mNode->unhook();
+            _Node * __n = static_cast<_Node *>(__position.mNode);
+            std::_Destroy(&__n->mData);
+            mPutNode(__n);
         }
     };
 } // namespace ft

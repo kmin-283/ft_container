@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/16 16:59:03 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/17 15:15:17 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,14 @@ namespace ft
             this->mPrev = __position->mPrev;
             this->mNext = __position;
             __position->mPrev = this;
+        }
+
+        void unhook()
+        {
+            this->mPrev->mNext = this->mNext;
+            this->mNext->mPrev = this->mPrev;
+            this->mPrev = this;
+            this->mNext = this;
         }
     };
     
