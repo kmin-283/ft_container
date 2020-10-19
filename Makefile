@@ -3,7 +3,7 @@ NAME = container
 CC = clang++
 CFLAGS = -std=c++98 -Wall -Werror -Wextra
 
-INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
+INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp\
 		Vector/vector.hpp
 
 SRCS = main.cpp

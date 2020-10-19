@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/19 16:19:55 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/19 16:51:20 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ namespace ft
         typedef T& reference;
 
         typedef VectorIterator<T> _Self;
-        typedef __gnu_cxx::ptrdiff_t difference_type;
+        // typedef __gnu_cxx::ptrdiff_t difference_type;
+        typedef ptrdiff_t difference_type;
     private:
         pointer mData;
     public:
@@ -93,7 +94,8 @@ namespace ft
         typedef const T& reference;
 
         typedef ConstVectorIterator<T> _Self;
-        typedef __gnu_cxx::ptrdiff_t difference_type;
+        // typedef __gnu_cxx::ptrdiff_t difference_type;
+        typedef ptrdiff_t   difference_type;
     private:
         pointer mData;
     public:
@@ -157,7 +159,8 @@ namespace ft
         typedef T& reference;
 
         typedef ReverseVectorIterator<T> _Self;
-        typedef __gnu_cxx::ptrdiff_t difference_type;
+        // typedef __gnu_cxx::ptrdiff_t difference_type;
+        typedef ptrdiff_t   difference_type;
     private:
         pointer mData;
     public:
@@ -221,7 +224,8 @@ namespace ft
         typedef T& reference;
 
         typedef ConstReverseVectorIterator<T> _Self;
-        typedef __gnu_cxx::ptrdiff_t difference_type;
+        // typedef __gnu_cxx::ptrdiff_t difference_type;
+        typedef ptrdiff_t   difference_type;
     private:
         pointer mData;
     public:
