@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/17 21:28:35 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/18 00:05:27 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,15 @@ namespace ft
         }
         void mClear()
         {
+            NodeBase *cur = this->mImpl.mNode.mNext;
+            while (cur != &this->mImpl.mNode)
+            {
+                Node<T> *tmp = static_cast<Node<T> *>(cur);
+                T *val = &tmp->mData;
+                cur = cur->mNext;
+                std::_Destroy(&val); //소멸자를 호출. 그런데 Node의 주소값 == Node.mData의 주소값이다.
+                mPutNode(tmp);
+            }
         }
         void mInit()
         {
@@ -141,7 +150,8 @@ namespace ft
         {
             this->insert(begin(), __x.begin(), __x.end());
         }
-        list(const_iterator __first, const_iterator __last, const allocator_type &__a = allocator_type()) // range constructor
+        template <typename _InputIterator>
+        list(_InputIterator __first, _InputIterator __last, const allocator_type &__a = allocator_type()) // range constructor
             : _Base(__a)
         {
             this->insert(begin(), __first, __last);
@@ -315,12 +325,24 @@ namespace ft
         }
         void remove(const T &value)
         {
-            (void)value;
+            iterator i = begin();
+            while (i != end())
+            {
+                iterator tmp = ++i;
+                if (*--tmp == value)
+                    erase(tmp);
+            }
         }
         template <typename _Predicate>
-        void remove_if(_Predicate __value)
+        void remove_if(_Predicate __ifState)
         {
-            (void)__value;
+            iterator i = begin();
+            while (i != end())
+            {
+                iterator tmp = ++i;
+                if (__ifState(*--tmp))
+                    erase(tmp);
+            }
         }
         void unique()
         {
@@ -353,27 +375,40 @@ namespace ft
     protected:
         void mAssignDispatch(const_iterator __first, const_iterator __last) //mac에서는 std::__false_type, wsl에서는 std::__false_type
         {
-            (void)__first;
-            (void)__last;
+            iterator i = begin();
+            for (; i != end() && __first != __last; ++__first, ++i)
+            {
+                *i = *__first;
+            }
+            if (__first != __last)
+                insert(end(), __first, __last);
+            else
+                erase(i, end());
         }
         void mFillAssign(size_type __n, const value_type &__val)
         {
             iterator i = begin();
-            for (;i != end() && __n > 0; i++, __n--)
+            for (;i != end() && __n > 0; ++i, --__n)
                 *i = __val;
             if (__n)
                 insert(end(), __n, __val);
             else
                 erase(i, end());
         }
+        template <typename _Integer>
+        void mInsertDispatch(iterator __pos, _Integer __first, _Integer __last) // mac에서는 std::false_type
+        {
+            for (; __first != __last; ++__first)
+                mInsert(__pos, *__first);
+        }
         void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
         {
-            for (; __first != __last; __first++)
+            for (; __first != __last; ++__first)
                 mInsert(__pos, *__first);
         }
         void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
         {
-            for (; __n > 0; __n--)
+            for (; __n > 0; --__n)
                 mInsert(__pos, __x);   
         }
         void mTransfer(iterator __position, iterator __first, iterator __last)

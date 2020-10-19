@@ -6,14 +6,20 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/17 21:31:25 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/17 23:34:51 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <list>
 #include "List/List.hpp"
 // #include <iostream>
+bool single_digit(const int &value) { return (value < 10); }
 
+// a predicate implemented as a class:
+struct is_odd
+{
+    bool operator()(const int &value) { return (value % 2) == 1; }
+};
 int main()
 {
     // ft::list<int> lst;
@@ -66,28 +72,37 @@ int main()
     // // stdlst.erase();
     // std::cout << "======================" << std::endl;
 
-    ft::list<int> first;
-    for (int i = 0; i < 10; i++)
-        first.push_back(i);
-    ft::list<int>::iterator it = first.begin();
-    it++;
-    it++;
-    it = first.erase(it);
-    std::cout << "val: " << *it << std::endl;
-    for (ft::list<int>::iterator iter = first.begin(); iter != first.end(); iter++)
+    // ft::list<int> first;
+    // for (int i = 0; i < 10; i++)
+    //     first.push_back(i);
+    // ft::list<int>::iterator it = first.begin();
+    // it++;
+    // it++;
+    // it = first.erase(it);
+    // std::cout << "val: " << *it << std::endl;
+    // for (ft::list<int>::iterator iter = first.begin(); iter != first.end(); iter++)
+    //     std::cout << *iter << std::endl;
+    // std::cout << "======================" << std::endl;
+    // first.insert(it, 789);
+    // std::cout << first.size() << std::endl;
+    // for (ft::list<int>::iterator iter = first.begin(); iter != first.end(); iter++)
+    //     std::cout << *iter << std::endl;
+    // std::cout << "======================" << std::endl;
+
+    int myints[] = {15, 36, 7, 1, 17, 20, 39, 4, 1};
+    ft::list<int> mylist(myints, myints + 9);
+    std::cout << mylist.size() << std::endl;
+    for (ft::list<int>::iterator iter = mylist.begin(); iter != mylist.end(); iter++)
+        std::cout << *iter << std::endl;
+    mylist.remove(1);
+    std::cout << mylist.size() << std::endl;
+    
+    std::cout << "======================" << std::endl;
+    ft::list<int> cplst(mylist);
+    cplst.remove_if(is_odd());
+    for (ft::list<int>::iterator iter = cplst.begin(); iter != cplst.end(); iter++)
         std::cout << *iter << std::endl;
     std::cout << "======================" << std::endl;
-    first.insert(it, 789);
-    std::cout << first.size() << std::endl;
-    for (ft::list<int>::iterator iter = first.begin(); iter != first.end(); iter++)
-        std::cout << *iter << std::endl;
-    
-    // std::cout << "======================" << std::endl;
-    // std::list<int> second;
-    // second.resize(20, 1);
-    // std::cout << second.size() << std::endl;
-    // for (std::list<int>::iterator iter = second.begin(); iter != second.end(); iter++)
-    //     std::cout << *iter << std::endl;
     // std::cout << "======================" << std::endl;
     // second.assign(first.begin(),first.end());
     // std::cout << second.size() << std::endl;
