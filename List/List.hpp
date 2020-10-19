@@ -6,14 +6,14 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/17 21:28:35 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/19 16:18:13 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <memory>
 #include <limits>
-#include "../Iterator/Iterator.hpp"
+#include "../Iterator/ListIterator.hpp"
 #include <iostream>
 
 namespace ft
@@ -78,10 +78,10 @@ namespace ft
         typedef typename _Alloc::const_pointer          const_pointer;
         typedef typename _Alloc::reference              reference;
         typedef typename _Alloc::const_reference        const_reference;
-        typedef Iterator<T>                             iterator;
-        typedef ConstIterator<T>                        const_iterator;
-        typedef ReverseIterator<T>                      reverse_iterator;
-        typedef ConstReverseIterator<T>                 const_reverse_iterator;
+        typedef ListIterator<T>                             iterator;
+        typedef ConstListIterator<T>                        const_iterator;
+        typedef ReverseListIterator<T>                      reverse_iterator;
+        typedef ConstReverseListIterator<T>                 const_reverse_iterator;
         typedef __gnu_cxx::size_t                                  size_type;
         // typedef ptrdiff_t                               difference_type; // mac에서 사용할 때
         typedef __gnu_cxx::ptrdiff_t difference_type;

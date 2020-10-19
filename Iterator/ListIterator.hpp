@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Iterator.hpp                                       :+:      :+:    :+:   */
+/*   ListIterator.hpp                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:41:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/16 21:24:09 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/19 16:18:27 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ namespace ft
 	struct random_access_iterator_tag: bidirectional_iterator_tag {};
 
     template <typename T, typename Category = bidirectional_iterator_tag>
-    class Iterator
+    class ListIterator
     {
     public:
         NodeBase *mNode;
@@ -30,17 +30,17 @@ namespace ft
         typedef T* pointer;
         typedef T& reference;
 
-        typedef Iterator<T> _Self;
+        typedef ListIterator<T> _Self;
         typedef Node<T> _Node;
 
         // typedef ptrdiff_t difference_type; //mac에서 사용할 때
         typedef __gnu_cxx::ptrdiff_t difference_type;
 
-        Iterator()
+        ListIterator()
             : mNode()
         {
         }
-        Iterator(NodeBase *other)
+        ListIterator(NodeBase *other)
             : mNode(other)
         {
         }
@@ -87,11 +87,11 @@ namespace ft
         {
             return (this->mNode != rhs.mNode);
         }
-        virtual ~Iterator() {}
+        virtual ~ListIterator() {}
     };
 
     template <typename T, typename Category = bidirectional_iterator_tag>    
-    class ConstIterator
+    class ConstListIterator
     {
     public:
         const NodeBase *mNode;
@@ -100,22 +100,22 @@ namespace ft
         typedef const T* pointer;
         typedef const T& reference;
 
-        typedef ConstIterator<T> _Self;
+        typedef ConstListIterator<T> _Self;
         typedef const Node<T> _Node;
         typedef Iterator<T> iterator;
 
         // typedef ptrdiff_t difference_type; //mac에서 사용할 때
         typedef __gnu_cxx::ptrdiff_t difference_type;
 
-        ConstIterator()
+        ConstListIterator()
             : mNode()
         {
         }
-        ConstIterator(const NodeBase *other)
+        ConstListIterator(const NodeBase *other)
             : mNode(other)
         {
         }
-        ConstIterator(const iterator &rhs)
+        ConstListIterator(const iterator &rhs)
             : mNode(rhs.mNode)
         {
         }
@@ -162,11 +162,11 @@ namespace ft
         {
             return (this->mNode != rhs.mNode);
         }
-        virtual ~ConstIterator() {}
+        virtual ~ConstListIterator() {}
     };
 
     template <typename T, typename Category = bidirectional_iterator_tag>    
-    class ReverseIterator
+    class ReverseListIterator
     {
     public:
         NodeBase *mNode;
@@ -174,17 +174,17 @@ namespace ft
         typedef T* pointer;
         typedef T& reference;
 
-        typedef ReverseIterator<T> _Self;
+        typedef ReverseListIterator<T> _Self;
         typedef Node<T> _Node;
 
         // typedef ptrdiff_t difference_type; //mac에서 사용할 때
         typedef __gnu_cxx::ptrdiff_t difference_type;
 
-        ReverseIterator()
+        ReverseListIterator()
             : mNode()
         {
         }
-        ReverseIterator(NodeBase *other)
+        ReverseListIterator(NodeBase *other)
             : mNode(other)
         {
         }
@@ -231,11 +231,11 @@ namespace ft
         {
             return (this->mNode != rhs.mNode);
         }
-        virtual ~ReverseIterator() {}
+        virtual ~ReverseListIterator() {}
     };
 
     template <typename T, typename Category = bidirectional_iterator_tag>    
-    class ConstReverseIterator
+    class ConstReverseListIterator
     {
     public:
         const NodeBase *mNode;
@@ -243,17 +243,17 @@ namespace ft
         typedef const T* pointer;
         typedef const T& reference;
 
-        typedef ConstReverseIterator<T> _Self;
+        typedef ConstReverseListIterator<T> _Self;
         typedef const Node<T> _Node;
 
         // typedef ptrdiff_t difference_type; //mac에서 사용할 때
         typedef __gnu_cxx::ptrdiff_t difference_type;
 
-        ConstReverseIterator()
+        ConstReverseListIterator()
             : mNode()
         {
         }
-        ConstReverseIterator(NodeBase *other)
+        ConstReverseListIterator(NodeBase *other)
             : mNode(other)
         {
         }
@@ -300,36 +300,36 @@ namespace ft
         {
             return (this->mNode != rhs.mNode);
         }
-        virtual ~ConstReverseIterator() {}
+        virtual ~ConstReverseListIterator() {}
     };
 } // namespace ft
 
 template <typename Val>
-inline bool operator==(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
+inline bool operator==(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
 {
     return (x.mNode == y.mNode);
 }
 template <typename Val>
-inline bool operator!=(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
+inline bool operator!=(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
 {
     return (x.mNode != y.mNode);
 }
 template <typename Val>
-inline bool operator>(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
+inline bool operator>(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
 {
     return (x.mNode > y.mNode);
 }
 template <typename Val>
-inline bool operator>=(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
+inline bool operator>=(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
 {
     return (x.mNode >= y.mNode);
 }template <typename Val>
-inline bool operator<(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
+inline bool operator<(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
 {
     return (x.mNode < y.mNode);
 }
 template <typename Val>
-inline bool operator<=(const ft::Iterator<Val> &x, const ft::ConstIterator<Val> &y)
+inline bool operator<=(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
 {
     return (x.mNode <= y.mNode);
 }
