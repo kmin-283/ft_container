@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 09:01:16 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/22 11:12:03 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -348,7 +348,36 @@ namespace ft
         }
         void unique()
         {
-
+            iterator start = begin();
+            while (true)
+            {
+                iterator finish = end();
+                iterator next = ++start;
+                --start;
+                if (start == finish)
+                    break ;
+                if (next != finish && *start == *next)
+                    start = erase(--next);
+                else
+                    ++start;
+            }
+        }
+        template <typename _BinaryPredicate>
+        void unique(_BinaryPredicate binary_pred)
+        {
+            iterator start = begin();
+            while (true)
+            {
+                iterator finish = end();
+                iterator next = ++start;
+                --start;
+                if (start == finish)
+                    break ;
+                if (next != finish && binary_pred(*start, *next))
+                    start = erase(--next);
+                else
+                    ++start;
+            }
         }
         void merge(list &__x)
         {

@@ -1,8 +1,7 @@
 NAME = container
 
 CC = clang++
-CFLAGS = -std=c++98 -Wall -Werror -Wextra
-
+CFLAGS = -std=c++98 -g3 -fsanitize=address
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 SRCS = main.cpp
 
