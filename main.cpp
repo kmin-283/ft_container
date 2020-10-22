@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 11:13:42 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/22 15:58:50 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,16 +25,67 @@ struct is_odd
 };
 int main()
 {
-    int myints[] = {1, 15, 15, 36, 7, 1, 17, 20, 39, 4, 1, 1, 15, 15, 15, 1};
-    std::list<int> stdlist(myints, myints + 16);
-    ft::list<int> mylist(myints, myints + 16);
-    mylist.unique(same_integral_part);
-    for (ft::list<int>::iterator iter = mylist.begin(); iter != mylist.end(); iter++)
-        std::cout << *iter << std::endl;
-    std::cout << "======================" << std::endl;    
-    stdlist.unique(same_integral_part);
+    int myints[] = {1, 2, 3, 4, 5, 6};
+    int myints2[] = {11, 12, 13, 15, 16, 17};
+    // std::list<int> stdlist(myints, myints + 16);
+    ft::list<int> mylist(myints, myints + 6);
+    ft::list<int> mylist2(myints2, myints2 + 6);
+    std::list<int> stdlist(myints, myints + 6);
+    std::list<int> stdlist2(myints2, myints2 + 6);
+    
+    // mylist.unique(same_integral_part);
+    // for (ft::list<int>::iterator iter = mylist.begin(); iter != mylist.end(); iter++)
+    //     std::cout << *iter << std::endl;
+    // std::cout << "======================" << std::endl;    
+    // stdlist.unique(same_integral_part);
+    // for (std::list<int>::iterator iter = stdlist.begin(); iter != stdlist.end(); iter++)
+    //     std::cout << *iter << std::endl;
+    // std::cout << "======================" << std::endl;
+    std::cout << "======================" << std::endl;
+    ft::list<int>::iterator it2 = mylist2.begin();
+    ++it2;
+    std::list<int>::iterator it = stdlist2.begin();
+    ++it;
+    stdlist.splice(stdlist.begin(), stdlist2, it);
     for (std::list<int>::iterator iter = stdlist.begin(); iter != stdlist.end(); iter++)
         std::cout << *iter << std::endl;
+    std::cout << "======================" << std::endl;
+
+    for (std::list<int>::iterator iter = stdlist2.begin(); iter != stdlist2.end(); iter++)
+        std::cout << *iter << std::endl;
+    stdlist.splice(stdlist.begin(), stdlist2);
+    std::cout << "======================" << std::endl;
+
+    for (std::list<int>::iterator iter = stdlist.begin(); iter != stdlist.end(); iter++)
+        std::cout << *iter << std::endl;
+    std::cout << "======================" << std::endl;
+
+    mylist.splice(mylist.begin(), mylist2, it2);
+    for (ft::list<int>::iterator iter = mylist.begin(); iter != mylist.end(); iter++)
+        std::cout << *iter << std::endl;
+    std::cout << "======================" << std::endl;
+
+    for (ft::list<int>::iterator iter = mylist2.begin(); iter != mylist2.end(); iter++)
+        std::cout << *iter << std::endl;    
+    std::cout << "======================" << std::endl;
+
+    mylist.splice(mylist.begin(), mylist2);
+    for (ft::list<int>::iterator iter = mylist.begin(); iter != mylist.end(); iter++)
+        std::cout << *iter << std::endl; 
+    std::cout << "======================" << std::endl;
+
+    // double mydouble[] = {1.1, -3.79, 4.6,28.7,147.9,-75.4};
+    // std::list<double> first(mydouble + 3, mydouble + 6);
+    // std::list<double> second(mydouble, mydouble + 3);
+    // first.merge(second);
+    // for (std::list<double>::iterator iter = first.begin(); iter != first.end(); iter++)
+    //     std::cout << *iter << std::endl;
+    // second.clear();
+    // std::cout << "======================" << std::endl;    
+    // for (std::list<double>::iterator iter = first.begin(); iter != first.end(); iter++)
+    //     std::cout << *iter << std::endl;
+
+
     // mylist.remove(1);
     // std::cout << mylist.size() << std::endl;
     // std::cout << "======================" << std::endl;

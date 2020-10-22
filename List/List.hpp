@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 11:12:03 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/22 15:56:03 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <memory>
 #include <limits>
 #include "../Iterator/ListIterator.hpp"
-#include <iostream>
 
 namespace ft
 {
@@ -310,20 +309,22 @@ namespace ft
         }
         void splice(iterator __position, list &__x)
         {
-            (void)__position;
-            (void)__x;
+            if (!__x.empty())
+                mTransfer(__position, __x.begin(), __x.end());
         }
         void splice(iterator __position, list &__x, iterator __i)
         {
-            (void)__position;
-            (void)__x;
-            (void)__i;
+            iterator __j = __i;
+            ++__j;
+            if (__position == __i || __position == __j)
+                return ;
+            if (!__x.empty())
+                mTransfer(__position, __i, __j);
         }
-        void splice(iterator __position, list &, iterator __first, iterator __last)
+        void splice(iterator __position, list &__x, iterator __first, iterator __last)
         {
-            (void)__position;
-            (void)__first;
-            (void)__last;
+            if (__first != __last)
+                mTransfer(__position, __first, __last);
         }
         void remove(const T &value)
         {
@@ -444,9 +445,7 @@ namespace ft
         }
         void mTransfer(iterator __position, iterator __first, iterator __last)
         {
-            (void)__position;
-            (void)__first;
-            (void)__last;
+            __position.mNode->transfer(__first.mNode, __last.mNode);
         }
         void mInsert(iterator __position, const value_type &__x)
         {
