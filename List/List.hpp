@@ -6,14 +6,14 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/18 00:05:27 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/22 09:01:16 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <memory>
 #include <limits>
-#include "../Iterator/Iterator.hpp"
+#include "../Iterator/ListIterator.hpp"
 #include <iostream>
 
 namespace ft
@@ -64,9 +64,10 @@ namespace ft
             while (cur != &this->mImpl.mNode)
             {
                 Node<T> *tmp = static_cast<Node<T> *>(cur);
-                T *val = &tmp->mData;
+                // T *val = &tmp->mData; // linux
                 cur = cur->mNext;
-                std::_Destroy(&val); //소멸자를 호출. 그런데 Node의 주소값 == Node.mData의 주소값이다.
+                // std::_Destroy(val); //소멸자를 호출. 그런데 Node의 주소값 == Node.mData의 주소값이다.
+                getAllocator().destroy(&tmp->mData);
                 mPutNode(tmp);
             }
         }
@@ -87,13 +88,14 @@ namespace ft
         typedef typename _Alloc::const_pointer          const_pointer;
         typedef typename _Alloc::reference              reference;
         typedef typename _Alloc::const_reference        const_reference;
-        typedef Iterator<T>                             iterator;
-        typedef ConstIterator<T>                        const_iterator;
-        typedef ReverseIterator<T>                      reverse_iterator;
-        typedef ConstReverseIterator<T>                 const_reverse_iterator;
-        typedef __gnu_cxx::size_t                                  size_type;
-        // typedef ptrdiff_t                               difference_type; // mac에서 사용할 때
-        typedef __gnu_cxx::ptrdiff_t difference_type;
+        typedef ListIterator<T>                             iterator;
+        typedef ConstListIterator<T>                        const_iterator;
+        typedef ReverseListIterator<T>                      reverse_iterator;
+        typedef ConstReverseListIterator<T>                 const_reverse_iterator;
+        // typedef __gnu_cxx::size_t                                  size_type;
+        typedef size_t                                  size_type;
+        typedef ptrdiff_t                               difference_type; // mac에서 사용할 때
+        // typedef __gnu_cxx::ptrdiff_t difference_type; // linux version
         typedef typename _Base::allocator_type          allocator_type;
     protected:
         typedef Node<T>                                 _Node;
@@ -426,7 +428,8 @@ namespace ft
         {
             __position.mNode->unhook();
             _Node * __n = static_cast<_Node *>(__position.mNode);
-            std::_Destroy(&__n->mData);
+            // std::_Destroy(&__n->mData);
+            getAllocator().destroy(&__n->mData);            
             mPutNode(__n);
         }
     };
