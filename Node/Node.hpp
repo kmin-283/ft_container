@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/23 11:49:56 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/23 14:07:24 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 #define BEGIN 1
 #define END 2
+#define ELSE 3
 
 namespace ft
 {
@@ -27,18 +28,23 @@ namespace ft
         {
             if (type == BEGIN) // begin()
             {
-                this->mNext = __position->mNext;
-                __position->mNext = this;
                 this->mPrev = __position->mPrev;
+                __position->mPrev = this;
+                this->mNext = __position;
             }
             else if (type == END) // end()
             {
-                this->mPrev = __position->mPrev;
                 __position->mPrev->mNext = this;
                 this->mNext = __position;
+                this->mPrev = __position->mPrev;
                 __position->mPrev = this;
             }
-            // __position->mNext->mPrev = this; // 20201023 추가한 내용 이 이전까지는 push_back, push_front 문제없었음
+            else
+            {
+                this->mPrev = __position->mPrev;
+                __position->mPrev = this;
+                this->mNext = __position;
+            }
         }
 
         void unhook()

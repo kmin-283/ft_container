@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/23 11:48:58 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/23 14:00:30 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,12 @@ int main()
         std::cout << *it << " ";
     std::cout << std::endl;    
     mylist1.push_front(7);
-    
-    for (ft::list<int>::iterator it = mylist1.begin(); it != mylist1.end(); ++it)
+
+    ft::list<int>::iterator itt = mylist1.begin();
+    ++itt;
+    std::cout << *itt << std::endl;
+    mylist1.insert(itt, 7705);
+    for (ft::list<int>::reverse_iterator it = mylist1.rbegin(); it != mylist1.rend(); ++it)
         std::cout << *it << " ";
     std::cout << std::endl;
 

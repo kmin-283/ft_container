@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/23 11:35:36 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/23 14:07:12 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ namespace ft
         using _Base::mImpl;
         using _Base::mPutNode;
         using _Base::mGetNode;
+
         _Node *mCreateNode(const value_type &__x)
         {
             _Node *__p;
@@ -193,19 +194,19 @@ namespace ft
         }
         reverse_iterator rbegin()
         {
-            return (&this->mImpl.mNode);
+            return (this->mImpl.mNode.mPrev);
         }
         const_reverse_iterator rbegin() const
         {
-            return (&this->mImpl.mNode);
+            return (this->mImpl.mNode.mPrev);
         }
         reverse_iterator rend()
         {
-            return (this->mImpl.mNode.mNext);
+            return (&this->mImpl.mNode);
         }
         const_reverse_iterator rend() const
         {
-            return (this->mImpl.mNode.mNext);
+            return (&this->mImpl.mNode);
         }
         bool empty() const
         {
@@ -451,9 +452,14 @@ namespace ft
         {
             _Node *__tmp = mCreateNode(__x);
             if (__position == begin())
+            {
                 __tmp->hook(__position.mNode, BEGIN);
+                this->mImpl.mNode.mNext = __tmp;
+            }
             else if (__position == end())
                 __tmp->hook(__position.mNode, END);
+            else
+                __tmp->hook(__position.mNode, ELSE);
         }
         void mErase(iterator __position)
         {
