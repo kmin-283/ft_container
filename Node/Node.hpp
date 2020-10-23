@@ -6,12 +6,15 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 16:22:16 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/23 11:49:56 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <iostream>
+
+#define BEGIN 1
+#define END 2
 
 namespace ft
 {
@@ -20,17 +23,22 @@ namespace ft
         NodeBase *mNext;
         NodeBase *mPrev;
 
-        void hook(NodeBase * const __position)
+        void hook(NodeBase * const __position, int type)
         {
-            if (__position == __position->mNext)
-                __position->mNext = this;
-            else
+            if (type == BEGIN) // begin()
             {
-                __position->mPrev->mNext = this;
+                this->mNext = __position->mNext;
+                __position->mNext = this;
+                this->mPrev = __position->mPrev;
             }
-            this->mPrev = __position->mPrev;
-            this->mNext = __position;
-            __position->mPrev = this;
+            else if (type == END) // end()
+            {
+                this->mPrev = __position->mPrev;
+                __position->mPrev->mNext = this;
+                this->mNext = __position;
+                __position->mPrev = this;
+            }
+            // __position->mNext->mPrev = this; // 20201023 추가한 내용 이 이전까지는 push_back, push_front 문제없었음
         }
 
         void unhook()

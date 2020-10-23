@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 16:11:23 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/23 11:35:36 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,19 +193,19 @@ namespace ft
         }
         reverse_iterator rbegin()
         {
-            return (reverse_iterator(end()));
+            return (&this->mImpl.mNode);
         }
         const_reverse_iterator rbegin() const
         {
-            return (const_reverse_iterator(end()));
+            return (&this->mImpl.mNode);
         }
         reverse_iterator rend()
         {
-            return (reverse_iterator(begin()));
+            return (this->mImpl.mNode.mNext);
         }
         const_reverse_iterator rend() const
         {
-            return (const_reverse_iterator(begin()));
+            return (this->mImpl.mNode.mNext);
         }
         bool empty() const
         {
@@ -450,7 +450,10 @@ namespace ft
         void mInsert(iterator __position, const value_type &__x)
         {
             _Node *__tmp = mCreateNode(__x);
-            __tmp->hook(__position.mNode);
+            if (__position == begin())
+                __tmp->hook(__position.mNode, BEGIN);
+            else if (__position == end())
+                __tmp->hook(__position.mNode, END);
         }
         void mErase(iterator __position)
         {
