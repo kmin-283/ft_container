@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/23 14:07:12 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/23 16:15:00 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ namespace ft
         void splice(iterator __position, list &__x)
         {
             if (!__x.empty())
-                mTransfer(__position, __x.begin(), __x.end());
+                mTransferTotal(__position, __x.begin(), __x.end());
         }
         void splice(iterator __position, list &__x, iterator __i)
         {
@@ -324,6 +324,7 @@ namespace ft
         }
         void splice(iterator __position, list &__x, iterator __first, iterator __last)
         {
+            (void)__x;
             if (__first != __last)
                 mTransfer(__position, __first, __last);
         }
@@ -443,6 +444,10 @@ namespace ft
         {
             for (; __n > 0; --__n)
                 mInsert(__pos, __x);   
+        }
+        void mTransferTotal(iterator __position, iterator __first, iterator __last)
+        {
+            __position.mNode->transfer_total(__first.mNode, __last.mNode);
         }
         void mTransfer(iterator __position, iterator __first, iterator __last)
         {
