@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/24 18:13:33 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/24 23:18:24 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <memory>
 #include <limits>
 #include "../Iterator/ListIterator.hpp"
+#include "../algorithms/algo.hpp"
 
 namespace ft
 {
@@ -359,19 +360,7 @@ namespace ft
         }
         void unique()
         {
-            iterator start = begin();
-            while (true)
-            {
-                iterator finish = end();
-                iterator next = ++start;
-                --start;
-                if (start == finish)
-                    break ;
-                if (next != finish && *start == *next)
-                    start = erase(--next);
-                else
-                    ++start;
-            }
+            unique(equal<value_type>);
         }
         template <typename _BinaryPredicate>
         void unique(_BinaryPredicate binary_pred)
@@ -392,13 +381,27 @@ namespace ft
         }
         void merge(list &__x)
         {
-            (void)__x;
+            merge(__x, &less<value_type>);
         }
         template <typename _StrictWeakOrdering>
         void merge(list &a, _StrictWeakOrdering b)
         {
-            (void)a;
-            (void)b;
+            iterator this_start = begin();
+            iterator this_end = end();
+            iterator obj_start = a.begin();
+            iterator obj_end = a.end();
+
+            while (obj_start != obj_end && this_start != this_end)
+            {
+                if (b(*obj_start, *this_start))
+                {
+                    splice(this_start, a, obj_start);
+                    obj_start = a.begin();
+                }
+                else
+                    ++this_start;
+            }
+            splice(this_end, a);
         }
         void reverse()
         {
@@ -406,7 +409,7 @@ namespace ft
         }
         void sort()
         {
-
+            sort(less<value_type>);
         }
         template <typename _StrictWeakOrdering>
         void sort(_StrictWeakOrdering a)
@@ -470,13 +473,13 @@ namespace ft
             _Node *__tmp = mCreateNode(__x);
             if (__position == begin())
             {
-                __tmp->hook(__position.mNode, BEGIN);
+                __tmp->hook_front(__position.mNode);
                 this->mImpl.mNode.mNext = __tmp;
             }
             else if (__position == end())
-                __tmp->hook(__position.mNode, END);
+                __tmp->hook_end(__position.mNode);
             else
-                __tmp->hook(__position.mNode, ELSE);
+                __tmp->hook_front(__position.mNode);
         }
         void mErase(iterator __position)
         {

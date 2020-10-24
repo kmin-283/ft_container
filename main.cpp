@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/24 18:35:26 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/24 22:48:12 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,23 @@
 bool single_digit(const int &value) { return (value < 10); }
 bool same_integral_part(double first, double second)
 {
-    return (int(first)==int(second));
+    return (int(first) == int(second));
 }
 // a predicate implemented as a class:
 struct is_odd
 {
     bool operator()(const int &value) { return (value % 2) == 1; }
 };
+
+bool mycomparison(double first, double second)
+{
+    return (int(first) < int(second));
+}
 int main()
 {
+    // ############ //
+    // splice test  //
+    // ############ //
     // ft::list<int> mylist1, mylist2;
     // ft::list<int>::iterator it;
 
@@ -55,8 +63,8 @@ int main()
     // std::cout << "mylist2 contains reverse:";
     // for (ft::list<int>::reverse_iterator itt = mylist2.rbegin(); itt!=mylist2.rend(); ++itt)
     //     std::cout << ' ' << *itt;
-    // std::cout << '\n';      
-              
+    // std::cout << '\n';
+
     // mylist2.splice (mylist2.begin(),mylist1, it);
     //                                 // mylist1: 1 10 20 30 3 4
     //                                 // mylist2: 2
@@ -76,7 +84,7 @@ int main()
     // std::cout << "mylist2 contains reverse:";
     // for (ft::list<int>::reverse_iterator itt = mylist2.rbegin(); itt!=mylist2.rend(); ++itt)
     //     std::cout << ' ' << *itt;
-    // std::cout << '\n';    
+    // std::cout << '\n';
     // it = mylist1.begin();
     // it++;
     // it++;
@@ -84,7 +92,7 @@ int main()
     // mylist1.splice ( mylist1.begin(), mylist1, it, mylist1.end());
     //                                 // mylist1: 30 3 4 1 10 20
     // std::cout << "mylist1 contains:";
-    
+
     // for (ft::list<int>::iterator itt = mylist1.begin(); itt!=mylist1.end(); ++itt)
     //     std::cout << ' ' << *itt;
     // std::cout << '\n';
@@ -99,24 +107,51 @@ int main()
     // std::cout << "mylist2 contains reverse:";
     // for (ft::list<int>::reverse_iterator itt = mylist2.rbegin(); itt!=mylist2.rend(); ++itt)
     //     std::cout << ' ' << *itt;
-    // std::cout << '\n'; 
+    // std::cout << '\n';
 
-    ft::list<int> s1,s2;
-    for (int i=1; i<=4; ++i)
-        s1.push_back(i);      // mylist1: 1 2 3 4
-    for (int i=1; i<=3; ++i)
-        s2.push_back(i*10);
-    ft::list<int>::iterator it = s2.begin();
-    ft::list<int>::iterator it2 = s2.begin();
-    it2++;
-    it2++;
-    s1.splice(s1.begin(), s2, it, s2.end());
-    for (ft::list<int>::iterator itt = s1.begin(); itt!=s1.end(); ++itt)
-        std::cout << ' ' << *itt;
+    // ############ //
+    // merge test   //
+    // ############ //
+    ft::list<double> first, second;
+
+    first.push_back(3.1);
+    first.push_back(2.2);
+    first.push_back(2.9);
+
+    second.push_back(3.7);
+    second.push_back(7.1);
+    second.push_back(1.4);
+
+    // first.sort();
+
+    // second.sort();
+
+    first.merge(second);
+    std::cout << "first contains:";
+    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
     std::cout << '\n';
-    std::cout << "mylist2 contains:";
-    for (ft::list<int>::iterator itt = s2.begin(); itt!=s2.end(); ++itt)
-        std::cout << ' ' << *itt;
+    // (second is now empty)
+    std::cout << "second contains:";
+    for (ft::list<double>::iterator it = second.begin(); it != second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    second.push_back(2.1);
+
+    first.merge(second, mycomparison);
+
+    std::cout << "first contains:";
+    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    
+    // ############ //
+    // reverse test   //
+    // ############ //
+    first.reverse();
+    std::cout << "first contains:";
+    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
     std::cout << '\n';
     return (0);
 }
