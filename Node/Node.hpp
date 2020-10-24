@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/23 16:47:16 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/24 18:34:18 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ namespace ft
             this->mPrev = this;
             this->mNext = this;
         }
-        void transfer_total(NodeBase * const __first, NodeBase * const __last)
+        void transfer_start_to_end(NodeBase * const __first, NodeBase * const __last)
         {
             __first->mPrev =  this->mPrev;
             this->mPrev->mNext = __first;
@@ -62,6 +62,16 @@ namespace ft
             __last->mPrev->mNext = this;
             __last->mNext = __last;
             __last->mPrev = __last;
+        }
+        void transfer_range(NodeBase * const __first, NodeBase * const __last)
+        {
+            __first->mPrev->mNext = __last->mNext;
+            __last->mNext->mPrev = __first->mPrev;
+
+            __first->mPrev = this->mPrev;
+            this->mPrev->mNext = __first;
+            __last->mNext = this;
+            this->mPrev = __last;
         }
         void transfer(NodeBase * const __first, NodeBase * const __last)
         {

@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/23 16:15:00 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/24 18:13:33 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,14 @@ namespace ft
         typedef ConstListIterator<T>                        const_iterator;
         typedef ReverseListIterator<T>                      reverse_iterator;
         typedef ConstReverseListIterator<T>                 const_reverse_iterator;
-        // typedef __gnu_cxx::size_t                                  size_type;
+#ifdef __linux__
+        typedef __gnu_cxx::size_t                                  size_type;
+        typedef __gnu_cxx::ptrdiff_t difference_type; // linux version
+#endif
+#ifdef __APPLE__
         typedef size_t                                  size_type;
-        typedef ptrdiff_t                               difference_type; // mac에서 사용할 때
-        // typedef __gnu_cxx::ptrdiff_t difference_type; // linux version
+        typedef ptrdiff_t                               difference_type;
+#endif
         typedef typename _Base::allocator_type          allocator_type;
     protected:
         typedef Node<T>                                 _Node;
@@ -311,7 +315,7 @@ namespace ft
         void splice(iterator __position, list &__x)
         {
             if (!__x.empty())
-                mTransferTotal(__position, __x.begin(), __x.end());
+                mTransferStartToEnd(__position, __x.begin(), __x.end());
         }
         void splice(iterator __position, list &__x, iterator __i)
         {
@@ -324,9 +328,13 @@ namespace ft
         }
         void splice(iterator __position, list &__x, iterator __first, iterator __last)
         {
-            (void)__x;
             if (__first != __last)
-                mTransfer(__position, __first, __last);
+            {
+                if (__x.end() == __last)
+                    mTransferRange(__position, __first, --__last);
+                else
+                    mTransferRange(__position, __first, __last);
+            }
         }
         void remove(const T &value)
         {
@@ -445,9 +453,13 @@ namespace ft
             for (; __n > 0; --__n)
                 mInsert(__pos, __x);   
         }
-        void mTransferTotal(iterator __position, iterator __first, iterator __last)
+        void mTransferStartToEnd(iterator __position, iterator __first, iterator __last)
         {
-            __position.mNode->transfer_total(__first.mNode, __last.mNode);
+            __position.mNode->transfer_start_to_end(__first.mNode, __last.mNode);
+        }
+        void mTransferRange(iterator __position, iterator __first, iterator __last)
+        {
+            __position.mNode->transfer_range(__first.mNode, __last.mNode);
         }
         void mTransfer(iterator __position, iterator __first, iterator __last)
         {
@@ -470,8 +482,12 @@ namespace ft
         {
             __position.mNode->unhook();
             _Node * __n = static_cast<_Node *>(__position.mNode);
-            // std::_Destroy(&__n->mData);
-            getAllocator().destroy(&__n->mData);            
+#ifdef __linux__
+            std::_Destroy(&__n->mData); // on linux
+#endif
+#ifdef __APPLE__
+            getAllocator().destroy(&__n->mData);   // on mac
+#endif
             mPutNode(__n);
         }
     };
