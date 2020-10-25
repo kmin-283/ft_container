@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/25 17:08:20 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/25 23:16:15 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,6 @@ int main()
     second.push_back(1.4);
 
     first.sort();
-
     second.sort();
 
     first.merge(second);
@@ -136,29 +135,31 @@ int main()
     // for (std::list<double>::iterator it = second.begin(); it != second.end(); ++it)
     //     std::cout << ' ' << *it;
     // std::cout << '\n';
+
     second.push_back(2.1);
 
     first.merge(second, mycomparison);
     first.sort();
-    std::cout << "first contains:";
-    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-    std::cout << "second contains:";
-    for (ft::list<double>::iterator it = second.begin(); it != second.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
-    // ############ //
-    // reverse test   //
-    // ############ //
-    // first.reverse();
-    // std::cout << "reverse first contains:";
+    // std::cout << "first contains:";
     // for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
     //     std::cout << ' ' << *it;
     // std::cout << '\n';
-    // std::cout << "reverse first contains:";
-    // for (ft::list<double>::reverse_iterator it = first.rbegin(); it != first.rend(); ++it)
+    // std::cout << "second contains:";
+    // for (ft::list<double>::iterator it = second.begin(); it != second.end(); ++it)
     //     std::cout << ' ' << *it;
     // std::cout << '\n';
+
+    // ############ //
+    // reverse test   //
+    // ############ //
+    first.reverse();
+    std::cout << "reverse first contains:";
+    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "reverse first contains:";
+    for (ft::list<double>::reverse_iterator it = first.rbegin(); it != first.rend(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/25 17:05:59 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/25 23:15:24 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -430,10 +430,8 @@ namespace ft
         {
             iterator start = begin();
             iterator next;
-            iterator finish = end();
 
-            --finish;
-            while (start != finish)
+            while (start != end())
             {
                 next = start;
                 ++next;
@@ -444,6 +442,7 @@ namespace ft
                         splice(start, *this, next); // swap
                         next = start;
                         ++next;
+                        start = begin();
                     }
                     else
                         ++next;
