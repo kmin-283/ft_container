@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 16:22:16 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/25 17:08:55 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,19 +20,19 @@ namespace ft
         NodeBase *mNext;
         NodeBase *mPrev;
 
-        void hook(NodeBase * const __position)
+        void hook_front(NodeBase *const __position)
         {
-            if (__position == __position->mNext)
-                __position->mNext = this;
-            else
-            {
-                __position->mPrev->mNext = this;
-            }
             this->mPrev = __position->mPrev;
+            __position->mPrev = this;
             this->mNext = __position;
+        }
+        void hook_end(NodeBase *const __position)
+        {
+            __position->mPrev->mNext = this;
+            this->mNext = __position;
+            this->mPrev = __position->mPrev;
             __position->mPrev = this;
         }
-
         void unhook()
         {
             this->mPrev->mNext = this->mNext;
@@ -40,26 +40,37 @@ namespace ft
             this->mPrev = this;
             this->mNext = this;
         }
-
-        void transfer(NodeBase * const __first, NodeBase * const __last)
+        void transfer_start_to_end(NodeBase *const __first, NodeBase *const __last)
         {
-            __last->mPrev->mNext = this;
-            if (__first != __last->mPrev) // last는 next 또는 prev의 비교대상이 될 수 없음 Node가 될 수 있기 때문에 end()인 경우
-            {
-                __last->mNext = __last; // end()의 경우 맨 처음 상태인 self->next = self;
-                __last->mPrev = __last; // self->prev = self로 만들어줌
-            }
-            else if (__first == __last->mPrev)
-            {
-                __first->mPrev->mNext = __last;
-                __last->mPrev = __first->mPrev;
-            }
             __first->mPrev = this->mPrev;
             this->mPrev->mNext = __first;
             this->mPrev = __last->mPrev;
-        } 
+            __last->mPrev->mNext = this;
+            __last->mNext = __last;
+            __last->mPrev = __last;
+        }
+        void transfer_range(NodeBase *const __first, NodeBase *const __last)
+        {
+            __first->mPrev->mNext = __last->mNext;
+            __last->mNext->mPrev = __first->mPrev;
+
+            __first->mPrev = this->mPrev;
+            this->mPrev->mNext = __first;
+            __last->mNext = this;
+            this->mPrev = __last;
+        }
+        void transfer(NodeBase *const __first, NodeBase *const __last)
+        {
+            __last->mPrev = __first->mPrev;
+            __first->mPrev->mNext = __last; // 이동 전의 노드들의 결합을 바꿔줌
+
+            __first->mPrev = this->mPrev;
+            this->mPrev->mNext = __first;
+            __first->mNext = this;
+            this->mPrev = __first;
+        }
     };
-    
+
     template <typename T>
     struct Node : public NodeBase
     {

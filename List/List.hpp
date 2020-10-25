@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 16:11:23 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/25 17:05:59 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <memory>
 #include <limits>
 #include "../Iterator/ListIterator.hpp"
+#include "../algorithms/algo.hpp"
 
 namespace ft
 {
@@ -91,10 +92,14 @@ namespace ft
         typedef ConstListIterator<T>                        const_iterator;
         typedef ReverseListIterator<T>                      reverse_iterator;
         typedef ConstReverseListIterator<T>                 const_reverse_iterator;
-        // typedef __gnu_cxx::size_t                                  size_type;
+#ifdef __linux__
+        typedef __gnu_cxx::size_t                                  size_type;
+        typedef __gnu_cxx::ptrdiff_t difference_type; // linux version
+#endif
+#ifdef __APPLE__
         typedef size_t                                  size_type;
-        typedef ptrdiff_t                               difference_type; // mac에서 사용할 때
-        // typedef __gnu_cxx::ptrdiff_t difference_type; // linux version
+        typedef ptrdiff_t                               difference_type;
+#endif
         typedef typename _Base::allocator_type          allocator_type;
     protected:
         typedef Node<T>                                 _Node;
@@ -102,6 +107,7 @@ namespace ft
         using _Base::mImpl;
         using _Base::mPutNode;
         using _Base::mGetNode;
+
         _Node *mCreateNode(const value_type &__x)
         {
             _Node *__p;
@@ -193,19 +199,19 @@ namespace ft
         }
         reverse_iterator rbegin()
         {
-            return (reverse_iterator(end()));
+            return (this->mImpl.mNode.mPrev);
         }
         const_reverse_iterator rbegin() const
         {
-            return (const_reverse_iterator(end()));
+            return (this->mImpl.mNode.mPrev);
         }
         reverse_iterator rend()
         {
-            return (reverse_iterator(begin()));
+            return (&this->mImpl.mNode);
         }
         const_reverse_iterator rend() const
         {
-            return (const_reverse_iterator(begin()));
+            return (&this->mImpl.mNode);
         }
         bool empty() const
         {
@@ -310,7 +316,7 @@ namespace ft
         void splice(iterator __position, list &__x)
         {
             if (!__x.empty())
-                mTransfer(__position, __x.begin(), __x.end());
+                mTransferStartToEnd(__position, __x.begin(), __x.end());
         }
         void splice(iterator __position, list &__x, iterator __i)
         {
@@ -324,7 +330,12 @@ namespace ft
         void splice(iterator __position, list &__x, iterator __first, iterator __last)
         {
             if (__first != __last)
-                mTransfer(__position, __first, __last);
+            {
+                if (__x.end() == __last)
+                    mTransferRange(__position, __first, --__last);
+                else
+                    mTransferRange(__position, __first, __last);
+            }
         }
         void remove(const T &value)
         {
@@ -349,19 +360,7 @@ namespace ft
         }
         void unique()
         {
-            iterator start = begin();
-            while (true)
-            {
-                iterator finish = end();
-                iterator next = ++start;
-                --start;
-                if (start == finish)
-                    break ;
-                if (next != finish && *start == *next)
-                    start = erase(--next);
-                else
-                    ++start;
-            }
+            unique(equal<value_type>);
         }
         template <typename _BinaryPredicate>
         void unique(_BinaryPredicate binary_pred)
@@ -382,26 +381,75 @@ namespace ft
         }
         void merge(list &__x)
         {
-            (void)__x;
+            merge(__x, &less<value_type>);
         }
         template <typename _StrictWeakOrdering>
         void merge(list &a, _StrictWeakOrdering b)
         {
-            (void)a;
-            (void)b;
+            iterator this_start = begin();
+            iterator this_end = end();
+            iterator obj_start = a.begin();
+            iterator obj_end = a.end();
+
+            while (obj_start != obj_end && this_start != this_end)
+            {
+                if (b(*obj_start, *this_start))
+                {
+                    splice(this_start, a, obj_start);
+                    obj_start = a.begin();
+                }
+                else
+                    ++this_start;
+            }
+            splice(this_end, a);
         }
         void reverse()
         {
-            this->mImpl.mNode.reverse();
+            iterator start = end();
+            iterator finish = begin();
+            iterator next;
+
+            --start; // 가장 마지막 노드
+            --start; // 뒤에서 2번째 노드
+            next = start;
+            while (start != finish)
+            {
+                if (next != finish)
+                    --next;
+                splice(end(), *this, start);
+                start = next;
+            }
+            splice(end(), *this, start);
         }
         void sort()
         {
-
+            sort(less<value_type>);
         }
         template <typename _StrictWeakOrdering>
         void sort(_StrictWeakOrdering a)
         {
-            (void)a;
+            iterator start = begin();
+            iterator next;
+            iterator finish = end();
+
+            --finish;
+            while (start != finish)
+            {
+                next = start;
+                ++next;
+                while (next != end())
+                {
+                    if (a(*next, *start))
+                    {
+                        splice(start, *this, next); // swap
+                        next = start;
+                        ++next;
+                    }
+                    else
+                        ++next;
+                }
+                ++start;
+            }
         }
         virtual ~list() {}
     protected:
@@ -443,6 +491,14 @@ namespace ft
             for (; __n > 0; --__n)
                 mInsert(__pos, __x);   
         }
+        void mTransferStartToEnd(iterator __position, iterator __first, iterator __last)
+        {
+            __position.mNode->transfer_start_to_end(__first.mNode, __last.mNode);
+        }
+        void mTransferRange(iterator __position, iterator __first, iterator __last)
+        {
+            __position.mNode->transfer_range(__first.mNode, __last.mNode);
+        }
         void mTransfer(iterator __position, iterator __first, iterator __last)
         {
             __position.mNode->transfer(__first.mNode, __last.mNode);
@@ -450,14 +506,26 @@ namespace ft
         void mInsert(iterator __position, const value_type &__x)
         {
             _Node *__tmp = mCreateNode(__x);
-            __tmp->hook(__position.mNode);
+            if (__position == begin())
+            {
+                __tmp->hook_front(__position.mNode);
+                this->mImpl.mNode.mNext = __tmp;
+            }
+            else if (__position == end())
+                __tmp->hook_end(__position.mNode);
+            else
+                __tmp->hook_front(__position.mNode);
         }
         void mErase(iterator __position)
         {
             __position.mNode->unhook();
             _Node * __n = static_cast<_Node *>(__position.mNode);
-            // std::_Destroy(&__n->mData);
-            getAllocator().destroy(&__n->mData);            
+#ifdef __linux__
+            std::_Destroy(&__n->mData); // on linux
+#endif
+#ifdef __APPLE__
+            getAllocator().destroy(&__n->mData);   // on mac
+#endif
             mPutNode(__n);
         }
     };

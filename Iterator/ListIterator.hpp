@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:41:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/22 08:44:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/24 16:39:59 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,12 @@ namespace ft
 
         typedef ListIterator<T> _Self;
         typedef Node<T> _Node;
-
+#ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-
+#endif
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
         ListIterator()
             : mNode()
         {
@@ -104,9 +106,12 @@ namespace ft
         typedef const Node<T> _Node;
         typedef ListIterator<T> iterator;
 
+#ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-
+#endif
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
         ConstListIterator()
             : mNode()
         {
@@ -177,9 +182,12 @@ namespace ft
         typedef ReverseListIterator<T> _Self;
         typedef Node<T> _Node;
 
+#ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-
+#endif
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
         ReverseListIterator()
             : mNode()
         {
@@ -246,9 +254,12 @@ namespace ft
         typedef ConstReverseListIterator<T> _Self;
         typedef const Node<T> _Node;
 
+#ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-
+#endif
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
         ConstReverseListIterator()
             : mNode()
         {
