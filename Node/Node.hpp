@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/25 16:58:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/25 17:08:55 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,13 +68,6 @@ namespace ft
             this->mPrev->mNext = __first;
             __first->mNext = this;
             this->mPrev = __first;
-        }
-        void swap(NodeBase &__y)
-        {
-            this->mNext = this->mPrev;
-            this->mPrev = &__y;
-            __y.mPrev = __y.mNext;
-            __y.mNext = this;
         }
     };
 
