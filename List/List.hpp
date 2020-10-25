@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/25 16:54:39 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/25 17:05:59 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -428,15 +428,27 @@ namespace ft
         template <typename _StrictWeakOrdering>
         void sort(_StrictWeakOrdering a)
         {
-            for (iterator it = begin(); it != end(); ++it)
-            {
-                for (iterator iter = ++it; iter != end(); ++iter)
-                {
-                    if (a(*iter, *it))
-                    {
+            iterator start = begin();
+            iterator next;
+            iterator finish = end();
 
+            --finish;
+            while (start != finish)
+            {
+                next = start;
+                ++next;
+                while (next != end())
+                {
+                    if (a(*next, *start))
+                    {
+                        splice(start, *this, next); // swap
+                        next = start;
+                        ++next;
                     }
+                    else
+                        ++next;
                 }
+                ++start;
             }
         }
         virtual ~list() {}
