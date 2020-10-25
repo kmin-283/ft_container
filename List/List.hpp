@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/24 23:18:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/25 16:54:39 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -405,7 +405,21 @@ namespace ft
         }
         void reverse()
         {
-            this->mImpl.mNode.reverse();
+            iterator start = end();
+            iterator finish = begin();
+            iterator next;
+
+            --start; // 가장 마지막 노드
+            --start; // 뒤에서 2번째 노드
+            next = start;
+            while (start != finish)
+            {
+                if (next != finish)
+                    --next;
+                splice(end(), *this, start);
+                start = next;
+            }
+            splice(end(), *this, start);
         }
         void sort()
         {
@@ -414,7 +428,16 @@ namespace ft
         template <typename _StrictWeakOrdering>
         void sort(_StrictWeakOrdering a)
         {
-            (void)a;
+            for (iterator it = begin(); it != end(); ++it)
+            {
+                for (iterator iter = ++it; iter != end(); ++iter)
+                {
+                    if (a(*iter, *it))
+                    {
+
+                    }
+                }
+            }
         }
         virtual ~list() {}
     protected:
