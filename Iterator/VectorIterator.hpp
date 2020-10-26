@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/19 16:51:20 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 13:13:01 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,12 @@ namespace ft
         typedef T& reference;
 
         typedef VectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
         typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:
@@ -92,10 +96,14 @@ namespace ft
         typedef T value_type;
         typedef const T* pointer;
         typedef const T& reference;
-
         typedef ConstVectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-        typedef ptrdiff_t   difference_type;
+
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
+        typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:
@@ -157,10 +165,14 @@ namespace ft
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;
-
         typedef ReverseVectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-        typedef ptrdiff_t   difference_type;
+        
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
+        typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:
@@ -224,8 +236,12 @@ namespace ft
         typedef T& reference;
 
         typedef ConstReverseVectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-        typedef ptrdiff_t   difference_type;
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
+        typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:

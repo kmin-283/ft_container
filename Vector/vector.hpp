@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 11:50:50 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 13:22:13 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ namespace ft
 
         allocator_type getAllocator() const
         {
-            return (allocator_type(*static_cast<T_allocator_type *>(&this->mImpl)));
+            return (allocator_type(*static_cast<const T_allocator_type *>(&this->mImpl)));
         }
 
         VectorBase(const allocator_type &__a)
@@ -115,7 +115,13 @@ namespace ft
         }
         virtual ~vector()
         {
-            std::destroy(this->mImpl.mStart, this->mImpl.mFinish);
+            pointer start = this->mImpl.mStart;
+            pointer finish = this->mImpl.mFinish;
+            for (; start != finish;)
+            {
+                this->getAllocator().destroy(start);
+                ++start;
+            }
         }
         iterator begin()
         {
