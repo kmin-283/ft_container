@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/19 17:03:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 11:50:50 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,9 @@ namespace ft
             : mImpl(__a)
         {}
         virtual ~VectorBase()
-        {}
+        {
+            mDeallocate(this->mImpl.mStart, this->mImpl.mEndOfStorage - this->mImpl.mStart);
+        }
 
         void mAllocate(size_type __n)
         {
@@ -111,11 +113,178 @@ namespace ft
             this->insert(begin(), __x.begin(), __x.end());
             return (*this);
         }
-        void begin()
-        {}
-        void insert()
-        {}
         virtual ~vector()
+        {
+            std::destroy(this->mImpl.mStart, this->mImpl.mFinish);
+        }
+        iterator begin()
+        {
+            return (iterator(this->mImpl.mStart));
+        }
+        const_iterator begin() const
+        {
+            return (const_iterator(this->mImpl.mStart));
+        }
+        iterator end()
+        {
+            return (iterator(this->mImpl.mFinish));
+        }
+        const_iterator end() const
+        {
+            return (const_iterator(this->mImpl.mFinish));
+        }
+        reverse_iterator rbegin()
+        {
+            return (reverse_iterator(end()));
+        }
+        const_reverse_iterator rbegin() const
+        {
+            return (const_reverse_iterator(end()));
+        }
+        reverse_iterator rend()
+        {
+            return (reverse_iterator(begin()));
+        }
+        const_reverse_iterator rend() const
+        {
+            return (const_reverse_iterator(begin()));
+        }
+        size_type size() const
+        {
+            return (size_type(this->mImpl.mFinish - this->mImpl.mStart));
+        }
+        size_type max_size() const
+        {
+            return (this->getAllocator().max_size());
+        }
+        void resize(size_type __new_size)
+        {
+            if (__new_size > size())
+                mDefaultAppend(__new_size - size());
+            else if (__new_size < size())
+                mEraseAtEnd(this->mImpl.mStart + __new_size);
+        }
+        size_type capacity() const
+        {
+            return (size_type(this->mImpl.mEndOfStorage - this->mImpl.mStart));
+        }
+        bool empty() const
+        {
+            return (begin() == end());
+        }
+        void reverse()
         {}
+        reference operator[](size_type __n)
+        {
+            return (*(this->mImpl.mStart + __n));
+        }
+        const_reference operator[](size_type __n) const
+        {
+            return (*(this->mImpl.mStart + __n));
+        }
+    protected:
+        void mRangeCheck(size_type __n)
+        {
+            if (__n >= this->size())
+                std::__throw_out_of_range("vector::mRangeCheck");
+        }
+    public:
+        reference at(size_type __n)
+        {
+            mRangeCheck(__n);
+            return (*this)[__n];
+        }
+        reference front()
+        {
+            return (*begin());
+        }
+        const_reference front() const
+        {
+            return (*begin());
+        }
+        reference back()
+        {
+            return (*(end() - 1));
+        }
+        const_reference back() const
+        {
+            return (*(end() - 1));
+        }
+        void assign(size_type __n, const value_type &__val)
+        {
+            mFillAssign(__n, __val);
+        }
+        template <typename _InputIterator>
+        void assign(_InputIterator __first, _InputIterator __last)
+        {
+            (void)__first;
+            (void)__last;
+        }
+        void push_back(const value_type &__x)
+        {
+            if (this->mImpl.mFinish != this->mImpl.endOfStorage)
+            {
+                this->mImpl.getAllocator().construct(this->mImpl.mFinish, __x); // 할당을 하지 않고, 값만 채움
+                ++this->mImpl.mFinish; // 결국 *this->mImpl.mFinish = __x과 같은 것임.
+            }
+            else
+                mInsertAux(end(), __x); // 새롭게 메모리를 할당해서 값을 채움
+        }
+        void pop_back()
+        {
+            --this->mImpl.mFinish;
+            this->mImpl.getAllocator().destoy(this->mImpl.mFinish);
+        }
+        iterator insert(iterator __position, const value_type &__x)
+        {
+            (void)__position;
+            (void)__x;
+        }
+        void insert(iterator __position, size_type __n, const value_type &__val)
+        {
+            mFillInsert(__position, __n, __val);
+        }
+        template <typename _InputIterator>
+        void insert(iterator __position, _InputIterator __first, _InputIterator __last)
+        {
+            (void)__position;
+            (void)__first;
+            (void)__last;
+        }
+        iterator erase(iterator __position)
+        {
+            
+        }
+        iterator erase(iterator __first, iterator __last)
+        {
+            
+        }
+        void swap(vector &__x)
+        {
+            std::swap(this->mImpl.mStart, __x.mImpl.mStart);
+            std::swap(this->mImpl.mFinish, __x.mImpl.mFinish);
+            std::swap(this->mImpl.mEndOfStorage, __x.mImpl.mEndOfStorage);
+            // alloc_swap??
+        }
+        void clear()
+        {
+            mEraseAtEnd(this->mImpl.mStart);
+        }
+    protected:
+        template <typename _ForwardIterator>
+        pointer mAllocateAndCopy(size_type __n, _ForwardIterator __first, _ForwardIterator __last)
+        {
+            pointer __result = this->mAllocate(__n);
+            try
+            {
+                std::uninitialized_copy(__first, __last, __result);
+                return (__result);
+            }
+            catch(const std::exception& e)
+            {
+                mDeallocate(__result, __n);
+                throw;
+            }
+        }
     };
 }

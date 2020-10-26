@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 09:14:27 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 09:24:27 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ namespace ft
         void transfer_range(NodeBase *const __first, NodeBase *const __last)
         {
             __first->mPrev->mNext = __last->mNext;
-            __last->mNext->mPrev = __first->mPrev;
+            __last->mNext->mPrev = __first->mPrev; // 이동 전의 노드들의 결합을 바꿔줌
 
             __first->mPrev = this->mPrev;
             this->mPrev->mNext = __first;
