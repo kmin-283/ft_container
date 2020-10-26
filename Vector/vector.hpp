@@ -6,13 +6,14 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 13:22:13 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 15:59:44 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <memory>
 #include "../Iterator/VectorIterator.hpp"
+#include <iostream>
 
 namespace ft
 {
@@ -27,6 +28,9 @@ namespace ft
             typename T_allocator_type::pointer mFinish;
             typename T_allocator_type::pointer mEndOfStorage;
 
+            VectorImpl()
+                : T_allocator_type(), mStart(0), mFinish(0), mEndOfStorage(0)
+            {}
             VectorImpl(const T_allocator_type &__a)
                 : T_allocator_type(__a), mStart(0), mFinish(0), mEndOfStorage(0)
             {}
@@ -41,18 +45,31 @@ namespace ft
         {
             return (allocator_type(*static_cast<const T_allocator_type *>(&this->mImpl)));
         }
-
         VectorBase(const allocator_type &__a)
             : mImpl(__a)
         {}
+        VectorBase(size_type __n)
+            : mImpl()
+        {
+            this->mImpl.mStart = this->mAllocate(__n);
+            this->mImpl.mFinish = this->mImpl.mStart;
+            this->mImpl.mEndOfStorage = this->mImpl.mStart + __n;
+        }
+        VectorBase(size_type __n, const allocator_type &__a)
+            : mImpl(__a)
+        {
+            this->mImpl.mStart = this->mAllocate(__n);
+            this->mImpl.mFinish = this->mImpl.mStart;
+            this->mImpl.mEndOfStorage = this->mImpl.mStart + __n;
+        }
         virtual ~VectorBase()
         {
             mDeallocate(this->mImpl.mStart, this->mImpl.mEndOfStorage - this->mImpl.mStart);
         }
 
-        void mAllocate(size_type __n)
+        typename T_allocator_type::pointer mAllocate(size_type __n)
         {
-            return (__n != 0 ? mImpl.allocate(__n) : 0);
+            return (__n != 0 ? this->mImpl.T_allocator_type::allocate(__n) : 0);
         }
         void mDeallocate(typename T_allocator_type::pointer __p, size_type __n)
         {
@@ -88,25 +105,19 @@ namespace ft
             : _Base(__a)
         {}
         explicit vector(size_type __n, const value_type &__val = value_type(), const allocator_type &__a = allocator_type()) // fill constructor
+            : _Base(__n, __a)
+        {
+            mFillInitialize(__n, __val);
+        }
+        vector(const_iterator __first, const_iterator __last, const allocator_type &__a = allocator_type()) // range constructor
             : _Base(__a)
         {
-            insert(begin(), __n, __val);
-        }
-        explicit vector(size_type __n) // size constructor?
-            : _Base(allocator_type())
-        {
-            insert(begin(), __n, value_type());
-        }
-        template <typename _InputIterator>
-        vector(_InputIterator __first, _InputIterator __last, const allocator_type &__a = allocator_type()) // range constructor
-            : _Base(__a)
-        {
-            insert(begin(), __first, __last);
+            mInitializeDispatch(__first, __last);
         }
         vector(const vector &__x) // copy constructor
             : _Base(__x.getAllocator())
         {
-            insert(begin(), __x.begin(), __x.end());
+            this->mImpl.mFinish = std::uninitialized_copy(__x.begin(), __x.end(), this->mImpl.mStart);
         }
         vector &operator=(const vector &__x) // assign operator
         {
@@ -250,12 +261,9 @@ namespace ft
         {
             mFillInsert(__position, __n, __val);
         }
-        template <typename _InputIterator>
-        void insert(iterator __position, _InputIterator __first, _InputIterator __last)
+        void insert(iterator __position, const_iterator __first, const_iterator __last)
         {
-            (void)__position;
-            (void)__first;
-            (void)__last;
+            mFillInsert(__position, __first, __last);
         }
         iterator erase(iterator __position)
         {
@@ -292,5 +300,128 @@ namespace ft
                 throw;
             }
         }
+        template <typename _Integer>
+        void mInitializeDispatch(_Integer __n, _Integer __value)
+        {
+            
+        }
+        void mInitializeDispatch(const_iterator __first, const_iterator __last)
+        {
+            mRangeInitialize(__first, __last);
+        }
+        template <typename _InputIterator>
+        void mRangeInitialize(_InputIterator __first, _InputIterator __last, std::input_iterator_tag)
+        {
+            for(; __first != __last; ++__first)
+                push_back(*__first);
+        }
+        template <typename _ForwardIterator>
+        void mRangeInitialize(_ForwardIterator __first, _ForwardIterator __last, std::forward_iterator_tag)
+        {
+            const size_type __n = std::distance(__first, __last);
+            this->mImpl.mStart = this->mAllocate(__n);
+            this->mImpl.mEndOfStorage = this->mImpl.mStart + __n;
+            this->mImpl.mFinish = std::uninitialized_copy(__first, __last, this->mImpl.mStart);
+        }
+        void mFillInitialize(size_type __n, const value_type &__value)
+        {
+            std::uninitialized_fill_n(this->mImpl.mStart, __n, __value);
+            this->mImpl.mFinish = this->mImpl.mEndOfStorage;
+        }
+        void mDefaultInitialize(size_type __n)
+        {
+            try
+            {
+                this->mAllocate(__n);
+            }
+            catch (std::exception &e)
+            {
+                this->mDeallocate(this->mImpl.mStart, __n);
+                throw;
+            }
+            this->mImpl.mFinish = this->mImpl.mEndOfStorage;
+        }
+        template <typename _Integer>
+        void mAssignDispatch(_Integer __n, _Integer __val, std::true_type)
+        {
+            mFillAssign(__n, __val);
+        }
+        void mAssignDispatch(const_iterator __first, const_iterator __last)
+        {
+            mAssignAux(__first, __last);
+        }
+        template <typename _InputIterator>
+        void mAssignAux(_InputIterator __first, _InputIterator __last, std::input_iterator_tag)
+        {}
+        template <typename _ForwardIterator>
+        void mAssignAux(_ForwardIterator __first, _ForwardIterator __last, std::forward_iterator_tag)
+        {}
+        void mFillAssign(size_type __n, const value_type &__val)
+        {}
+        template <typename _Integer>
+        void mInsertDispatch(iterator __pos, _Integer __n, _Integer __val)
+        {
+            mFillInsert(__pos, __n, __val);
+        }
+        void mInsertDispatch(iterator __pos, const_iterator __n, const_iterator __val)
+        {
+            mRangeInsert(__pos, __n, __val);
+        }
+        template <typename _InputIterator>
+        void mRangeInsert(iterator __pos, _InputIterator __first, _InputIterator __last, std::input_iterator_tag)
+        {
+
+        }
+        template<typename _ForwardIterator>
+        void mRangeInsert(iterator __pos, _ForwardIterator __first, _ForwardIterator __last, std::forward_iterator_tag)
+        {}
+        void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
+        {}
+        void mDefaultAppend(size_type __n)
+        {}
+        void mInsertAux(iterator __position, const value_type &__x)
+        {}
+        size_type mCheckLen(size_type __n, const char *__s) const
+        {
+            if (max_size() - size() < __n)
+                std::__throw_length_error(__s);
+            const size_type __len = size() + std::max(size(), __n);
+            return (__len < size() || __len > max_size()) ? max_size() : __len;
+        }
+        void mEraseAtEnd(pointer __pos)
+        {
+            // std::destroy(__pos, this->mImpl.mFinish);
+            this->mImpl.mFinish = __pos;
+        }
     };
+    template <typename _Tp, typename _Alloc>
+    inline bool operator<(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
+    {
+        return (std::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end()));
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator!=(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
+    {
+        return (!(__x == __y));
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator<=(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
+    {
+        return (!(__x <= __y));
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator>(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
+    {
+        return (!(__x > __y));
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator>=(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
+    {
+        return (!(__x >= __y));
+    }
+    template <typename _Tp, typename _Alloc>
+    inline void swap(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
+    {
+        __x.swap(__y);
+    }
 }

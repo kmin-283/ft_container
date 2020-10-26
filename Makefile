@@ -1,11 +1,16 @@
 # NAME = container
 
 CC = clang++
-CFLAGS = -std=c++98 -g3 -fsanitize=address
+CFLAGS = -std=c++98
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
-SRCS = main_list.cpp main_vector.cpp
+
+SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp)
 
 OBJS = $(SRCS:%.cpp=%.o)
+
+LIST = $(addprefix ./tests/, main_list.cpp)
+VECTOR = $(addprefix ./tests/, main_vector.cpp)
+
 
 # $(NAME):	$(OBJS)
 # 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
@@ -16,18 +21,28 @@ OBJS = $(SRCS:%.cpp=%.o)
 # all:		$(NAME)
 
 list: $(OBJS)
-			$(CC) $(CFLAGS) -o list_container main_list.cpp
-
+			$(CC) $(CFLAGS) -o list_container $(LIST)
+			./list_container
+			
 vector: $(OBJS)
-			$(CC) $(CFLAGS) -o vector_container main_vector.cpp			
+			$(CC) $(CFLAGS) -o vector_container $(VECTOR)
+			./vector_container			
 
 clean:
 			rm -rf $(OBJS)
+			rm -f list_container
+			rm -f vector_container
 
 fclean:
 			rm -rf $(OBJS)
 			rm -rf $(NAME)
+			rm -f list_container
+			rm -f vector_container
 
 re: fclean all
+
+relist : fclean list
+
+revector : fclean vector
 
 .PHONY: all clean fclean re

@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   main_list.cpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 09:10:48 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 15:00:02 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <list>
-#include "List/List.hpp"
+#include <iostream>
+#include "../List/List.hpp"
 
 bool single_digit(const int &value) { return (value < 10); }
 bool same_integral_part(double first, double second)

@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 13:13:01 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 15:39:17 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,9 @@ namespace ft
         pointer mData;
     public:
         VectorIterator()
+        {}
+        VectorIterator(pointer ptr)
+            :mData(ptr)
         {}
         VectorIterator(const VectorIterator &other)
             :mData(other.mData)
@@ -105,9 +108,12 @@ namespace ft
         typedef ptrdiff_t difference_type;
 #endif
     private:
-        pointer mData;
+        const pointer mData;
     public:
         ConstVectorIterator()
+        {}
+        ConstVectorIterator(pointer ptr)
+            :mData(ptr)
         {}
         ConstVectorIterator(const ConstVectorIterator &other)
             :mData(other.mData)
@@ -178,6 +184,9 @@ namespace ft
     public:
         ReverseVectorIterator()
         {}
+        ReverseVectorIterator(pointer ptr)
+            :mData(ptr)
+        {}
         ReverseVectorIterator(const ReverseVectorIterator &other)
             :mData(other.mData)
         {}
@@ -243,9 +252,12 @@ namespace ft
         typedef ptrdiff_t difference_type;
 #endif
     private:
-        pointer mData;
+        const pointer mData;
     public:
         ConstReverseVectorIterator()
+        {}
+        ConstReverseVectorIterator(pointer ptr)
+            :mData(ptr)
         {}
         ConstReverseVectorIterator(const ConstReverseVectorIterator &other)
             :mData(other.mData)
