@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/25 17:08:55 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 09:14:27 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,15 +40,15 @@ namespace ft
             this->mPrev = this;
             this->mNext = this;
         }
-        void transfer_start_to_end(NodeBase *const __first, NodeBase *const __last)
-        {
-            __first->mPrev = this->mPrev;
-            this->mPrev->mNext = __first;
-            this->mPrev = __last->mPrev;
-            __last->mPrev->mNext = this;
-            __last->mNext = __last;
-            __last->mPrev = __last;
-        }
+        // void transfer_start_to_end(NodeBase *const __first, NodeBase *const __last)
+        // {
+        //     __first->mPrev = this->mPrev;
+        //     this->mPrev->mNext = __first;
+        //     this->mPrev = __last->mPrev;
+        //     __last->mPrev->mNext = this;
+        //     __last->mNext = __last;
+        //     __last->mPrev = __last;
+        // }
         void transfer_range(NodeBase *const __first, NodeBase *const __last)
         {
             __first->mPrev->mNext = __last->mNext;

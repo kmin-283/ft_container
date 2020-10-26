@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/25 23:15:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 09:14:01 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,8 +315,9 @@ namespace ft
         }
         void splice(iterator __position, list &__x)
         {
+            iterator finish = __x.end();
             if (!__x.empty())
-                mTransferStartToEnd(__position, __x.begin(), __x.end());
+                mTransferRange(__position, __x.begin(), --finish);
         }
         void splice(iterator __position, list &__x, iterator __i)
         {
@@ -490,10 +491,10 @@ namespace ft
             for (; __n > 0; --__n)
                 mInsert(__pos, __x);   
         }
-        void mTransferStartToEnd(iterator __position, iterator __first, iterator __last)
-        {
-            __position.mNode->transfer_start_to_end(__first.mNode, __last.mNode);
-        }
+        // void mTransferStartToEnd(iterator __position, iterator __first, iterator __last)
+        // {
+        //     __position.mNode->transfer_start_to_end(__first.mNode, __last.mNode);
+        // }
         void mTransferRange(iterator __position, iterator __first, iterator __last)
         {
             __position.mNode->transfer_range(__first.mNode, __last.mNode);
