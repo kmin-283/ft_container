@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 15:59:44 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/29 15:52:24 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,13 +115,15 @@ namespace ft
             mInitializeDispatch(__first, __last);
         }
         vector(const vector &__x) // copy constructor
-            : _Base(__x.getAllocator())
+            : _Base(__x.size(), __x.getAllocator())
         {
             this->mImpl.mFinish = std::uninitialized_copy(__x.begin(), __x.end(), this->mImpl.mStart);
         }
         vector &operator=(const vector &__x) // assign operator
         {
-            this->insert(begin(), __x.begin(), __x.end());
+            this->mImpl.mStart = mAllocate(__x.size());
+            this->mImpl.mFinish = std::uninitialized_copy(__x.begin(), __x.end(), this->mImpl.mStart);
+            this->mImpl.mEndOfStroage = this->mImpl.mStart + this->size();
             return (*this);
         }
         virtual ~vector()
@@ -231,17 +233,15 @@ namespace ft
         {
             mFillAssign(__n, __val);
         }
-        template <typename _InputIterator>
-        void assign(_InputIterator __first, _InputIterator __last)
+        void assign(const_iterator __first, const_iterator __last)
         {
-            (void)__first;
-            (void)__last;
+            mAssignDispatch(__first, __last);
         }
         void push_back(const value_type &__x)
         {
-            if (this->mImpl.mFinish != this->mImpl.endOfStorage)
+            if (this->mImpl.mFinish != this->mImpl.mEndOfStorage)
             {
-                this->mImpl.getAllocator().construct(this->mImpl.mFinish, __x); // 할당을 하지 않고, 값만 채움
+                this->getAllocator().construct(this->mImpl.mFinish, __x); // 할당을 하지 않고, 값만 채움
                 ++this->mImpl.mFinish; // 결국 *this->mImpl.mFinish = __x과 같은 것임.
             }
             else
@@ -250,7 +250,7 @@ namespace ft
         void pop_back()
         {
             --this->mImpl.mFinish;
-            this->mImpl.getAllocator().destoy(this->mImpl.mFinish);
+            this->getAllocator().destoy(this->mImpl.mFinish);
         }
         iterator insert(iterator __position, const value_type &__x)
         {
@@ -380,7 +380,17 @@ namespace ft
         void mDefaultAppend(size_type __n)
         {}
         void mInsertAux(iterator __position, const value_type &__x)
-        {}
+        {
+            size_type default_capacity = this->size();
+            size_type capacity = default_capacity == 0 ? 1 : default_capacity * 2;
+            pointer tmp = mAllocateAndCopy(capacity, this->begin(), this->end());
+            this->getAllocator().construct(tmp + default_capacity, __x);
+            mEraseAtEnd(this->mImpl.mStart);
+            this->mDeallocate(this->mImpl.mStart, default_capacity);
+            this->mImpl.mStart = tmp;
+            this->mImpl.mFinish = this->mImpl.mStart + default_capacity + 1;
+            this->mImpl.mEndOfStorage = this->mImpl.mStart + capacity;
+        }
         size_type mCheckLen(size_type __n, const char *__s) const
         {
             if (max_size() - size() < __n)
@@ -390,7 +400,12 @@ namespace ft
         }
         void mEraseAtEnd(pointer __pos)
         {
-            // std::destroy(__pos, this->mImpl.mFinish);
+            pointer mover = __pos;
+            for (; mover != this->mImpl.mFinish; )
+            {
+                this->getAllocator().destroy(mover);
+                ++mover;
+            }
             this->mImpl.mFinish = __pos;
         }
     };

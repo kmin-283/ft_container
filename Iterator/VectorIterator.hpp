@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 15:39:17 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/29 13:17:59 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ namespace ft
         typedef ptrdiff_t difference_type;
 #endif
     private:
-        const pointer mData;
+        pointer mData;
     public:
         ConstVectorIterator()
         {}
@@ -252,7 +252,7 @@ namespace ft
         typedef ptrdiff_t difference_type;
 #endif
     private:
-        const pointer mData;
+        pointer mData;
     public:
         ConstReverseVectorIterator()
         {}
