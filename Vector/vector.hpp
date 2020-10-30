@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/30 14:15:42 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/30 14:45:38 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,9 +263,13 @@ namespace ft
         {
             mFillInsert(__position, __n, __val);
         }
+        void insert(iterator __position, iterator __first, iterator __last)
+        {
+            mInsertDispatch(__position, __first, __last);
+        }
         void insert(iterator __position, const_iterator __first, const_iterator __last)
         {
-            mFillInsert(__position, __first, __last);
+            mInsertDispatch(__position, __first, __last);
         }
         iterator erase(iterator __position)
         {
