@@ -60,6 +60,11 @@
         "tuple": "cpp",
         "typeinfo": "cpp",
         "unordered_map": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "__tree": "cpp",
+        "deque": "cpp",
+        "map": "cpp",
+        "queue": "cpp",
+        "thread": "cpp"
     }
 }

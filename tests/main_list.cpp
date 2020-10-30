@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 15:00:02 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/29 16:25:56 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,54 +113,56 @@ int main()
     // ############ //
     // merge test   //
     // ############ //
-    // ft::list<double> first, second;
+    ft::list<double> first, second;
 
-    // first.push_back(3.1);
-    // first.push_back(2.2);
-    // first.push_back(2.9);
+    first.push_back(3.1);
+    first.push_back(2.2);
+    first.push_back(2.9);
 
-    // second.push_back(3.7);
-    // second.push_back(7.1);
-    // second.push_back(1.4);
+    second.push_back(3.7);
+    second.push_back(7.1);
+    second.push_back(1.4);
 
-    // first.sort();
-    // second.sort();
+    first.sort();
+    second.sort();
 
-    // first.merge(second);
-    // // std::cout << "first contains:";
-    // // for (std::list<double>::iterator it = first.begin(); it != first.end(); ++it)
-    // //     std::cout << ' ' << *it;
-    // // std::cout << '\n';
-    // // // (second is now empty)
-    // // std::cout << "second contains:";
-    // // for (std::list<double>::iterator it = second.begin(); it != second.end(); ++it)
-    // //     std::cout << ' ' << *it;
-    // // std::cout << '\n';
+    first.merge(second);
+    std::cout << "first contains:";
+    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    // (second is now empty)
+    std::cout << "second contains:";
+    for (ft::list<double>::iterator it = second.begin(); it != second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
-    // second.push_back(2.1);
+    second.push_back(2.1);
 
-    // first.merge(second, mycomparison);
-    // first.sort();
-    // // std::cout << "first contains:";
-    // // for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
-    // //     std::cout << ' ' << *it;
-    // // std::cout << '\n';
-    // // std::cout << "second contains:";
-    // // for (ft::list<double>::iterator it = second.begin(); it != second.end(); ++it)
-    // //     std::cout << ' ' << *it;
-    // // std::cout << '\n';
+    first.merge(second, mycomparison);
+    first.sort();
+    std::cout << "first contains:";
+    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "second contains:";
+    for (ft::list<double>::iterator it = second.begin(); it != second.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
     // // ############ //
     // // reverse test   //
     // // ############ //
-    // first.reverse();
-    // std::cout << "reverse first contains:";
-    // for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
-    //     std::cout << ' ' << *it;
-    // std::cout << '\n';
-    // std::cout << "reverse first contains:";
-    // for (ft::list<double>::reverse_iterator it = first.rbegin(); it != first.rend(); ++it)
-    //     std::cout << ' ' << *it;
-    // std::cout << '\n';
+    first.reverse();
+    std::cout << "reverse first contains:";
+    for (ft::list<double>::iterator it = first.begin(); it != first.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    std::cout << "reverse first contains:";
+    for (ft::list<double>::reverse_iterator it = first.rbegin(); it != first.rend(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
+    while (1)
+        ;
     return (0);
 }

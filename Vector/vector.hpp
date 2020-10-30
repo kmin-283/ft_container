@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/29 15:52:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/30 14:15:42 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,9 @@ namespace ft
             return (begin() == end());
         }
         void reverse()
-        {}
+        {
+
+        }
         reference operator[](size_type __n)
         {
             return (*(this->mImpl.mStart + __n));
@@ -250,12 +252,12 @@ namespace ft
         void pop_back()
         {
             --this->mImpl.mFinish;
-            this->getAllocator().destoy(this->mImpl.mFinish);
+            this->getAllocator().destroy(this->mImpl.mFinish);
         }
         iterator insert(iterator __position, const value_type &__x)
         {
-            (void)__position;
-            (void)__x;
+            mFillInsert(__position, 1, __x);
+            return (begin());
         }
         void insert(iterator __position, size_type __n, const value_type &__val)
         {
@@ -376,7 +378,31 @@ namespace ft
         void mRangeInsert(iterator __pos, _ForwardIterator __first, _ForwardIterator __last, std::forward_iterator_tag)
         {}
         void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
-        {}
+        {
+            pointer element;
+            pointer startPoint;
+            difference_type disToBegin = __pos.distance(begin()); // distance from __pos to begin()
+            difference_type disToEnd = __pos.distance(end()) - 1; // distance from __pos to end()
+
+            for (size_type i = 0; i < __n; ++i)
+                push_back(__x); //push back에서 주소가 바뀔 수 있기 때문에 __pos를 그대로 사용할 수 없다.
+            element = this->mImpl.mFinish;
+            startPoint = this->mImpl.mStart + disToBegin;
+            --startPoint;
+            --element;
+            for (size_type i = 0; startPoint != this->mImpl.mStart + disToBegin + disToEnd; --element)
+            {
+                *element = *(this->mImpl.mStart + disToBegin + disToEnd - i);
+                ++startPoint;
+                ++i;
+            }
+            element = this->mImpl.mStart + disToBegin;
+            for (size_type i = 0; i < __n; ++i)
+            {
+                *element =  __x;
+                ++element;
+            }
+        }
         void mDefaultAppend(size_type __n)
         {}
         void mInsertAux(iterator __position, const value_type &__x)

@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/29 13:17:59 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/30 11:54:49 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,17 @@ namespace ft
         VectorIterator(pointer ptr)
             :mData(ptr)
         {}
-        VectorIterator(const VectorIterator &other)
+        VectorIterator(const VectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const VectorIterator &rhs)
+        _Self &operator=(const VectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const VectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {
@@ -115,13 +119,17 @@ namespace ft
         ConstVectorIterator(pointer ptr)
             :mData(ptr)
         {}
-        ConstVectorIterator(const ConstVectorIterator &other)
+        ConstVectorIterator(const ConstVectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const ConstVectorIterator &rhs)
+        _Self &operator=(const ConstVectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const ConstVectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {
@@ -187,13 +195,17 @@ namespace ft
         ReverseVectorIterator(pointer ptr)
             :mData(ptr)
         {}
-        ReverseVectorIterator(const ReverseVectorIterator &other)
+        ReverseVectorIterator(const ReverseVectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const ReverseVectorIterator &rhs)
+        _Self &operator=(const ReverseVectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const ReverseVectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {
@@ -259,13 +271,17 @@ namespace ft
         ConstReverseVectorIterator(pointer ptr)
             :mData(ptr)
         {}
-        ConstReverseVectorIterator(const ConstReverseVectorIterator &other)
+        ConstReverseVectorIterator(const ConstReverseVectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const ConstReverseVectorIterator &rhs)
+        _Self &operator=(const ConstReverseVectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const ConstReverseVectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {
