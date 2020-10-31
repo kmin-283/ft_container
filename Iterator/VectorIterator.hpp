@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/19 16:51:20 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/30 11:54:49 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,20 +29,31 @@ namespace ft
         typedef T& reference;
 
         typedef VectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
         typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:
         VectorIterator()
         {}
-        VectorIterator(const VectorIterator &other)
+        VectorIterator(pointer ptr)
+            :mData(ptr)
+        {}
+        VectorIterator(const VectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const VectorIterator &rhs)
+        _Self &operator=(const VectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const VectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {
@@ -92,22 +103,33 @@ namespace ft
         typedef T value_type;
         typedef const T* pointer;
         typedef const T& reference;
-
         typedef ConstVectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-        typedef ptrdiff_t   difference_type;
+
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
+        typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:
         ConstVectorIterator()
         {}
-        ConstVectorIterator(const ConstVectorIterator &other)
+        ConstVectorIterator(pointer ptr)
+            :mData(ptr)
+        {}
+        ConstVectorIterator(const ConstVectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const ConstVectorIterator &rhs)
+        _Self &operator=(const ConstVectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const ConstVectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {
@@ -157,22 +179,33 @@ namespace ft
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;
-
         typedef ReverseVectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-        typedef ptrdiff_t   difference_type;
+        
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
+        typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:
         ReverseVectorIterator()
         {}
-        ReverseVectorIterator(const ReverseVectorIterator &other)
+        ReverseVectorIterator(pointer ptr)
+            :mData(ptr)
+        {}
+        ReverseVectorIterator(const ReverseVectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const ReverseVectorIterator &rhs)
+        _Self &operator=(const ReverseVectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const ReverseVectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {
@@ -224,20 +257,31 @@ namespace ft
         typedef T& reference;
 
         typedef ConstReverseVectorIterator<T> _Self;
-        // typedef __gnu_cxx::ptrdiff_t difference_type;
-        typedef ptrdiff_t   difference_type;
+#ifdef __linux__
+        typedef __gnu_cxx::ptrdiff_t difference_type;
+#endif
+#ifdef __APPLE__
+        typedef ptrdiff_t difference_type;
+#endif
     private:
         pointer mData;
     public:
         ConstReverseVectorIterator()
         {}
-        ConstReverseVectorIterator(const ConstReverseVectorIterator &other)
+        ConstReverseVectorIterator(pointer ptr)
+            :mData(ptr)
+        {}
+        ConstReverseVectorIterator(const ConstReverseVectorIterator<T> &other)
             :mData(other.mData)
         {}
-        _Self &operator=(const ConstReverseVectorIterator &rhs)
+        _Self &operator=(const ConstReverseVectorIterator<T> &rhs)
         {
             this->mData = rhs.mData;
             return (*this);
+        }
+        difference_type distance(const ConstReverseVectorIterator<T> &other)
+        {
+            return (other.mData - this->mData > 0 ? other.mData - this->mData : this->mData - other.mData);
         }
         reference operator*() const
         {

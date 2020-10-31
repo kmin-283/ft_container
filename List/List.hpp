@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/19 16:18:13 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/26 09:14:01 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include <memory>
 #include <limits>
 #include "../Iterator/ListIterator.hpp"
-#include <iostream>
+#include "../algorithms/algo.hpp"
 
 namespace ft
 {
@@ -60,6 +60,16 @@ namespace ft
         }
         void mClear()
         {
+            NodeBase *cur = this->mImpl.mNode.mNext;
+            while (cur != &this->mImpl.mNode)
+            {
+                Node<T> *tmp = static_cast<Node<T> *>(cur);
+                // T *val = &tmp->mData; // linux
+                cur = cur->mNext;
+                // std::_Destroy(val); //소멸자를 호출. 그런데 Node의 주소값 == Node.mData의 주소값이다.
+                getAllocator().destroy(&tmp->mData);
+                mPutNode(tmp);
+            }
         }
         void mInit()
         {
@@ -82,9 +92,14 @@ namespace ft
         typedef ConstListIterator<T>                        const_iterator;
         typedef ReverseListIterator<T>                      reverse_iterator;
         typedef ConstReverseListIterator<T>                 const_reverse_iterator;
+#ifdef __linux__
         typedef __gnu_cxx::size_t                                  size_type;
-        // typedef ptrdiff_t                               difference_type; // mac에서 사용할 때
-        typedef __gnu_cxx::ptrdiff_t difference_type;
+        typedef __gnu_cxx::ptrdiff_t difference_type; // linux version
+#endif
+#ifdef __APPLE__
+        typedef size_t                                  size_type;
+        typedef ptrdiff_t                               difference_type;
+#endif
         typedef typename _Base::allocator_type          allocator_type;
     protected:
         typedef Node<T>                                 _Node;
@@ -92,6 +107,7 @@ namespace ft
         using _Base::mImpl;
         using _Base::mPutNode;
         using _Base::mGetNode;
+
         _Node *mCreateNode(const value_type &__x)
         {
             _Node *__p;
@@ -141,7 +157,8 @@ namespace ft
         {
             this->insert(begin(), __x.begin(), __x.end());
         }
-        list(const_iterator __first, const_iterator __last, const allocator_type &__a = allocator_type()) // range constructor
+        template <typename _InputIterator>
+        list(_InputIterator __first, _InputIterator __last, const allocator_type &__a = allocator_type()) // range constructor
             : _Base(__a)
         {
             this->insert(begin(), __first, __last);
@@ -182,19 +199,19 @@ namespace ft
         }
         reverse_iterator rbegin()
         {
-            return (reverse_iterator(end()));
+            return (this->mImpl.mNode.mPrev);
         }
         const_reverse_iterator rbegin() const
         {
-            return (const_reverse_iterator(end()));
+            return (this->mImpl.mNode.mPrev);
         }
         reverse_iterator rend()
         {
-            return (reverse_iterator(begin()));
+            return (&this->mImpl.mNode);
         }
         const_reverse_iterator rend() const
         {
-            return (const_reverse_iterator(begin()));
+            return (&this->mImpl.mNode);
         }
         bool empty() const
         {
@@ -298,100 +315,217 @@ namespace ft
         }
         void splice(iterator __position, list &__x)
         {
-            (void)__position;
-            (void)__x;
+            iterator finish = __x.end();
+            if (!__x.empty())
+                mTransferRange(__position, __x.begin(), --finish);
         }
         void splice(iterator __position, list &__x, iterator __i)
         {
-            (void)__position;
-            (void)__x;
-            (void)__i;
+            iterator __j = __i;
+            ++__j;
+            if (__position == __i || __position == __j)
+                return ;
+            if (!__x.empty())
+                mTransfer(__position, __i, __j);
         }
-        void splice(iterator __position, list &, iterator __first, iterator __last)
+        void splice(iterator __position, list &__x, iterator __first, iterator __last)
         {
-            (void)__position;
-            (void)__first;
-            (void)__last;
+            if (__first != __last)
+            {
+                if (__x.end() == __last)
+                    mTransferRange(__position, __first, --__last);
+                else
+                    mTransferRange(__position, __first, __last);
+            }
         }
         void remove(const T &value)
         {
-            (void)value;
+            iterator i = begin();
+            while (i != end())
+            {
+                iterator tmp = ++i;
+                if (*--tmp == value)
+                    erase(tmp);
+            }
         }
         template <typename _Predicate>
-        void remove_if(_Predicate __value)
+        void remove_if(_Predicate __ifState)
         {
-            (void)__value;
+            iterator i = begin();
+            while (i != end())
+            {
+                iterator tmp = ++i;
+                if (__ifState(*--tmp))
+                    erase(tmp);
+            }
         }
         void unique()
         {
-
+            unique(equal<value_type>);
+        }
+        template <typename _BinaryPredicate>
+        void unique(_BinaryPredicate binary_pred)
+        {
+            iterator start = begin();
+            while (true)
+            {
+                iterator finish = end();
+                iterator next = ++start;
+                --start;
+                if (start == finish)
+                    break ;
+                if (next != finish && binary_pred(*start, *next))
+                    start = erase(--next);
+                else
+                    ++start;
+            }
         }
         void merge(list &__x)
         {
-            (void)__x;
+            merge(__x, &less<value_type>);
         }
         template <typename _StrictWeakOrdering>
         void merge(list &a, _StrictWeakOrdering b)
         {
-            (void)a;
-            (void)b;
+            iterator this_start = begin();
+            iterator this_end = end();
+            iterator obj_start = a.begin();
+            iterator obj_end = a.end();
+
+            while (obj_start != obj_end && this_start != this_end)
+            {
+                if (b(*obj_start, *this_start))
+                {
+                    splice(this_start, a, obj_start);
+                    obj_start = a.begin();
+                }
+                else
+                    ++this_start;
+            }
+            splice(this_end, a);
         }
         void reverse()
         {
-            this->mImpl.mNode.reverse();
+            iterator start = end();
+            iterator finish = begin();
+            iterator next;
+
+            --start; // 가장 마지막 노드
+            --start; // 뒤에서 2번째 노드
+            next = start;
+            while (start != finish)
+            {
+                if (next != finish)
+                    --next;
+                splice(end(), *this, start);
+                start = next;
+            }
+            splice(end(), *this, start);
         }
         void sort()
         {
-
+            sort(less<value_type>);
         }
         template <typename _StrictWeakOrdering>
         void sort(_StrictWeakOrdering a)
         {
-            (void)a;
+            iterator start = begin();
+            iterator next;
+
+            while (start != end())
+            {
+                next = start;
+                ++next;
+                while (next != end())
+                {
+                    if (a(*next, *start))
+                    {
+                        splice(start, *this, next); // swap
+                        next = start;
+                        ++next;
+                        start = begin();
+                    }
+                    else
+                        ++next;
+                }
+                ++start;
+            }
         }
         virtual ~list() {}
     protected:
         void mAssignDispatch(const_iterator __first, const_iterator __last) //mac에서는 std::__false_type, wsl에서는 std::__false_type
         {
-            (void)__first;
-            (void)__last;
+            iterator i = begin();
+            for (; i != end() && __first != __last; ++__first, ++i)
+            {
+                *i = *__first;
+            }
+            if (__first != __last)
+                insert(end(), __first, __last);
+            else
+                erase(i, end());
         }
         void mFillAssign(size_type __n, const value_type &__val)
         {
             iterator i = begin();
-            for (;i != end() && __n > 0; i++, __n--)
+            for (;i != end() && __n > 0; ++i, --__n)
                 *i = __val;
             if (__n)
                 insert(end(), __n, __val);
             else
                 erase(i, end());
         }
+        template <typename _Integer>
+        void mInsertDispatch(iterator __pos, _Integer __first, _Integer __last) // mac에서는 std::false_type
+        {
+            for (; __first != __last; ++__first)
+                mInsert(__pos, *__first);
+        }
         void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
         {
-            for (; __first != __last; __first++)
+            for (; __first != __last; ++__first)
                 mInsert(__pos, *__first);
         }
         void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
         {
-            for (; __n > 0; __n--)
+            for (; __n > 0; --__n)
                 mInsert(__pos, __x);   
+        }
+        // void mTransferStartToEnd(iterator __position, iterator __first, iterator __last)
+        // {
+        //     __position.mNode->transfer_start_to_end(__first.mNode, __last.mNode);
+        // }
+        void mTransferRange(iterator __position, iterator __first, iterator __last)
+        {
+            __position.mNode->transfer_range(__first.mNode, __last.mNode);
         }
         void mTransfer(iterator __position, iterator __first, iterator __last)
         {
-            (void)__position;
-            (void)__first;
-            (void)__last;
+            __position.mNode->transfer(__first.mNode, __last.mNode);
         }
         void mInsert(iterator __position, const value_type &__x)
         {
             _Node *__tmp = mCreateNode(__x);
-            __tmp->hook(__position.mNode);
+            if (__position == begin())
+            {
+                __tmp->hook_front(__position.mNode);
+                this->mImpl.mNode.mNext = __tmp;
+            }
+            else if (__position == end())
+                __tmp->hook_end(__position.mNode);
+            else
+                __tmp->hook_front(__position.mNode);
         }
         void mErase(iterator __position)
         {
             __position.mNode->unhook();
             _Node * __n = static_cast<_Node *>(__position.mNode);
-            std::_Destroy(&__n->mData);
+#ifdef __linux__
+            std::_Destroy(&__n->mData); // on linux
+#endif
+#ifdef __APPLE__
+            getAllocator().destroy(&__n->mData);   // on mac
+#endif
             mPutNode(__n);
         }
     };

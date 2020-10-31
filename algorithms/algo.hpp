@@ -1,29 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   algo.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/19 17:01:54 by kmin             ###   ########.fr       */
+/*   Created: 2020/10/24 18:52:12 by kmin              #+#    #+#             */
+/*   Updated: 2020/10/24 18:53:29 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include <list>
-#include <vector>
-// #include "List/List.hpp"
-#include "Vector/vector.hpp"
-#include <iostream>
-
-int main()
+namespace ft
 {
-    ft::vector<int> vec;
-    std::vector<int> stdvec(4,100);
-    stdvec.insert(--stdvec.end(),1);
-    for (int i = 0; i < 5; i++)
+    template <typename T>
+    bool equal(const T &a, const T &b)
     {
-        std::cout << stdvec[i] << std::endl;
+        return (a == b);
     }
-    return (0);
+    
+    template <typename T>
+    bool less(const T &a, const T &b)
+    {
+        return (a < b);
+    }
 }
