@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:41:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/24 16:39:59 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/31 14:20:41 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ namespace ft
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;
+        typedef Category iterator_category;
 
         typedef ListIterator<T> _Self;
         typedef Node<T> _Node;
@@ -101,6 +102,7 @@ namespace ft
         typedef T value_type;
         typedef const T* pointer;
         typedef const T& reference;
+        typedef Category iterator_category;
 
         typedef ConstListIterator<T> _Self;
         typedef const Node<T> _Node;
@@ -178,6 +180,7 @@ namespace ft
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;
+        typedef Category iterator_category;
 
         typedef ReverseListIterator<T> _Self;
         typedef Node<T> _Node;
@@ -250,6 +253,7 @@ namespace ft
         typedef T value_type;
         typedef const T* pointer;
         typedef const T& reference;
+        typedef Category iterator_category;
 
         typedef ConstReverseListIterator<T> _Self;
         typedef const Node<T> _Node;

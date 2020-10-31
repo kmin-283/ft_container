@@ -21,11 +21,11 @@ VECTOR = $(addprefix ./tests/, main_vector.cpp)
 # all:		$(NAME)
 
 list: $(OBJS)
-			$(CC) $(CFLAGS) -o list_container $(LIST)
+			$(CC) $(CFLAGS) -o list_container $(LIST) -I ./List
 			./list_container
 			
 vector: $(OBJS)
-			$(CC) $(CFLAGS) -o vector_container $(VECTOR)
+			$(CC) $(CFLAGS) -o vector_container $(VECTOR) -I ./Vector
 			./vector_container			
 
 clean:

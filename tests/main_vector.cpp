@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 10:06:39 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/30 14:45:54 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/31 16:44:44 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,24 @@ int main()
     //     std::cout << *it << " ";
     // std::cout << std::endl;
     std::cout << "=======================" << std::endl;
-    v.push_back(1);    
+    v.push_back(1);
     v.push_back(2);
     v.push_back(3);
     v.push_back(4);
     v.push_back(5);
-    v.push_back(6);
-    v.push_back(7);
-    v.push_back(8);
-    v.push_back(9);
-    v.push_back(10);
-    v.push_back(11);
     it = v.begin();
     ++it;
     ++it;
-    ++it;
-    v.insert(it, 5, 700);
-    // it = v.begin();
+    v.insert(it, 4, 150);
+    
+
+    int myarray[] = {501, 502, 503};
+    v.insert(v.begin(), myarray, myarray + 3);
     // v.insert(it, v2.begin(), v2.end());
+
     for (ft::vector<int>::iterator it = v.begin(); it != v.end(); ++it)
         std::cout << *it << " ";
     std::cout << std::endl;
-    while (1);
+    // while (1);
     return (0);
 }

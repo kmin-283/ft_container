@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/30 11:54:49 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/31 14:19:26 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ namespace ft
     class VectorIterator
     {
     public:
+        typedef Category iterator_category;
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;
@@ -100,6 +101,7 @@ namespace ft
     class ConstVectorIterator
     {
     public:
+        typedef Category iterator_category;
         typedef T value_type;
         typedef const T* pointer;
         typedef const T& reference;
@@ -176,6 +178,7 @@ namespace ft
     class ReverseVectorIterator
     {
     public:
+        typedef Category iterator_category;
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;
@@ -252,6 +255,7 @@ namespace ft
     class ConstReverseVectorIterator
     {
     public:
+        typedef Category iterator_category;
         typedef T value_type;
         typedef T* pointer;
         typedef T& reference;

@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/30 14:45:38 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/31 16:55:37 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <memory>
 #include "../Iterator/VectorIterator.hpp"
 #include <iostream>
+#include <typeinfo>
 
 namespace ft
 {
@@ -94,7 +95,12 @@ namespace ft
         typedef ReverseVectorIterator<T>           reverse_iterator;
         typedef ConstReverseVectorIterator<T>      const_reverse_iterator;
         typedef size_t                                      size_type;
+#ifdef __APPLE__
         typedef ptrdiff_t                                   difference_type;
+#endif
+#ifdef __linux
+        typedef __gnu_cxx::ptrdiff_t                        difference_type;
+#endif
         typedef _Alloc                                      allocator_type;
     protected:
         using _Base::mAllocate;
@@ -209,6 +215,26 @@ namespace ft
             if (__n >= this->size())
                 std::__throw_out_of_range("vector::mRangeCheck");
         }
+        template <typename _InputIterator>
+        bool is_integral(_InputIterator &val)
+        {
+            (void)val;
+            if (typeid(_InputIterator) == typeid(bool) ||
+            typeid(_InputIterator) == typeid(char) ||
+            typeid(_InputIterator) == typeid(wchar_t) ||
+            typeid(_InputIterator) == typeid(signed char) ||
+            typeid(_InputIterator) == typeid(short int) ||
+            typeid(_InputIterator) == typeid(int) ||
+            typeid(_InputIterator) == typeid(long int) ||
+            typeid(_InputIterator) == typeid(long long int) ||
+            typeid(_InputIterator) == typeid(unsigned char) ||
+            typeid(_InputIterator) == typeid(unsigned short int) ||
+            typeid(_InputIterator) == typeid(unsigned int) ||
+            typeid(_InputIterator) == typeid(unsigned long int) ||
+            typeid(_InputIterator) == typeid(unsigned long long int))
+                return (true);
+            return (false);
+        }
     public:
         reference at(size_type __n)
         {
@@ -263,13 +289,13 @@ namespace ft
         {
             mFillInsert(__position, __n, __val);
         }
-        void insert(iterator __position, iterator __first, iterator __last)
+        template <typename _InputIteraor>
+        void insert(iterator __position, _InputIteraor __first, _InputIteraor __last)
         {
-            mInsertDispatch(__position, __first, __last);
-        }
-        void insert(iterator __position, const_iterator __first, const_iterator __last)
-        {
-            mInsertDispatch(__position, __first, __last);
+            if (is_integral(__first))
+                mInsertDispatch(__position, __first, __last, std::__true_type());
+            else
+                mInsertDispatch(__position, __first, __last, std::__false_type());
         }
         iterator erase(iterator __position)
         {
@@ -348,7 +374,7 @@ namespace ft
             this->mImpl.mFinish = this->mImpl.mEndOfStorage;
         }
         template <typename _Integer>
-        void mAssignDispatch(_Integer __n, _Integer __val, std::true_type)
+        void mAssignDispatch(_Integer __n, _Integer __val)
         {
             mFillAssign(__n, __val);
         }
@@ -364,23 +390,32 @@ namespace ft
         {}
         void mFillAssign(size_type __n, const value_type &__val)
         {}
-        template <typename _Integer>
-        void mInsertDispatch(iterator __pos, _Integer __n, _Integer __val)
+        template <typename _InputIterator>
+        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last, std::__false_type)
+        {
+            // if (!is_integral(__first))
+            // {
+            //     for(; __first != __last;)
+            //     {
+            //         __position = this->insert(__position, *__first);
+            //         ++__first;
+            //         ++__position;
+            //     }
+            // }
+        }
+        template <typename _Integral>
+        void mInsertDispatch(iterator __pos, _Integral __n, const _Integral &__val, std::__true_type)
         {
             mFillInsert(__pos, __n, __val);
-        }
-        void mInsertDispatch(iterator __pos, const_iterator __n, const_iterator __val)
-        {
-            mRangeInsert(__pos, __n, __val);
         }
         template <typename _InputIterator>
         void mRangeInsert(iterator __pos, _InputIterator __first, _InputIterator __last, std::input_iterator_tag)
         {
-
         }
         template<typename _ForwardIterator>
-        void mRangeInsert(iterator __pos, _ForwardIterator __first, _ForwardIterator __last, std::forward_iterator_tag)
-        {}
+        void mRangeInsert(iterator __pos, _ForwardIterator __first, _ForwardIterator __last, std::forward_iterator_tag) // 배열을 insert하는 경우
+        {
+        }
         void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
         {
             pointer element;
