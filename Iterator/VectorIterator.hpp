@@ -6,11 +6,13 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/31 14:19:26 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/31 22:40:28 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
+
+#include <typeinfo>
 
 namespace ft
 {
@@ -63,6 +65,18 @@ namespace ft
         pointer operator->() const
         {
             return (&this->mData);
+        }
+        _Self &operator+(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                ++this->mData;
+            return (*this);
+        }
+        _Self &operator-(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                --this->mData;
+            return (*this);
         }
         _Self &operator++()
         {
@@ -141,6 +155,18 @@ namespace ft
         {
             return (&this->mData);
         }
+        _Self &operator+(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                ++this->mData;
+            return (*this);
+        }
+        _Self &operator-(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                --this->mData;
+            return (*this);
+        }
         _Self &operator++()
         {
             ++this->mData;
@@ -218,26 +244,38 @@ namespace ft
         {
             return (&this->mData);
         }
+        _Self &operator+(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                --this->mData;
+            return (*this);
+        }
+        _Self &operator-(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                ++this->mData;
+            return (*this);
+        }
         _Self &operator++()
         {
-            ++this->mData;
+            --this->mData;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            ++this->mData;
+            --this->mData;
             return (temp);
         }
         _Self &operator--()
         {
-            --this->mData;
+            ++this->mData;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            --this->mData;
+            ++this->mData;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -295,26 +333,38 @@ namespace ft
         {
             return (&this->mData);
         }
+        _Self &operator+(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                --this->mData;
+            return (*this);
+        }
+        _Self &operator-(int cnt)
+        {
+            for (int i = 0; i < cnt; ++i)
+                ++this->mData;
+            return (*this);
+        }
         _Self &operator++()
         {
-            ++this->mData;
+            --this->mData;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            ++this->mData;
+            --this->mData;
             return (temp);
         }
         _Self &operator--()
         {
-            --this->mData;
+            ++this->mData;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            --this->mData;
+            ++this->mData;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -327,6 +377,13 @@ namespace ft
         }
         virtual ~ConstReverseVectorIterator() {}
     };
+
+    class typeBase
+    {};
+    class myFalseType : public typeBase
+    {};
+    class myTrueType : public typeBase
+    {};
 }
 
 template <typename Val>

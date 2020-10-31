@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/26 09:14:01 by kmin             ###   ########.fr       */
+/*   Updated: 2020/10/31 17:42:25 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ namespace ft
         typedef ReverseListIterator<T>                      reverse_iterator;
         typedef ConstReverseListIterator<T>                 const_reverse_iterator;
 #ifdef __linux__
-        typedef __gnu_cxx::size_t                                  size_type;
-        typedef __gnu_cxx::ptrdiff_t difference_type; // linux version
+        typedef __gnu_cxx::size_t                           size_type;
+        typedef __gnu_cxx::ptrdiff_t                        difference_type;
 #endif
 #ifdef __APPLE__
         typedef size_t                                  size_type;
