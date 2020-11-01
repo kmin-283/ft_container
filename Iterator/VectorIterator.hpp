@@ -6,13 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/31 22:40:28 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/01 16:33:30 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
-
-#include <typeinfo>
 
 namespace ft
 {
@@ -77,6 +75,11 @@ namespace ft
             for (int i = 0; i < cnt; ++i)
                 --this->mData;
             return (*this);
+        }
+        difference_type operator-(VectorIterator<T> &other)
+        {
+            difference_type distance = this->mData - other.mData;
+            return (distance);
         }
         _Self &operator++()
         {
@@ -167,6 +170,11 @@ namespace ft
                 --this->mData;
             return (*this);
         }
+        difference_type operator-(ConstVectorIterator<T> &other)
+        {
+            difference_type distance = this->mData - other.mData;
+            return (distance);
+        }
         _Self &operator++()
         {
             ++this->mData;
@@ -255,6 +263,11 @@ namespace ft
             for (int i = 0; i < cnt; ++i)
                 ++this->mData;
             return (*this);
+        }
+        difference_type operator-(ReverseVectorIterator<T> &other)
+        {
+            difference_type distance = other.mData - this->mData;
+            return (distance);
         }
         _Self &operator++()
         {
@@ -345,6 +358,11 @@ namespace ft
                 ++this->mData;
             return (*this);
         }
+        difference_type operator-(ConstReverseVectorIterator<T> &other)
+        {
+            difference_type distance = other.mData - this->mData;
+            return (distance);
+        }
         _Self &operator++()
         {
             --this->mData;
@@ -377,13 +395,6 @@ namespace ft
         }
         virtual ~ConstReverseVectorIterator() {}
     };
-
-    class typeBase
-    {};
-    class myFalseType : public typeBase
-    {};
-    class myTrueType : public typeBase
-    {};
 }
 
 template <typename Val>
