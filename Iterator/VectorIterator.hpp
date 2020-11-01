@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/01 16:33:30 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/01 18:01:53 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@ namespace ft
 #ifdef __APPLE__
         typedef ptrdiff_t difference_type;
 #endif
-    private:
-        pointer mData;
     public:
+        pointer mData;
+
         VectorIterator()
         {}
         VectorIterator(pointer ptr)
@@ -130,9 +130,9 @@ namespace ft
 #ifdef __APPLE__
         typedef ptrdiff_t difference_type;
 #endif
-    private:
-        pointer mData;
     public:
+        pointer mData;
+
         ConstVectorIterator()
         {}
         ConstVectorIterator(pointer ptr)
@@ -224,15 +224,18 @@ namespace ft
 #ifdef __APPLE__
         typedef ptrdiff_t difference_type;
 #endif
-    private:
-        pointer mData;
     public:
+        pointer mData;
+
         ReverseVectorIterator()
         {}
         ReverseVectorIterator(pointer ptr)
             :mData(ptr)
         {}
         ReverseVectorIterator(const ReverseVectorIterator<T> &other)
+            :mData(other.mData)
+        {}
+        ReverseVectorIterator(const VectorIterator<T> &other)
             :mData(other.mData)
         {}
         _Self &operator=(const ReverseVectorIterator<T> &rhs)
@@ -318,15 +321,18 @@ namespace ft
 #ifdef __APPLE__
         typedef ptrdiff_t difference_type;
 #endif
-    private:
-        pointer mData;
     public:
+        pointer mData;
+
         ConstReverseVectorIterator()
         {}
         ConstReverseVectorIterator(pointer ptr)
             :mData(ptr)
         {}
         ConstReverseVectorIterator(const ConstReverseVectorIterator<T> &other)
+            :mData(other.mData)
+        {}
+        ConstReverseVectorIterator(const VectorIterator<T> &other)
             :mData(other.mData)
         {}
         _Self &operator=(const ConstReverseVectorIterator<T> &rhs)

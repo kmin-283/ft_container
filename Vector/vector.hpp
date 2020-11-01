@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/01 16:45:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/01 18:02:47 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,19 +165,19 @@ namespace ft
         }
         reverse_iterator rbegin()
         {
-            return (reverse_iterator(end()));
+            return (reverse_iterator(end() - 1));
         }
         const_reverse_iterator rbegin() const
         {
-            return (const_reverse_iterator(end()));
+            return (const_reverse_iterator(end() - 1));
         }
         reverse_iterator rend()
         {
-            return (reverse_iterator(begin()));
+            return (reverse_iterator(begin() - 1));
         }
         const_reverse_iterator rend() const
         {
-            return (const_reverse_iterator(begin()));
+            return (const_reverse_iterator(begin() - 1));
         }
         size_type size() const
         {
@@ -187,10 +187,10 @@ namespace ft
         {
             return (this->getAllocator().max_size());
         }
-        void resize(size_type __new_size)
+        void resize(size_type __new_size, value_type __val = value_type())
         {
             if (__new_size > size())
-                mDefaultAppend(__new_size - size());
+                insert(end(), __new_size - size(), __val);
             else if (__new_size < size())
                 mEraseAtEnd(this->mImpl.mStart + __new_size);
         }
@@ -202,9 +202,19 @@ namespace ft
         {
             return (begin() == end());
         }
-        void reverse()
+        void reserve(size_type __n)
         {
-
+            size_type current_size = size();
+            
+            if (this->capacity() < __n)
+            {
+                pointer tmp = mAllocateAndCopy(__n, begin(), end());
+                mEraseAtEnd(this->mImpl.mStart);
+                this->mDeallocate(this->mImpl.mStart, current_size);
+                this->mImpl.mStart = tmp;
+                this->mImpl.mEndOfStorage = this->mImpl.mStart + __n;
+                this->mImpl.mFinish = this->mImpl.mStart + current_size;
+            }
         }
         reference operator[](size_type __n)
         {
