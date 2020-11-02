@@ -10,7 +10,7 @@ OBJS = $(SRCS:%.cpp=%.o)
 
 LIST = $(addprefix ./tests/, main_list.cpp)
 VECTOR = $(addprefix ./tests/, main_vector.cpp)
-
+MAP = $(addprefix ./tests/, main_map.cpp)
 
 # $(NAME):	$(OBJS)
 # 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
@@ -26,7 +26,11 @@ list: $(OBJS)
 			
 vector: $(OBJS)
 			$(CC) $(CFLAGS) -o vector_container $(VECTOR) -I ./Vector
-			./vector_container			
+			./vector_container
+
+map: $(OBJS)
+			$(CC) $(CFLAGS) -o map_container $(MAP) -I ./Map
+			./map_container
 
 clean:
 			rm -rf $(OBJS)
@@ -44,5 +48,7 @@ re: fclean all
 relist : fclean list
 
 revector : fclean vector
+
+remap : fclean map
 
 .PHONY: all clean fclean re

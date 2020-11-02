@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/31 17:42:25 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/02 15:56:55 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ namespace ft
     {
     protected:
         typedef typename _Alloc::template rebind<Node<T> >::other _Node_Alloc_type;
-        struct ListImpl : public _Node_Alloc_type // NodeBase allocator를 상속받음
+        struct ListImpl : public _Node_Alloc_type // Node를 상속받음
         {
             NodeBase mNode;
-            ListImpl(const _Node_Alloc_type &__a) // NodeBase allocator object를 받아서
-                : _Node_Alloc_type(__a) // NodeBase allocator object 생성.
+            ListImpl(const _Node_Alloc_type &__a) // Node object를 받아서
+                : _Node_Alloc_type(__a) // Node object 생성.
             {
             }
         };
