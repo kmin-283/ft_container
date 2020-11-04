@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/04 19:48:14 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/04 20:10:06 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,11 @@
 int main()
 {
     ft::map<std::string, int> m;
-    while (1);
+    int psize;
+
+    psize =  sizeof(ft::map<char, int>::value_type) * 5;
+
+    std::cout << psize << std::endl;
     return (0);
 }
 

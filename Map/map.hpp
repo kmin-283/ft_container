@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/04 20:00:07 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/04 20:09:27 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ namespace ft
         {
         }
         template <typename _InputIterator>
-        map(_InputIterator __first, _InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type()))
+        map(_InputIterator __first, _InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : _M_t()
         {
             _M_t.nInsertUnique(__first, __last);
