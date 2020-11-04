@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/02 17:02:18 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/04 19:42:02 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,28 @@ namespace ft
         };
     private:
         typedef typename _Alloc::template rebind<value_type>:: other _Pair_alloc_type;
-        typedef red_black_tree<key_type, value_type> _Rep_type;
+        typedef red_black_tree<key_type, value_type, key_compare, _Pair_alloc_type> _Rep_type;
+
+        // actual tree structure
+        _Rep_type _M_t;
+    public:
+        typedef typename _Pair_alloc_type::pointer                      pointer;
+        typedef typename _Pair_alloc_type::const_pointer                const_pointer;
+        typedef typename _Pair_alloc_type::reference                    reference;
+        typedef typename _Pair_alloc_type::const_reference              const_reference;
+        // typedef typename _Rep_type::iterator                            iterator;
+        // typedef typename _Rep_type::const_iterator                      const_iterator;
+        // typedef typename _Rep_type::size_type                           size_type;
+        // typedef typename _Rep_type::difference_type                     difference_type;
+        // typedef typename _Rep_type::reverse_iterator                    reverse_iterator;
+        // typedef typename _Rep_type::const_reverse_iterator              const_reverse_iterator;
+
+
+        explicit map(const _Compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
+            : _M_t(__comp, __a)
+        {
+        }
+        ~map()
+        {}
     };
 }

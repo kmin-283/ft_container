@@ -34,14 +34,12 @@ map: $(OBJS)
 
 clean:
 			rm -rf $(OBJS)
-			rm -f list_container
-			rm -f vector_container
-
-fclean:
-			rm -rf $(OBJS)
+			
+fclean: clean
 			rm -rf $(NAME)
 			rm -f list_container
 			rm -f vector_container
+			rm -f map_container
 
 re: fclean all
 
