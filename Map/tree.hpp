@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/04 20:04:42 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/05 11:28:00 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,19 @@ namespace ft
         }
         virtual ~red_black_tree_base()
         {
+            mClear(&this->mImpl.mNode);
+        }
+        void mClear(tree_node_base *root)
+        {
+            tree_node<key_type, value_type> *tmp = static_cast<tree_node<key_type, value_type> *>(root);
+            
+            if (root->mLeft != NULL)
+                mClear(root->mLeft);
+            if (root->mRight != NULL)
+                mClear(root->mRight);
+            // getAllocator().destroy(&tmp->mData.first);
+            // getAllocator().destroy(&tmp->mData.second);
+            // mPutNode(tmp);
         }
     };
 
@@ -91,8 +104,8 @@ namespace ft
             try
             {
                 __p = this->mGetNode();
-                __p->mData.first = __x;
-                __p->mData.second = __y;
+                this->mImpl.getAllocator().construct(__p->mData.first, __x);
+                this->mImpl.getAllocator().construct(__p->mData.second, __y);
             }
             catch (...)
             {
@@ -131,11 +144,11 @@ namespace ft
         
         node_pointer searchTreeHelper(node_pointer node, key_type key)
         {
-            if (node == TNULL || key == node->mData)
+            if (node == TNULL || key == node->mData.first)
             {
                 return (node);
             }
-            if (key < node->mData)
+            if (key < node->mData.first)
             {
                 return (searchTreeHelper(node->mLeft, key));
             }
@@ -225,13 +238,60 @@ namespace ft
         }
         void deleteNodeHelper(node_pointer node, key_type key)
         {
+            node_pointer z = TNULL;
+            node_pointer x, y;
+
+            while (node != TNULL)
+            {
+                if (node->mData.first == key)
+                    z = node;
+                if (node->mData.first <= key)
+                    node = node->mRight;
+                else
+                    node = node->mLeft;
+            }
+            if (z == TNULL)
+                return ;
+            y = z;
+            bool y_original_color = y->color;
+            if (z->mLeft == TNULL)
+            {
+                x = z->mRight;
+                rbTransplant(z, z->mRight);
+            }
+            else if (z->mRight == TNULL)
+            {
+                x = z->mLeft;
+                rbTransplant(z, z->mLeft);
+            }
+            else
+            {
+                y = minimum(z->mRight);
+                y_original_color = y->color;
+                x = y->mRight;
+                if (y->mParent == z)
+                    x->mParent = y;
+                else
+                {
+                    rbTransplant(y, y->mRight);
+                    y->mRight = z->mRight;
+                    y->mRight->mParent = y;
+                }
+                rbTransplant(z, y);
+                y->mLeft = z->mLeft;
+                y->mLeft->mParent = y;
+                y->color = z->color;
+            }
+            this->getAllocator().destroy(z); // 되는건가..?
+            this->mPutNode(z); // ??
+            if (y_original_color == BLACK)
+                deleteFix(x);
         }
 
     public:
         red_black_tree(const key_compare &__comp, const allocator_type &__a = allocator_type())
             : _Base(__a)
         {
-            mCreateNode();
         }
         ~red_black_tree()
         {
