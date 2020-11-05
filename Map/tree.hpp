@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 16:21:18 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/05 16:27:47 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,14 @@ namespace ft
         }
         ~red_black_tree()
         {
+        }
+        std::pair<const_iterator, const_iterator> equal_range(key_type __k) const
+        {
+            
+        }
+        std::pair<iterator, iterator> equal_range(key_type __k)
+        {
+            
         }
     };
 } // namespace ft

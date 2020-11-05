@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 11:18:20 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/05 16:39:13 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 
 int main()
 {
-    ft::map<std::string, int> m;
+    ft::map<char, int> m;
+    std::pair<const char, int> *p;
     int psize;
 
     psize =  sizeof(ft::map<char, int>::value_type) * 5;
-
-    std::cout << psize << std::endl;
+    p = m.getAllocator().allocate(5);
+    m.getAllocator().deallocate(p, 5);  
     return (0);
 }
 

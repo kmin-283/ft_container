@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 16:20:10 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/05 16:27:22 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,11 +205,11 @@ namespace ft
         {
             return (_M_t.upper_bound(__k));
         }
-        std::pair<iterator, iterator> equal_range(const key_type &__k)
+        std::pair<const_iterator, const_iterator> equal_range(const key_type &__k) const
         {
             return (_M_t.equal_range(__k));
         }
-        std::pair<iterator,iterator> equal_range (const key_type &__k)
+        std::pair<iterator, iterator> equal_range (const key_type &__k)
         {
             return (_M_t.equal_range(__k));
         }
