@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 16:39:13 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/10 14:06:49 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,23 @@
 
 int main()
 {
-    ft::map<char, int> m;
-    std::pair<const char, int> *p;
-    int psize;
+    std::map<char,int> mymap;
+    std::map<char,int>::iterator itlow,itup;
 
-    psize =  sizeof(ft::map<char, int>::value_type) * 5;
-    p = m.getAllocator().allocate(5);
-    m.getAllocator().deallocate(p, 5);  
+    mymap['b']=20;
+    mymap['a']=40;
+    mymap['c']=60;
+    mymap['d']=80;
+    mymap['e']=100;
+
+    itlow=mymap.lower_bound ('b');  // itlow points to b
+    itup=mymap.upper_bound ('d');   // itup points to e (not d!)
+
+    mymap.erase(itlow,itup);        // erases [itlow,itup)
+
+    // print content:
+    for (std::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
     return (0);
 }
 

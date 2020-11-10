@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 16:27:22 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/10 16:53:28 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ namespace ft
         map(_InputIterator __first, _InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : _M_t()
         {
-            _M_t.nInsertUnique(__first, __last);
+            _M_t.mInsertUnique(__first, __last);
         }
         map(const map &__x) // copy constructor
             : _M_t(__x._M_t)
@@ -130,7 +130,7 @@ namespace ft
         }
         mapped_type &operator[](const key_type &__k)
         {
-            iterator __i = lower_bound(__k);
+            iterator __i = std::lower_bound(__k);
             
             if (__i == end() || key_comp()(__k, (*__i).first))
                 __i = insert(__i, value_type(__k, mapped_type()));

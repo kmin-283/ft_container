@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 10:31:47 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 16:13:48 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/10 16:53:14 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,18 +20,20 @@ namespace ft
 	struct bidirectional_iterator_tag: forward_iterator_tag {};
 	struct random_access_iterator_tag: bidirectional_iterator_tag {};
 
-    template <typename key_type, typename value_type, typename Category = bidirectional_iterator_tag>
+    template <typename _Tp, typename Category = bidirectional_iterator_tag>
     class MapIterator
     {
     public:
-        tree_node_base *mNode;
-        // typedef key_type value_type;
-        typedef key_type* pointer;
-        typedef key_type& reference;
+        typedef _Tp value_type;
+        typedef _Tp* pointer;
+        typedef _Tp& reference;
         typedef Category iterator_category;
 
-        typedef MapIterator<key_type, value_type> _Self;
-        typedef tree_node<key_type, value_type> _Node;
+        typedef MapIterator<_Tp> _Self;
+        typedef rb_tree_node_base<_Tp>::base_ptr    _Base_ptr;
+        typedef rb_tree_node<_Tp>*                  _Link_type;
+
+        _Base_ptr mNode;
 #ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
 #endif
@@ -42,8 +44,8 @@ namespace ft
             : mNode()
         {
         }
-        MapIterator(tree_node_base *other)
-            : mNode(other)
+        explicit MapIterator(_Link_type __x)
+            : mNode(__x)
         {
         }
         _Self &operator=(const _Self &rhs)
@@ -53,32 +55,32 @@ namespace ft
         }
         reference operator*() const
         {
-            return (static_cast<_Node *>(mNode)->mData);
+            return (static_cast<_Link_type>(mNode)->mValueField);
         }
         pointer operator->() const
         {
-            return (&static_cast<_Node *>(mNode)->mData);
+            return (&static_cast<_Link_type>(mNode)->mValueField);
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -92,21 +94,22 @@ namespace ft
         virtual ~MapIterator() {}
     };
 
-    template <typename key_type, typename value_type, typename Category = bidirectional_iterator_tag>    
+    template <typename _Tp, typename Category = bidirectional_iterator_tag>
     class ConstMapIterator
     {
     public:
-        const tree_node_base *mNode;
-
-        // typedef key_type value_type;
-        typedef const key_type* pointer;
-        typedef const key_type& reference;
+        typedef _Tp value_type;
+        typedef const _Tp* pointer;
+        typedef const _Tp& reference;
         typedef Category iterator_category;
 
-        typedef ConstMapIterator<key_type, value_type> _Self;
-        typedef const tree_node<key_type, value_type> _Node;
-        typedef MapIterator<key_type, value_type> iterator;
+        typedef MapIterator<_Tp>                            iterator;
 
+        typedef ConstMapIterator<_Tp>                       _Self;
+        typedef rb_tree_node_base<_Tp>::const_base_ptr      _Base_ptr;
+        typedef const rb_tree_node<_Tp>*                    _Link_type;
+
+        _Base_ptr mNode;
 #ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
 #endif
@@ -117,12 +120,12 @@ namespace ft
             : mNode()
         {
         }
-        ConstMapIterator(const tree_node_base *other)
-            : mNode(other)
+        explicit ConstMapIterator(_Link_type __x)
+            : mNode(__x)
         {
         }
-        ConstMapIterator(const iterator &rhs)
-            : mNode(rhs.mNode)
+        ConstMapIterator(const iterator &__it)
+            : mNode(__it.mNode)
         {
         }
         _Self &operator=(const _Self &rhs)
@@ -132,32 +135,32 @@ namespace ft
         }
         reference operator*() const
         {
-            return (static_cast<_Node *>(mNode)->mData);
+            return (static_cast<_Link_type>(mNode)->mValueField);
         }
         pointer operator->() const
         {
-            return (&static_cast<_Node *>(mNode)->mData);
+            return (&static_cast<_Link_type>(mNode)->mValueField);
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -171,19 +174,20 @@ namespace ft
         virtual ~ConstMapIterator() {}
     };
 
-    template <typename key_type, typename value_type, typename Category = bidirectional_iterator_tag>    
+    template <typename _Tp, typename Category = bidirectional_iterator_tag>
     class ReverseMapIterator
     {
     public:
-        tree_node_base *mNode;
-        // typedef key_type value_type;
-        typedef key_type* pointer;
-        typedef key_type& reference;
+        typedef _Tp value_type;
+        typedef _Tp* pointer;
+        typedef _Tp& reference;
         typedef Category iterator_category;
 
-        typedef ReverseMapIterator<key_type, value_type> _Self;
-        typedef tree_node<key_type, value_type> _Node;
+        typedef ReverseMapIterator<_Tp> _Self;
+        typedef rb_tree_node_base<_Tp>::base_ptr    _Base_ptr;
+        typedef rb_tree_node<_Tp>*                  _Link_type;
 
+        _Base_ptr mNode;
 #ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
 #endif
@@ -194,8 +198,8 @@ namespace ft
             : mNode()
         {
         }
-        ReverseMapIterator(tree_node_base *other)
-            : mNode(other)
+        explicit ReverseMapIterator(_Link_type __x)
+            : mNode(__x)
         {
         }
         _Self &operator=(const _Self &rhs)
@@ -205,32 +209,32 @@ namespace ft
         }
         reference operator*() const
         {
-            return (static_cast<_Node *>(mNode)->mData);
+            return (static_cast<_Link_type>(mNode)->mValueField);
         }
         pointer operator->() const
         {
-            return (&static_cast<_Node *>(mNode)->mData);
+            return (&static_cast<_Link_type>(mNode)->mValueField);
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -244,19 +248,22 @@ namespace ft
         virtual ~ReverseMapIterator() {}
     };
 
-    template <typename key_type, typename value_type, typename Category = bidirectional_iterator_tag>    
+    template <typename _Tp, typename Category = bidirectional_iterator_tag>
     class ConstReverseMapIterator
     {
     public:
-        const tree_node_base *mNode;
-        // typedef key_type value_type;
-        typedef const key_type* pointer;
-        typedef const key_type& reference;
+        typedef _Tp value_type;
+        typedef const _Tp* pointer;
+        typedef const _Tp& reference;
         typedef Category iterator_category;
 
-        typedef ConstReverseMapIterator<key_type, value_type> _Self;
-        typedef const tree_node<key_type, value_type> _Node;
+        typedef MapIterator<_Tp>                            iterator;
 
+        typedef ConstReverseMapIterator<_Tp>                       _Self;
+        typedef rb_tree_node_base<_Tp>::const_base_ptr      _Base_ptr;
+        typedef const rb_tree_node<_Tp>*                    _Link_type;
+
+        _Base_ptr mNode;
 #ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
 #endif
@@ -267,8 +274,12 @@ namespace ft
             : mNode()
         {
         }
-        ConstReverseMapIterator(tree_node_base *other)
-            : mNode(other)
+        explicit ConstReverseMapIterator(_Link_type __x)
+            : mNode(__x)
+        {
+        }
+        ConstReverseMapIterator(const iterator &__it)
+            : mNode(__it.mNode)
         {
         }
         _Self &operator=(const _Self &rhs)
@@ -278,32 +289,32 @@ namespace ft
         }
         reference operator*() const
         {
-            return (static_cast<_Node *>(mNode)->mData);
+            return (static_cast<_Link_type>(mNode)->mValueField);
         }
         pointer operator->() const
         {
-            return (&static_cast<_Node *>(mNode)->mData);
+            return (&static_cast<_Link_type>(mNode)->mValueField);
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mPrev;
+            this->mNode = this->mNode->m_left;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->mNext;
+            this->mNode = this->mNode->m_right;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -318,32 +329,36 @@ namespace ft
     };
 } // namespace ft
 
-template <typename key_type, typename value_type>
-inline bool operator==(const ft::MapIterator<key_type, value_type> &x, const ft::ConstMapIterator<key_type, value_type> &y)
+template <typename _Val>
+inline bool operator==(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
 {
     return (x.mNode == y.mNode);
 }
-template <typename key_type, typename value_type>
-inline bool operator!=(const ft::MapIterator<key_type, value_type> &x, const ft::ConstMapIterator<key_type, value_type> &y)
+template <typename _Val>
+inline bool operator!=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
 {
     return (x.mNode != y.mNode);
 }
-template <typename key_type, typename value_type>
-inline bool operator>(const ft::MapIterator<key_type, value_type> &x, const ft::ConstMapIterator<key_type, value_type> &y)
+template <typename _Val>
+inline bool operator>(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
 {
     return (x.mNode > y.mNode);
 }
-template <typename key_type, typename value_type>
-inline bool operator>=(const ft::MapIterator<key_type, value_type> &x, const ft::ConstMapIterator<key_type, value_type> &y)
+template <typename _Val>
+inline bool operator>=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
 {
     return (x.mNode >= y.mNode);
-}template <typename key_type, typename value_type>
-inline bool operator<(const ft::MapIterator<key_type, value_type> &x, const ft::ConstMapIterator<key_type, value_type> &y)
+}template <typename _Val>
+inline bool operator<(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
 {
     return (x.mNode < y.mNode);
 }
-template <typename key_type, typename value_type>
-inline bool operator<=(const ft::MapIterator<key_type, value_type> &x, const ft::ConstMapIterator<key_type, value_type> &y)
+template <typename _Val>
+inline bool operator<=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
 {
     return (x.mNode <= y.mNode);
 }
+
+void rb_tree_insert_and_rebalance(const bool __insert_left, ft::rb_tree_node_base *__x, ft::rb_tree_node_base *__p, ft::rb_tree_node_base &__header) throw ();
+
+ft::rb_tree_node_base *rb_tree_rebalance_for_erase(ft::rb_tree_node_base * const __z, ft::rb_tree_node_base &__header) throw ();

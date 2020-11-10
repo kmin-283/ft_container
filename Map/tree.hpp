@@ -6,126 +6,126 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 16:27:47 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/10 17:33:28 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <iostream>
 #include "../Iterator/MapIterator.hpp"
-
-#define BLACK true
-#define RED false
+#include <exception>
+#include <type_traits>
 
 namespace ft
 {
-    template <typename key_type, typename value_type, typename _Alloc>
-    class red_black_tree_base
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc = std::allocator<_Val> >
+    class red_black_tree
     {
+        typedef typename _Alloc::template rebind<rb_tree_node<_Val> >::other _Node_allocator;
     protected:
-        typedef typename _Alloc::template rebind<tree_node<key_type, value_type> >::other _Node_Alloc_type;
-        struct MapImpl : public _Node_Alloc_type // tree_node를 상속받음
-        {
-            tree_node_base mNode;
-            MapImpl(const _Node_Alloc_type &__a) // tree_node object를 받아서
-                : _Node_Alloc_type(__a) // tree_node object 생성.
-            {
-            }
-        };
-        MapImpl mImpl;
-
-        tree_node<key_type, value_type> *mGetNode()
-        {
-            return mImpl._Node_Alloc_type::allocate(1);
-        }
-
-        void mPutNode(tree_node<key_type, value_type> *__p)
-        {
-            mImpl._Node_Alloc_type::deallocate(__p, 1);
-        }
+        typedef rb_tree_node_base*                                              _Base_ptr;
+        typedef const rb_tree_node_base*                                        _Const_Base_ptr;
+        
     public:
-        typedef _Alloc allocator_type;
-
-        allocator_type getAllocator() const
-        {
-            return (allocator_type(*static_cast<const _Node_Alloc_type *>(&this->mImpl)));
-        }
-        red_black_tree_base(const allocator_type &__a)
-            : mImpl(__a)
-        {
-        }
-        virtual ~red_black_tree_base()
-        {
-            mClear(&this->mImpl.mNode);
-        }
-        void mClear(tree_node_base *root)
-        {
-            tree_node<key_type, value_type> *tmp = static_cast<tree_node<key_type, value_type> *>(root);
-            
-            if (root->mLeft != NULL)
-                mClear(root->mLeft);
-            if (root->mRight != NULL)
-                mClear(root->mRight);
-            // getAllocator().destroy(&tmp->mData.first);
-            // getAllocator().destroy(&tmp->mData.second);
-            // mPutNode(tmp);
-        }
-    };
-
-    template <typename key_type, typename value_type, typename key_compare, typename _Pair_alloc_type>
-    class red_black_tree : public red_black_tree_base<key_type, value_type, _Pair_alloc_type>
-    {
-    public:
-        typedef tree_node<key_type, value_type>* node_pointer;
-        typedef red_black_tree_base<key_type, value_type, _Pair_alloc_type>     _Base;
-        typedef typename _Base::allocator_type                                  allocator_type;
+        typedef _Key                                                            key_type;
+        typedef _Val                                                            value_type;
+        typedef value_type*                                                     pointer;
+        typedef const value_type*                                               const_pointer;
+        typedef value_type&                                                     reference;
+        typedef const value_type&                                               const_reference;
+        typedef rb_tree_node<_Val>*                                             _Link_type;
+        typedef const rb_tree_node<_Val>*                                       _Const_Link_type;
+        typedef _Alloc                                                          allocator_type;
+        
         typedef MapIterator<key_type, value_type>                               iterator;
         typedef ConstMapIterator<key_type, value_type>                          const_iterator;
         typedef ReverseMapIterator<key_type, value_type>                        reverse_iterator;
         typedef ConstReverseMapIterator<key_type, value_type>                   const_reverse_iterator;
+        
         typedef size_t                                                          size_type;
         typedef ptrdiff_t                                                       difference_type;
+
+        _Node_allocator &mGetNode_Allocator()
+        {
+            return *(static_cast<_Node_allocator*>(&this->mImpl));
+        }
+        const _Node_allocator &mGetNode_Allocator() const
+        {
+            return *(static_cast<const _Node_allocator*>(&this->mImpl));
+        }
+        allocator_type getAlloctor() const
+        {
+            return (allocator_type(mGetNode_Allocator()));
+        }
     protected:
-        typedef tree_node<key_type, value_type>                                 _Node;
-
-        using _Base::mImpl;
-        using _Base::mPutNode;
-        using _Base::mGetNode;
-
-        _Node *mCreateNode(const key_type &__x, const value_type &__y)
+        _Link_type mGetNode()
         {
-            _Node *__p;
+            return (mImpl._Node_allocator::allocate(1));
+        }
+        void mPutNode(_Link_type __p)
+        {
+            return (mImpl._Node_allocator::deallocate(__p, 1));
+        }
+        _Link_type mCreateNode(const value_type &__x)
+        {
+            _Link_type __tmp = mGetNode();
+
             try
             {
-                __p = this->mGetNode();
-                this->mImpl.getAllocator().construct(__p->mData.first, __x);
-                this->mImpl.getAllocator().construct(__p->mData.second, __y);
+                getAlloctor().std::construct(&__tmp->mValueField, __x);
             }
-            catch (...)
+            catch(const std::exception& e)
             {
-                this->mPutNode(__p);
+                mPutNode(__tmp);
                 throw;
             }
-            return (__p);
+            return (__tmp);
         }
-        _Node *mCreateNode()
+        void mDestroyNode(_Link_type __p)
         {
-            _Node *__p;
-            try
-            {
-                __p =  this->mGetNode();
-            }
-            catch(...)
-            {
-                this->mPutNode(__p);
-                throw;
-            }
-            return (__p);
+            getAlloctor().destroy(&__p->mValueField);
+            mPutNode(__p);
         }
+        _Link_type mCloneNode(_Const_Link_type __x)
+        {
+            _Link_type __tmp =  mCreateNode(__x->mValueField);
+            __tmp->m_color = __x->m_color;
+            __tmp->mLeft = 0;
+            __tmp->mRight = 0;
+            return (__tmp);
+        }
+    protected:
+        template <typename _Key_compare, bool _Is_pod_comparator = std::is_pod(_Key_compare)>
+        struct rb_tree_impl : public _Node_allocator
+        {
+            _Key_compare                    mKeyCompare;
+            rb_tree_node_base               mHeader;
+            size_type                       mNodeCount;
 
-    private:
-        node_pointer root;
-        node_pointer TNULL;
-
+            rb_tree_impl()
+                : _Node_allocator(), mKeyCompare(), mHeader(), mNodeCount(0)
+            {
+                mInitialize();
+            }
+            rb_tree_impl(const _Key_compare &__comp, const _Node_allocator &__a)
+                : _Node_allocator(__a), mKeyCompare(__comp), mHeader(), mNodeCount(0)
+            {
+                mInitialize();
+            }
+        private:
+            void mInitialize()
+            {
+                this->mHeader.mColor = RED;
+                this->mHeader.mParent = 0;
+                this->mHeader.mLeft = &this->mHeader;
+                this->mHeader.mRight = &this->mHeader;
+            }
+        };
+        
+        rb_tree_impl<_Compare> mImpl;
+    protected:
+        _Base_ptr &mRoot()
+        {
+            return (this->mImpl.mHeader.mParent);
+        }
     public:
         red_black_tree(const key_compare &__comp, const allocator_type &__a = allocator_type())
             : _Base(__a)
@@ -141,6 +141,27 @@ namespace ft
         }
         ~red_black_tree()
         {
+        }
+        std::pair<iterator, bool> mInsertUnique(const value_type &__val)
+        {
+            
+        }
+        iterator mInsertUnique(const_iterator __p, const value_type &__val)
+        {
+            
+        }
+        template <typename _InputIterator>
+        void insert(_InputIterator __first, _InputIterator __last)
+        {
+            
+        }
+        iterator lower_bound(const key_type &__k)
+        {
+            
+        }
+        const_iterator lower_bound(const key_type &__k) const
+        {
+            
         }
         std::pair<const_iterator, const_iterator> equal_range(key_type __k) const
         {
