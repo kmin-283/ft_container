@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/10 17:33:28 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/10 17:52:37 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ namespace ft
             return (__tmp);
         }
     protected:
-        template <typename _Key_compare, bool _Is_pod_comparator = std::is_pod(_Key_compare)>
+        template <typename _Key_compare>
         struct rb_tree_impl : public _Node_allocator
         {
             _Key_compare                    mKeyCompare;
@@ -126,6 +126,88 @@ namespace ft
         {
             return (this->mImpl.mHeader.mParent);
         }
+        _Const_Base_ptr mRoot() const
+        {
+            return (this->mImpl.mHeader.mParent);
+        }
+        _Base_ptr &mLeftMost()
+        {
+            return (this->mImpl.mHeader.mLeft);
+        }
+        _Const_Base_ptr mLeftMost() const
+        {
+            return (this->mImpl.mHeader.mLeft);
+        }
+        _Base_ptr &mRightMost()
+        {
+            return (this->mImpl.mHeader.mRight);
+        }
+        _Const_Base_ptr mRightMost() const
+        {
+            return (this->mImpl.mHeader.mRight);
+        }
+        _Link_type mBegin()
+        {
+            return (static_cast<_Link_type>(this->mImpl.mHeader.mParent));
+        }
+        _Const_Link_type mBegin() const
+        {
+            return (static_cast<_Const_Link_type>(this->mImpl.mHeader.mParent));
+        }
+        _Link_type mEnd()
+        {
+            return (static_cast<_Link_type>(&this->mImpl.mHeader));
+        }
+        _Const_Link_type mEnd() const
+        {
+            return (static_cast<_Const_Link_type>(&this->mImpl.mHeader));
+        }
+        static const_reference sValue(_Const_Link_type __x)
+        {
+            return (__x->mValueField);
+        }
+        static const _Key &sKey(_Const_Link_type __x)
+        {
+            return (_KeyOfValue()(sValue(__x)));
+        }
+        static _Const_Link_type sLeft(_Base_ptr __x)
+        {
+            return (static_cast<_Const_Link_type>(__x->mLeft));
+        }
+        static _Link_type sRight(_Base_ptr __x)
+        {
+            return (static_cast<_Link_type>(__x->mRight));
+        }
+        static _Const_Link_type sRight(_Const_Base_ptr __x)
+        {
+            return (static_cast<_Const_Link_type>(__x->mRight));
+        }
+        static const_reference sValue(_Const_Base_ptr __x)
+        {
+            return (static_cast<_Const_Link_type>(__x)->mValueField);
+        }
+        static const _Key &sKey(_Const_Base_ptr __x)
+        {
+            return (_KeyOfValue()(sValue(__x)));
+        }
+        static _Base_ptr sMinimum(_Base_ptr __x)
+        {
+            return (rb_tree_node_base::S_minimum(__x));
+        }
+        static _Const_Base_ptr sMinimum(_Const_Base_ptr __x)
+        {
+            return (rb_tree_node_base::S_minimum(__x));
+        }
+        static _Base_ptr sMaximum(_Base_ptr __x)
+        {
+            return (rb_tree_node_base::S_maximum(__x));
+        }
+        static _Const_Base_ptr sMaximum(_Const_Base_ptr __x)
+        {
+            return (rb_tree_node_base::S_maximum(__x));
+        }
+    private:
+        
     public:
         red_black_tree(const key_compare &__comp, const allocator_type &__a = allocator_type())
             : _Base(__a)
