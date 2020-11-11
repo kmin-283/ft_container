@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 10:06:39 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/01 18:03:56 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/11 15:04:32 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,12 @@ int main()
         std::cout << *it << " ";
     std::cout << std::endl;
     std::cout << "=======================" << std::endl;
-
+    
+    // TODO: fix below compare statement
+    // if (v != v2)
+    //     std::cout << "not equal!" << std::endl;
+    
+    
     // ft::vector<int> myvector;
 
     // // set some values (from 1 to 10)

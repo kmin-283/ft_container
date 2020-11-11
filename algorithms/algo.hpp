@@ -6,9 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/24 18:52:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/02 12:57:31 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/11 18:36:17 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <functional>
 
 namespace ft
 {
@@ -17,7 +19,6 @@ namespace ft
     {
         return (a == b);
     }
-    
     template <typename T>
     bool less(const T &a, const T &b)
     {

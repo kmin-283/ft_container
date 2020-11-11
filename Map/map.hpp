@@ -6,12 +6,13 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/10 16:53:28 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/11 18:38:00 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <memory>
-#include "tree.hpp"
+#include <functional>
+#include "./tree.hpp"
 
 namespace ft
 {
@@ -45,7 +46,7 @@ namespace ft
         };
     private:
         typedef typename _Alloc::template rebind<value_type>:: other _Pair_alloc_type;
-        typedef red_black_tree<key_type, value_type, key_compare, _Pair_alloc_type> _Rep_type;
+        typedef red_black_tree<key_type, value_type, std::_Select1st<value_type>, key_compare, _Pair_alloc_type> _Rep_type;
 
         // actual tree structure
         _Rep_type _M_t; // _M_t가 무슨 의미인지 알 수 없음.... 이름을 바꾸자
@@ -62,7 +63,10 @@ namespace ft
         typedef typename _Rep_type::const_reverse_iterator              const_reverse_iterator;
 
 
-        explicit map(const _Compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
+        map()
+            : _M_t()
+        {}
+        explicit map(const _Compare &__comp, const allocator_type &__a = allocator_type())
             : _M_t(__comp, __a)
         {
         }

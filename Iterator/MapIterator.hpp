@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 10:31:47 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/10 16:53:14 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/11 18:22:15 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,11 @@ namespace ft
         typedef Category iterator_category;
 
         typedef MapIterator<_Tp> _Self;
-        typedef rb_tree_node_base<_Tp>::base_ptr    _Base_ptr;
+        typedef rb_tree_node_base::base_ptr    _Base_ptr;
         typedef rb_tree_node<_Tp>*                  _Link_type;
 
         _Base_ptr mNode;
-#ifdef __MAC__
+#ifdef __APPLE__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
 #endif
 #ifdef __linux__
@@ -106,7 +106,7 @@ namespace ft
         typedef MapIterator<_Tp>                            iterator;
 
         typedef ConstMapIterator<_Tp>                       _Self;
-        typedef rb_tree_node_base<_Tp>::const_base_ptr      _Base_ptr;
+        typedef rb_tree_node_base::const_base_ptr           _Base_ptr;
         typedef const rb_tree_node<_Tp>*                    _Link_type;
 
         _Base_ptr mNode;
@@ -183,8 +183,10 @@ namespace ft
         typedef _Tp& reference;
         typedef Category iterator_category;
 
+        typedef MapIterator<_Tp>                            iterator;
+
         typedef ReverseMapIterator<_Tp> _Self;
-        typedef rb_tree_node_base<_Tp>::base_ptr    _Base_ptr;
+        typedef rb_tree_node_base::base_ptr    _Base_ptr;
         typedef rb_tree_node<_Tp>*                  _Link_type;
 
         _Base_ptr mNode;
@@ -200,6 +202,10 @@ namespace ft
         }
         explicit ReverseMapIterator(_Link_type __x)
             : mNode(__x)
+        {
+        }
+        ReverseMapIterator(const iterator &__it)
+            : mNode(__it.mNode)
         {
         }
         _Self &operator=(const _Self &rhs)
@@ -260,7 +266,7 @@ namespace ft
         typedef MapIterator<_Tp>                            iterator;
 
         typedef ConstReverseMapIterator<_Tp>                       _Self;
-        typedef rb_tree_node_base<_Tp>::const_base_ptr      _Base_ptr;
+        typedef rb_tree_node_base::const_base_ptr      _Base_ptr;
         typedef const rb_tree_node<_Tp>*                    _Link_type;
 
         _Base_ptr mNode;
@@ -327,38 +333,37 @@ namespace ft
         }
         virtual ~ConstReverseMapIterator() {}
     };
+
+    template <typename _Val>
+    inline bool operator==(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode == y.mNode);
+    }
+    template <typename _Val>
+    inline bool operator!=(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode != y.mNode);
+    }
+    template <typename _Val>
+    inline bool operator>(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode > y.mNode);
+    }
+    template <typename _Val>
+    inline bool operator>=(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode >= y.mNode);
+    }template <typename _Val>
+    inline bool operator<(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode < y.mNode);
+    }
+    template <typename _Val>
+    inline bool operator<=(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode <= y.mNode);
+    }
+
+    void rb_tree_insert_and_rebalance(const bool __insert_left, rb_tree_node_base *__x, rb_tree_node_base *__p, rb_tree_node_base &__header) throw ();
+    rb_tree_node_base *rb_tree_rebalance_for_erase(rb_tree_node_base * const __z, rb_tree_node_base &__header) throw ();
 } // namespace ft
-
-template <typename _Val>
-inline bool operator==(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode == y.mNode);
-}
-template <typename _Val>
-inline bool operator!=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode != y.mNode);
-}
-template <typename _Val>
-inline bool operator>(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode > y.mNode);
-}
-template <typename _Val>
-inline bool operator>=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode >= y.mNode);
-}template <typename _Val>
-inline bool operator<(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode < y.mNode);
-}
-template <typename _Val>
-inline bool operator<=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode <= y.mNode);
-}
-
-void rb_tree_insert_and_rebalance(const bool __insert_left, ft::rb_tree_node_base *__x, ft::rb_tree_node_base *__p, ft::rb_tree_node_base &__header) throw ();
-
-ft::rb_tree_node_base *rb_tree_rebalance_for_erase(ft::rb_tree_node_base * const __z, ft::rb_tree_node_base &__header) throw ();
