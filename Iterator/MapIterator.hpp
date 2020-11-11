@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 10:31:47 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/11 18:22:15 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/11 22:31:08 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,9 @@ namespace ft
         typedef _Tp& reference;
         typedef Category iterator_category;
 
-        typedef MapIterator<_Tp> _Self;
-        typedef rb_tree_node_base::base_ptr    _Base_ptr;
-        typedef rb_tree_node<_Tp>*                  _Link_type;
+        typedef MapIterator<_Tp>                _Self;
+        typedef rb_tree_node_base::base_ptr     _Base_ptr;
+        typedef rb_tree_node<_Tp>*              _Link_type;
 
         _Base_ptr mNode;
 #ifdef __APPLE__
@@ -63,24 +63,24 @@ namespace ft
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -143,24 +143,24 @@ namespace ft
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -223,24 +223,24 @@ namespace ft
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -303,24 +303,24 @@ namespace ft
         }
         _Self &operator++()
         {
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_left;
+            this->mNode = this->mNode->mLeft;
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = this->mNode->m_right;
+            this->mNode = this->mNode->mRight;
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -333,37 +333,22 @@ namespace ft
         }
         virtual ~ConstReverseMapIterator() {}
     };
-
-    template <typename _Val>
-    inline bool operator==(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
-    {
-        return (x.mNode == y.mNode);
-    }
-    template <typename _Val>
-    inline bool operator!=(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
-    {
-        return (x.mNode != y.mNode);
-    }
-    template <typename _Val>
-    inline bool operator>(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
-    {
-        return (x.mNode > y.mNode);
-    }
-    template <typename _Val>
-    inline bool operator>=(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
-    {
-        return (x.mNode >= y.mNode);
-    }template <typename _Val>
-    inline bool operator<(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
-    {
-        return (x.mNode < y.mNode);
-    }
-    template <typename _Val>
-    inline bool operator<=(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
-    {
-        return (x.mNode <= y.mNode);
-    }
-
-    void rb_tree_insert_and_rebalance(const bool __insert_left, rb_tree_node_base *__x, rb_tree_node_base *__p, rb_tree_node_base &__header) throw ();
-    rb_tree_node_base *rb_tree_rebalance_for_erase(rb_tree_node_base * const __z, rb_tree_node_base &__header) throw ();
 } // namespace ft
+
+template <typename _Val>
+inline bool operator==(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
+{
+    return (x.mNode == y.mNode);
+}
+template <typename _Val>
+inline bool operator!=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
+{
+    return (x.mNode != y.mNode);
+}
+
+void rb_tree_insert_and_rebalance(const bool __insert_left, ft::rb_tree_node_base *__x, ft::rb_tree_node_base *__p, ft::rb_tree_node_base &__header) throw ()
+{}
+ft::rb_tree_node_base *rb_tree_rebalance_for_erase(ft::rb_tree_node_base * const __z, ft::rb_tree_node_base &__header) throw ()
+{
+    return (&__header);
+}

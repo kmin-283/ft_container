@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 16:10:50 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/11 18:38:39 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/11 22:03:58 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,11 @@ namespace ft
     {
         typedef rb_tree_node_base* base_ptr;
         typedef const rb_tree_node_base* const_base_ptr;
-        
-        rb_tree_color       mColor;
-        rb_tree_node_base   *mLeft;
-        rb_tree_node_base   *mRight;
-        rb_tree_node_base   *mParent;
+
+        rb_tree_color mColor;
+        rb_tree_node_base *mLeft;
+        rb_tree_node_base *mRight;
+        rb_tree_node_base *mParent;
 
         static base_ptr S_minimum(base_ptr __x)
         {
