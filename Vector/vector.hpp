@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/12 16:43:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 20:07:00 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -530,6 +530,11 @@ namespace ft
             this->mImpl.mFinish = __pos;
         }
     };
+    template <typename _Tp, typename _Alloc>
+    inline bool operator==(const vector<_Tp, _Alloc>& __x, const vector<_Tp, _Alloc>& __y)
+    {
+        return (__x.size() == __y.size() && std::equal(__x.begin(), __x.end(), __y.begin()));
+    }
     template <typename _Tp, typename _Alloc>
     inline bool operator<(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
     {
