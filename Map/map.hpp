@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/12 12:23:00 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 17:55:40 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ namespace ft
         typedef red_black_tree<key_type, value_type, std::_Select1st<value_type>, key_compare, _Pair_alloc_type> _Rep_type;
 
         // actual tree structure
-        _Rep_type _M_t; // _M_t ... member tree?
+        _Rep_type mTree;
     public:
         typedef typename _Pair_alloc_type::pointer                      pointer;
         typedef typename _Pair_alloc_type::const_pointer                const_pointer;
@@ -62,69 +62,69 @@ namespace ft
         typedef typename _Rep_type::const_reverse_iterator              const_reverse_iterator;
 
         explicit map(const _Compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
-            : _M_t(__comp, __a)
+            : mTree(__comp, __a)
         {}
         template <typename _InputIterator>
-        map(_InputIterator __first, _InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
-            : _M_t()
+        map(_InputIterator __first, _InputIterator __last)
+            : mTree()
         {
-            _M_t.mInsertUnique(__first, __last);
+            mTree.mInsertUnique(__first, __last);
         }
         map(const map &__x) // copy constructor
-            : _M_t(__x._M_t)
+            : mTree(__x.mTree)
         {}
         map &operator=(const map &__x)
         {
-            _M_t = __x._M_t;
+            mTree = __x.mTree;
             return (*this);
         }
         allocator_type getAllocator() const
         {
-            return (_M_t.getAllocator());
+            return (mTree.getAllocator());
         }
         iterator begin()
         {
-            return (_M_t.begin());
+            return (mTree.begin());
         }
         const_iterator begin() const
         {
-            return (_M_t.begin());
+            return (mTree.begin());
         }
         iterator end()
         {
-            return (_M_t.end());
+            return (mTree.end());
         }
         const_iterator end() const
         {
-            return (_M_t.end());
+            return (mTree.end());
         }
         reverse_iterator rbegin()
         {
-            return (_M_t.rbegin());
+            return (mTree.rbegin());
         }
         const_reverse_iterator rbegin() const
         {
-            return (_M_t.rbegin());
+            return (mTree.rbegin());
         }
         reverse_iterator rend()
         {
-            return (_M_t.rend());
+            return (mTree.rend());
         }
         const_reverse_iterator rend() const
         {
-            return (_M_t.rend());
+            return (mTree.rend());
         }
         bool empty() const
         {
-            return (_M_t.empty());
+            return (mTree.empty());
         }
         size_type size() const
         {
-            return (_M_t.size());
+            return (mTree.size());
         }
         size_type max_size() const
         {
-            return (_M_t.max_size());
+            return (mTree.max_size());
         }
         mapped_type &operator[](const key_type &__k)
         {
@@ -136,93 +136,130 @@ namespace ft
         }
         std::pair<iterator, bool> insert(const value_type &__val)
         {
-            return (_M_t.mInsertUnique(__val));
+            return (mTree.mInsertUnique(__val));
         }
         iterator insert(iterator __position, const value_type &__x)
         {
-            return (_M_t.mInsertUnique(__position, __x));
+            return (mTree.mInsertUnique(__position, __x));
         }
         template <typename _InputIterator>
         void insert(_InputIterator __first, _InputIterator __last)
         {
-            _M_t.mInsertUnique(__first, __last);
+            mTree.mInsertUnique(__first, __last);
         }
         void erase(iterator __position)
         {
-            _M_t.erase(__position);
+            mTree.erase(__position);
         }
         size_type erase(const key_type &__k)
         {
-            return (_M_t.erase(__k));
+            return (mTree.erase(__k));
         }
         void erase(iterator __first, iterator __last)
         {
-            _M_t.erase(__first, __last);
+            mTree.erase(__first, __last);
         }
         void swap(map& __x)
         {
-            _M_t.swap(__x._M_t);
+            mTree.swap(__x.mTree);
         }
         void clear()
         {
-            _M_t.clear();
+            mTree.clear();
         }
         key_compare key_comp() const
         {
-            return (_M_t.key_comp());
+            return (mTree.key_comp());
         }
         value_compare value_comp() const
         {
-            return (value_compare(_M_t.key_comp()));
+            return (value_compare(mTree.key_comp()));
         }
         iterator find(const key_type &__k)
         {
-            return (_M_t.find(__k));
+            return (mTree.find(__k));
         }
         const_iterator find(const key_type &__k) const
         {
-            return (_M_t.find(__k));
+            return (mTree.find(__k));
         }
         size_type count(const key_type &__k) const
         {
-            return (_M_t.find(__k) == _M_t.end() ? 0 : 1);
+            return (mTree.find(__k) == mTree.end() ? 0 : 1);
         }
         iterator lower_bound(const key_type &__k)
         {
-            return (_M_t.lower_bound(__k));
+            return (mTree.lower_bound(__k));
         }
         const_iterator lower_bound(const key_type &__k) const
         {
-            return (_M_t.lower_bound(__k));
+            return (mTree.lower_bound(__k));
         }
         iterator upper_bound(const key_type &__k)
         {
-            return (_M_t.upper_bound(__k));
+            return (mTree.upper_bound(__k));
         }
         const_iterator upper_bound(const key_type &__k) const
         {
-            return (_M_t.upper_bound(__k));
+            return (mTree.upper_bound(__k));
         }
         std::pair<const_iterator, const_iterator> equal_range(const key_type &__k) const
         {
-            return (_M_t.equal_range(__k));
+            return (mTree.equal_range(__k));
         }
         std::pair<iterator, iterator> equal_range (const key_type &__k)
         {
-            return (_M_t.equal_range(__k));
+            return (mTree.equal_range(__k));
         }
 
         template<typename _K1, typename _T1, typename _C1, typename _A1>
-        friend bool operator==(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&)
-        {
-            
-        }
+        friend bool operator==(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
         template<typename _K1, typename _T1, typename _C1, typename _A1>
-        friend bool operator<(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&)
-        {
-            
-        }
+        friend bool operator<(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
         ~map()
         {}
     };
+}
+
+template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+inline bool operator==(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
+                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
+{
+    return (__x.mTree == __y.mTree);
+}
+template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+inline bool operator!=(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
+                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
+{
+    return (!(__x == __y));
+}
+template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+inline bool operator<(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
+                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
+{
+    return (__x.mTree < __y.mTree);
+}
+template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+inline bool operator>(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
+                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
+{
+    return (__y.mTree < __x.mTree);
+}
+template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+inline bool operator<=(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
+                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
+{
+    return (!(__x.mTree < __y.mTree));
+}
+template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+inline bool operator>=(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
+                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
+{
+    return (!(__y.mTree < __x.mTree));
+}
+template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+inline void swap(ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
+                        ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
+{
+    __x.swap(__y);
 }

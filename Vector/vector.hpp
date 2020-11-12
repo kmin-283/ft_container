@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/11 14:56:51 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 16:43:24 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,9 +496,12 @@ namespace ft
             }
         }
         void mDefaultAppend(size_type __n)
-        {}
+        {
+            (void)__n;
+        }
         void mInsertAux(iterator __position, const value_type &__x)
         {
+            (void)__position;
             size_type default_capacity = this->size();
             size_type capacity = default_capacity == 0 ? 1 : default_capacity * 2;
             pointer tmp = mAllocateAndCopy(capacity, this->begin(), this->end());

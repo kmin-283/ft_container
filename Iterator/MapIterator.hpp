@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 10:31:47 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/12 16:12:33 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 17:42:49 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,10 @@ namespace ft
         }
         explicit MapIterator(_Link_type __x)
             : mNode(__x)
+        {
+        }
+        MapIterator(const MapIterator<_Tp> &__it)
+            : mNode(__it.mNode)
         {
         }
         _Self &operator=(const _Self &rhs)
@@ -223,24 +227,24 @@ namespace ft
         }
         _Self &operator++()
         {
-            this->mNode = rb_tree_increment(this->mNode);
+            this->mNode = rb_tree_decrement(this->mNode);
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = rb_tree_increment(this->mNode);
+            this->mNode = rb_tree_decrement(this->mNode);
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = rb_tree_decrement(this->mNode);
+            this->mNode = rb_tree_increment(this->mNode);
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = rb_tree_decrement(this->mNode);
+            this->mNode = rb_tree_increment(this->mNode);
             return (temp);
         }
         bool operator==(const _Self &rhs) const
@@ -303,24 +307,24 @@ namespace ft
         }
         _Self &operator++()
         {
-            this->mNode = rb_tree_increment(this->mNode);
+            this->mNode = rb_tree_decrement(this->mNode);
             return (*this);
         }
         _Self operator++(int)
         {
             _Self temp = *this;
-            this->mNode = rb_tree_increment(this->mNode);
+            this->mNode = rb_tree_decrement(this->mNode);
             return (temp);
         }
         _Self &operator--()
         {
-            this->mNode = rb_tree_decrement(this->mNode);
+            this->mNode = rb_tree_increment(this->mNode);
             return (*this);
         }
         _Self operator--(int)
         {
             _Self temp = *this;
-            this->mNode = rb_tree_decrement(this->mNode);
+            this->mNode = rb_tree_increment(this->mNode);
             return (temp);
         }
         bool operator==(const _Self &rhs) const

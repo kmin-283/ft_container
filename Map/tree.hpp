@@ -6,12 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/12 15:49:57 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 18:58:29 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Iterator/MapIterator.hpp"
-#include <iostream>
 #include <exception>
 #include <functional>
 #include <algorithm>
@@ -234,6 +233,8 @@ namespace ft
         const_iterator mUpperBound(_Const_Link_type __x, _Const_Link_type __y, const _Key &__k) const;
 
     public:
+        red_black_tree()
+        {}
         red_black_tree(const _Compare &__comp, const allocator_type &__a = allocator_type())
             : mImpl(__comp, __a)
         {
@@ -276,19 +277,35 @@ namespace ft
         }
         reverse_iterator rbegin()
         {
-            return (reverse_iterator(end()));
+            iterator it = end();
+            
+            if (it == begin())
+                return (reverse_iterator(it));
+            return (reverse_iterator(--it));
         }
         const_reverse_iterator rbegin() const
         {
-            return (const_reverse_iterator(end()));
+            iterator it = end();
+
+            if (it == begin())
+                return (const_reverse_iterator(it));
+            return (const_reverse_iterator(--it));
         }
         reverse_iterator rend()
         {
-            return (reverse_iterator(begin()));
+            iterator it = begin();
+
+            if (end() == it)
+                return (reverse_iterator(it));
+            return (reverse_iterator(--it));
         }
         const_reverse_iterator rend() const
         {
-            return (const_reverse_iterator(begin()));
+            iterator it = begin();
+
+            if (end() == it)
+                return (const_reverse_iterator(it));         
+            return (const_reverse_iterator(--it));
         }
         bool empty() const
         {
@@ -314,6 +331,7 @@ namespace ft
         void erase(iterator __position);
         size_type erase(const key_type &__x);
         void erase(iterator __first, iterator __last);
+        void erase(const_iterator __first, const_iterator __last);
         void clear()
         {
             mErase(mBegin());
@@ -390,8 +408,8 @@ inline void swap(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Al
     __x.swap(__y);
 }
 template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>
-    &ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>&
+ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
     operator=(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x)
 {
     if (this != &__x)
@@ -405,8 +423,8 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>
             mRightMost() = sMaximum(mRoot());
             mImpl.mNodeCount = __x.mImpl.mNodeCount;
         }
-        return (*this);
     }
+    return (*this);
 }
 template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
 typename ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
@@ -534,7 +552,7 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
 {
     while (__x != 0)
     {
-        if (!mImpl.mKeyCompare(__k, sKey(__x)))
+        if (mImpl.mKeyCompare(__k, sKey(__x)))
         {
             __y = __x;
             __x = sLeft(__x);
@@ -551,7 +569,7 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
 {
     while (__x != 0)
     {
-        if (!mImpl.mKeyCompare(__k, sKey(__x)))
+        if (mImpl.mKeyCompare(__k, sKey(__x)))
         {
             __y = __x;
             __x = sLeft(__x);
@@ -762,7 +780,7 @@ typename ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::iterator
 ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
     mInsertEqual(const_iterator __position, const _Val &__v)
 {
-    if (__position._M_node == mEnd())
+    if (__position.mNode == mEnd())
     {
         if (size() > 0 && !mImpl.mKeyCompare(_KeyOfValue()(__v),
                                                 sKey(mRightMost())))
@@ -770,21 +788,21 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
         else
             return mInsertEqual(__v);
     }
-    else if (!mImpl.mKeyCompare(sKey(__position._M_node),
+    else if (!mImpl.mKeyCompare(sKey(__position.mNode),
                                     _KeyOfValue()(__v)))
     {
         // First, try before...
         const_iterator __before = __position;
-        if (__position._M_node == mLeftMost()) // begin()
+        if (__position.mNode == mLeftMost()) // begin()
             return mInsert(mLeftMost(), mLeftMost(), __v);
         else if (!mImpl.mKeyCompare(_KeyOfValue()(__v),
-                                        sKey((--__before)._M_node)))
+                                        sKey((--__before).mNode)))
         {
-            if (sRight(__before._M_node) == 0)
-                return mInsert(0, __before._M_node, __v);
+            if (sRight(__before.mNode) == 0)
+                return mInsert(0, __before.mNode, __v);
             else
-                return mInsert(__position._M_node,
-                                __position._M_node, __v);
+                return mInsert(__position.mNode,
+                                __position.mNode, __v);
         }
         else
             return mInsertEqual(__v);
@@ -793,15 +811,15 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
     {
         const_iterator __after = __position;
         
-        if (__position._M_node == mRightMost())
+        if (__position.mNode == mRightMost())
             return mInsert(0, mRightMost(), __v);
-        else if (!mImpl.mKeyCompare(sKey((++__after)._M_node),
+        else if (!mImpl.mKeyCompare(sKey((++__after).mNode),
                                         _KeyOfValue()(__v)))
         {
-            if (sRight(__position._M_node) == 0)
-                return mInsert(0, __position._M_node, __v);
+            if (sRight(__position.mNode) == 0)
+                return mInsert(0, __position.mNode, __v);
             else
-                return mInsert(__after._M_node, __after._M_node, __v);
+                return mInsert(__after.mNode, __after.mNode, __v);
         }
         else
             return mInsertEquallower(__v);
@@ -815,7 +833,7 @@ void ft::red_black_tree<_Key, _Val, _KoV, _Cmp, _Alloc>::
     mInsertUnique(_InputIterator __first, _InputIterator __last)
 {
     for (; __first != __last; ++__first)
-        mInsertUnique_(end(), *__first);
+        mInsertUnique(end(), *__first);
 }
 
 template <typename _Key, typename _Val, typename _KoV,
@@ -835,9 +853,9 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
     erase(iterator __position)
 {
     _Link_type __y =
-        static_cast<_Link_type>(rb_tree_rebalance_for_erase(__position._M_node, this->mImpl._M_header));
-    _M_destroy_node(__y);
-    --mImpl._M_node_count;
+        static_cast<_Link_type>(rb_tree_rebalance_for_erase(__position.mNode, this->mImpl.mHeader));
+    mDestroyNode(__y);
+    --mImpl.mNodeCount;
 }
 
 template <typename _Key, typename _Val, typename _KeyOfValue,
@@ -866,13 +884,26 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
 
 template <typename _Key, typename _Val, typename _KeyOfValue,
             typename _Compare, typename _Alloc>
+void
+ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
+    erase(const_iterator __first, const_iterator __last)
+{
+    if (__first == begin() && __last == end())
+        clear();
+    else
+        while (__first != __last)
+            erase(__first++);
+}
+
+template <typename _Key, typename _Val, typename _KeyOfValue,
+            typename _Compare, typename _Alloc>
 typename ft::red_black_tree<_Key, _Val, _KeyOfValue,
                         _Compare, _Alloc>::iterator
 ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
     find(const _Key &__k)
 {
     iterator __j = mLowerBound(mBegin(), mEnd(), __k);
-    return (__j == end() || mImpl.mKeyCompare(__k, sKey(__j._M_node)))
+    return (__j == end() || mImpl.mKeyCompare(__k, sKey(__j.mNode)))
                 ? end() : __j;
 }
 
@@ -884,7 +915,7 @@ ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::
     find(const _Key &__k) const
 {
     const_iterator __j = mLowerBound(mBegin(), mEnd(), __k);
-    return (__j == end() || mImpl.mKeyCompare(__k, sKey(__j._M_node)))
+    return (__j == end() || mImpl.mKeyCompare(__k, sKey(__j.mNode)))
                 ? end() : __j;
 }
 
@@ -902,13 +933,13 @@ template <typename _Key, typename _Val, typename _KeyOfValue,
             typename _Compare, typename _Alloc>
 bool ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::__rb_verify() const
 {
-    if (mImpl._M_node_count == 0 || begin() == end())
-        return mImpl._M_node_count == 0 && begin() == end() && this->mImpl._M_header._M_left == mEnd() && this->mImpl._M_header._M_right == mEnd();
+    if (mImpl.mNodeCount == 0 || begin() == end())
+        return mImpl.mNodeCount == 0 && begin() == end() && this->mImpl.mHeader._M_left == mEnd() && this->mImpl.mHeader._M_right == mEnd();
 
     unsigned int __len = red_black_tree_black_count(mLeftMost(), mRoot());
     for (const_iterator __it = begin(); __it != end(); ++__it)
     {
-        _Const_Link_type __x = static_cast<_Const_Link_type>(__it._M_node);
+        _Const_Link_type __x = static_cast<_Const_Link_type>(__it.mNode);
         _Const_Link_type __L = sLeft(__x);
         _Const_Link_type __R = sRight(__x);
 

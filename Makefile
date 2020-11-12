@@ -12,6 +12,8 @@ LIST = $(addprefix ./tests/, main_list.cpp)
 VECTOR = $(addprefix ./tests/, main_vector.cpp)
 MAP = $(addprefix ./tests/, main_map.cpp)
 
+TEST_RESULT = $(addprefix ./result/, my stl)
+
 # $(NAME):	$(OBJS)
 # 			$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
@@ -31,6 +33,7 @@ vector: $(OBJS)
 map: $(OBJS)
 			$(CC) $(CFLAGS) -o map_container $(MAP) -I ./Map
 			./map_container
+			diff $(TEST_RESULT) > ./result/result || exit 0
 
 clean:
 			rm -rf $(OBJS)
@@ -40,6 +43,8 @@ fclean: clean
 			rm -f list_container
 			rm -f vector_container
 			rm -f map_container
+			rm -f $(TEST_RESULT)
+			rm -f ./result/result
 
 re: fclean all
 
