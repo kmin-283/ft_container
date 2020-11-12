@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/11 22:28:38 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 12:23:00 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,7 @@ namespace ft
 
         explicit map(const _Compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : _M_t(__comp, __a)
-        {
-        }
+        {}
         template <typename _InputIterator>
         map(_InputIterator __first, _InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : _M_t()

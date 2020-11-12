@@ -6,11 +6,12 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/11 22:30:32 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 15:49:57 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Iterator/MapIterator.hpp"
+#include <iostream>
 #include <exception>
 #include <functional>
 #include <algorithm>

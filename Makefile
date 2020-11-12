@@ -1,7 +1,7 @@
 # NAME = container
 
 CC = clang++
-CFLAGS = -std=c++98
+CFLAGS = -std=c++98 -fsanitize=address
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 
 SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp)

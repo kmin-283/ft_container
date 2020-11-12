@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/11 22:32:01 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/12 16:15:45 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,24 +19,22 @@ int main()
 {
     ft::map<char, int> mymap;
     ft::map<char, int>::iterator itlow,itup;
-    ft::map<char, int> mymap2(mymap);
 
+
+    mymap['e']=100;
     mymap['b']=20;
     mymap['a']=40;
     mymap['c']=60;
     mymap['d']=80;
-    mymap['e']=100;
 
-    std::cout << mymap['a'] << std::endl;
-    std::cout << mymap['b'] << std::endl;
     // itlow=mymap.lower_bound ('b');  // itlow points to b
     // itup=mymap.upper_bound ('d');   // itup points to e (not d!)
 
     // mymap.erase(itlow,itup);        // erases [itlow,itup)
 
     // // print content:
-    // for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
-    //     std::cout << it->first << " => " << it->second << '\n';
+    for (ft::map<char,int>::iterator it=mymap.begin(); it!=mymap.end(); ++it)
+        std::cout << it->first << " => " << it->second << '\n';
     return (0);
 }
 
