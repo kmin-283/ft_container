@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 16:10:50 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/12 19:59:20 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/16 14:27:42 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,79 +166,79 @@ static void rb_tree_right_rotate(ft::rb_tree_node_base *const __x, ft::rb_tree_n
     __x->mParent = __y;
 }
 
-void rb_tree_insert_and_rebalance(const bool __insert_left, ft::rb_tree_node_base *__x, ft::rb_tree_node_base *__p, ft::rb_tree_node_base &__header) throw()
+void rb_tree_insert_and_rebalance(const bool __insert_left, ft::rb_tree_node_base *__new_node, ft::rb_tree_node_base *__p, ft::rb_tree_node_base &__header) throw()
 {
     ft::rb_tree_node_base *&__root = __header.mParent;
 
-    __x->mParent = __p;
-    __x->mLeft = 0;
-    __x->mRight = 0;
-    __x->mColor = ft::RED;
+    __new_node->mParent = __p;
+    __new_node->mLeft = 0;
+    __new_node->mRight = 0;
+    __new_node->mColor = ft::RED;
 
     if (__insert_left)
     {
-        __p->mLeft = __x;
+        __p->mLeft = __new_node;
         if (__p == &__header)
         {
-            __header.mParent = __x;
-            __header.mRight = __x;
+            __header.mParent = __new_node;
+            __header.mRight = __new_node;
         }
         else if (__p == __header.mLeft)
-            __header.mLeft = __x;
+            __header.mLeft = __new_node;
     }
     else
     {
-        __p->mRight = __x;
+        __p->mRight = __new_node;
         if (__p == __header.mRight)
-            __header.mRight = __x;
+            __header.mRight = __new_node;
     }
-    while (__x != __root && __x->mParent->mColor == ft::RED)
+    while (__new_node != __root && __new_node->mParent->mColor == ft::RED)
     {
-        ft::rb_tree_node_base *const __xpp = __x->mParent->mParent;
+        ft::rb_tree_node_base *const __new_node_greand_parent = __new_node->mParent->mParent;
 
-        if (__x->mParent == __xpp->mLeft)
+        if (__new_node->mParent == __new_node_greand_parent->mLeft)
         {
-            ft::rb_tree_node_base *const __y = __xpp->mRight;
+            ft::rb_tree_node_base *const __y = __new_node_greand_parent->mRight;
 
             if (__y && __y->mColor == ft::RED)
             {
-                __x->mParent->mColor = ft::BLACK;
+                __new_node->mParent->mColor = ft::BLACK;
                 __y->mColor = ft::BLACK;
-                __xpp->mColor = ft::RED;
-                __x = __xpp;
+                __new_node_greand_parent->mColor = ft::RED;
+                __new_node = __new_node_greand_parent;
             }
             else
             {
-                if (__x == __x->mParent->mRight)
+                if (__new_node == __new_node->mParent->mRight)
                 {
-                    __x = __x->mParent;
-                    rb_tree_left_rotate(__x, __root);
+                    __new_node = __new_node->mParent;
+                    rb_tree_left_rotate(__new_node, __root);
                 }
-                __x->mParent->mColor = ft::BLACK;
-                __xpp->mColor = ft::RED;
-                rb_tree_right_rotate(__xpp, __root);
+                __new_node->mParent->mColor = ft::BLACK;
+                __new_node_greand_parent->mColor = ft::RED;
+                rb_tree_right_rotate(__new_node_greand_parent, __root);
             }
         }
         else
         {
-            ft::rb_tree_node_base *const __y = __xpp->mLeft;
+            ft::rb_tree_node_base *const __y = __new_node_greand_parent->mLeft;
             if (__y && __y->mColor == ft::RED)
             {
-                __x->mParent->mColor = ft::BLACK;
+                __new_node->mParent->mColor = ft::BLACK;
                 __y->mColor = ft::BLACK;
-                __xpp->mColor = ft::RED;
-                __x = __xpp;
+                __new_node_greand_parent->mColor = ft::RED;
+                __new_node = __new_node_greand_parent;
             }
             else
             {
-                if (__x == __x->mParent->mLeft)
+                if (__new_node == __new_node->mParent->mLeft)
                 {
-                    __x = __x->mParent;
-                    rb_tree_right_rotate(__x, __root);
+                    __new_node = __new_node->mParent;
+                    rb_tree_right_rotate(__new_node, __root);
                 }
-                __x->mParent->mColor = ft::BLACK;
-                __xpp->mColor = ft::RED;
-                rb_tree_left_rotate(__xpp, __root);
+                __new_node->mParent->mColor = ft::BLACK;
+                __new_node_greand_parent->mColor = ft::RED;
+                rb_tree_left_rotate(__new_node_greand_parent, __root);
             }
         }
     }

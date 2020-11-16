@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/12 17:55:40 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/16 14:51:40 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,19 @@
 
 namespace ft
 {
+    template <typename _Pair>
+    struct _Select1st : public std::unary_function<_Pair, typename _Pair::first_type>
+    {
+        typename _Pair::first_type &operator()(_Pair &__x) const
+        {
+            return (__x.first);
+        }
+        const typename _Pair::first_type &operator()(const _Pair &__x) const
+        {
+            return (__x.first);
+        }
+    };
+
     template <typename _Key, typename _Tp, typename _Compare = std::less<_Key>, typename _Alloc = std::allocator<std::pair<const _Key, _Tp> > >
     class map
     {
@@ -45,7 +58,7 @@ namespace ft
         };
     private:
         typedef typename _Alloc::template rebind<value_type>::other _Pair_alloc_type;
-        typedef red_black_tree<key_type, value_type, std::_Select1st<value_type>, key_compare, _Pair_alloc_type> _Rep_type;
+        typedef red_black_tree<key_type, value_type, ft::_Select1st<value_type>, key_compare, _Pair_alloc_type> _Rep_type;
 
         // actual tree structure
         _Rep_type mTree;
