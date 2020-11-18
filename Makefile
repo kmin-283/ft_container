@@ -4,7 +4,7 @@ CC = clang++
 CFLAGS = -std=c++98 -fsanitize=address
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 
-SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp)
+SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp main_map.cpp)
 
 OBJS = $(SRCS:%.cpp=%.o)
 
