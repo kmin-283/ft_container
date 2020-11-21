@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 16:10:50 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/18 14:31:06 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/21 20:07:14 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,20 @@ static ft::rb_tree_node_base *local_rb_tree_increment(ft::rb_tree_node_base *__x
     return __x;
 }
 
-ft::rb_tree_node_base *rb_tree_increment(ft::rb_tree_node_base* __x) throw ()
+ft::rb_tree_node_base *rb_tree_increment(ft::rb_tree_node_base *__x) throw()
 {
     return local_rb_tree_increment(__x);
 }
 
-const ft::rb_tree_node_base *rb_tree_increment(const ft::rb_tree_node_base* __x) throw ()
+const ft::rb_tree_node_base *rb_tree_increment(const ft::rb_tree_node_base *__x) throw()
 {
-    return local_rb_tree_increment(const_cast<ft::rb_tree_node_base*>(__x));
+    return local_rb_tree_increment(const_cast<ft::rb_tree_node_base *>(__x));
 }
 
 static ft::rb_tree_node_base *local_rb_tree_decrement(ft::rb_tree_node_base *__x) throw()
 {
     if (__x->mColor == ft::RED && __x->mParent->mParent == __x)
-        __x = __x->mRight;
+        __x = __x->mRight; // reverse_iterator의 경우 header_node가 삽입되었을 때 가장 큰 노드로 변경시켜주어야만 정상적으로 동작하기 떄문에 header_node->mRight로 변경시켜줌.
     else if (__x->mLeft != 0)
     {
         ft::rb_tree_node_base *__y = __x->mLeft;
@@ -118,14 +118,14 @@ static ft::rb_tree_node_base *local_rb_tree_decrement(ft::rb_tree_node_base *__x
     return __x;
 }
 
-ft::rb_tree_node_base *rb_tree_decrement(ft::rb_tree_node_base* __x) throw ()
+ft::rb_tree_node_base *rb_tree_decrement(ft::rb_tree_node_base *__x) throw()
 {
     return local_rb_tree_decrement(__x);
 }
 
-const ft::rb_tree_node_base *rb_tree_decrement(const ft::rb_tree_node_base* __x) throw ()
+const ft::rb_tree_node_base *rb_tree_decrement(const ft::rb_tree_node_base *__x) throw()
 {
-    return local_rb_tree_decrement(const_cast<ft::rb_tree_node_base*>(__x));
+    return local_rb_tree_decrement(const_cast<ft::rb_tree_node_base *>(__x));
 }
 
 static void rb_tree_left_rotate(ft::rb_tree_node_base *const __x, ft::rb_tree_node_base *&__root)
@@ -244,88 +244,91 @@ void rb_tree_insert_and_rebalance(const bool __insert_left, ft::rb_tree_node_bas
     }
     __root->mColor = ft::BLACK;
 }
-ft::rb_tree_node_base *rb_tree_rebalance_for_erase(ft::rb_tree_node_base *const __z, ft::rb_tree_node_base &__header) throw()
+
+ft::rb_tree_node_base *rb_tree_rebalance_for_erase(ft::rb_tree_node_base *const __target, ft::rb_tree_node_base &__header) throw()
 {
     ft::rb_tree_node_base *&__root = __header.mParent;
     ft::rb_tree_node_base *&__leftmost = __header.mLeft;
     ft::rb_tree_node_base *&__rightmost = __header.mRight;
-    ft::rb_tree_node_base *__y = __z;
+    ft::rb_tree_node_base *__y = __target;
     ft::rb_tree_node_base *__x = 0;
     ft::rb_tree_node_base *__x_parent = 0;
 
-    if (__y->mLeft == 0)       // __z has at most one non-null child. y == z.
+    if (__y->mLeft == 0)       // __target has at most one non-null child. y == z.
         __x = __y->mRight;     // __x might be null.
-    else if (__y->mRight == 0) // __z has exactly one non-null child. y == z.
+    else if (__y->mRight == 0) // __target has exactly one non-null child. y == z.
         __x = __y->mLeft;      // __x is not null.
     else
     {
-        // __z has two non-null children.  Set __y to
-        __y = __y->mRight; //   __z's successor.  __x might be null.
+        // __target has two non-null children.  Set __y to
+        __y = __y->mRight; //   __target's successor.  __x might be null.
         while (__y->mLeft != 0)
             __y = __y->mLeft;
         __x = __y->mRight;
     }
-    if (__y != __z)
+    if (__y != __target)
     {
         // relink y in place of z.  y is z's successor
-        __z->mLeft->mParent = __y;
-        __y->mLeft = __z->mLeft;
-        if (__y != __z->mRight)
+        __target->mLeft->mParent = __y;
+        __y->mLeft = __target->mLeft;
+        if (__y != __target->mRight)
         {
             __x_parent = __y->mParent;
             if (__x)
                 __x->mParent = __y->mParent;
             __y->mParent->mLeft = __x; // __y must be a child of mLeft
-            __y->mRight = __z->mRight;
-            __z->mRight->mParent = __y;
+            __y->mRight = __target->mRight;
+            __target->mRight->mParent = __y;
         }
         else
             __x_parent = __y;
-        if (__root == __z)
+        if (__root == __target)
             __root = __y;
-        else if (__z->mParent->mLeft == __z)
-            __z->mParent->mLeft = __y;
+        else if (__target->mParent->mLeft == __target)
+            __target->mParent->mLeft = __y;
         else
-            __z->mParent->mRight = __y;
-        __y->mParent = __z->mParent;
-        std::swap(__y->mColor, __z->mColor);
-        __y = __z;
+            __target->mParent->mRight = __y;
+        __y->mParent = __target->mParent;
+        std::swap(__y->mColor, __target->mColor);
+        __y = __target;
         // __y now points to node to be actually deleted
     }
     else
-    { // __y == __z
+    { // __y == __target
         __x_parent = __y->mParent;
         if (__x)
             __x->mParent = __y->mParent;
-        if (__root == __z)
+        if (__root == __target)
             __root = __x;
-        else if (__z->mParent->mLeft == __z)
-            __z->mParent->mLeft = __x;
+        else if (__target->mParent->mLeft == __target)
+            __target->mParent->mLeft = __x;
         else
-            __z->mParent->mRight = __x;
-        if (__leftmost == __z)
+            __target->mParent->mRight = __x;
+        if (__leftmost == __target)
         {
-            if (__z->mRight == 0) // __z->mLeft must be null also
-                __leftmost = __z->mParent;
-            // makes __leftmost == _M_header if __z == __root
+            if (__target->mRight == 0) // __target->mLeft must be null also
+                __leftmost = __target->mParent;
+            // makes __leftmost == _M_header if __target == __root
             else
                 __leftmost = ft::rb_tree_node_base::S_minimum(__x);
         }
-        if (__rightmost == __z)
+        if (__rightmost == __target)
         {
-            if (__z->mLeft == 0) // __z->mRight must be null also
-                __rightmost = __z->mParent;
-            // makes __rightmost == _M_header if __z == __root
-            else // __x == __z->mLeft
+            if (__target->mLeft == 0) // __target->mRight must be null also
+                __rightmost = __target->mParent;
+            // makes __rightmost == _M_header if __target == __root
+            else // __x == __target->mLeft
                 __rightmost = ft::rb_tree_node_base::S_maximum(__x);
         }
     }
-    if (__y->mColor != ft::RED)
+    if (__y->mColor != ft::RED) // __y->color == black ==> rebalancing
     {
         while (__x != __root && (__x == 0 || __x->mColor == ft::BLACK))
+        {
             if (__x == __x_parent->mLeft)
             {
-                ft::rb_tree_node_base *__w = __x_parent->mRight;
+                ft::rb_tree_node_base *__w = __x_parent->mRight; // x->sibling
+
                 if (__w->mColor == ft::RED)
                 {
                     __w->mColor = ft::BLACK;
@@ -362,7 +365,8 @@ ft::rb_tree_node_base *rb_tree_rebalance_for_erase(ft::rb_tree_node_base *const 
             else
             {
                 // same as above, with mRight <-> mLeft.
-                ft::rb_tree_node_base *__w = __x_parent->mLeft;
+                ft::rb_tree_node_base *__w = __x_parent->mLeft; // x->sibling
+
                 if (__w->mColor == ft::RED)
                 {
                     __w->mColor = ft::BLACK;
@@ -396,6 +400,7 @@ ft::rb_tree_node_base *rb_tree_rebalance_for_erase(ft::rb_tree_node_base *const 
                     break;
                 }
             }
+        }
         if (__x)
             __x->mColor = ft::BLACK;
     }

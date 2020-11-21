@@ -44,7 +44,6 @@ fclean: clean
 			rm -f vector_container
 			rm -f map_container
 			rm -f $(TEST_RESULT)
-			rm -f ./result/result
 
 re: fclean all
 
