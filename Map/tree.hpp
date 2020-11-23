@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/23 15:54:55 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/23 22:57:32 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,19 @@
 
 namespace ft
 {
+    template <typename _Pair>
+    struct _Select1st : public std::unary_function<_Pair, typename _Pair::first_type>
+    {
+        typename _Pair::first_type &operator()(_Pair &__x) const
+        {
+            return (__x.first);
+        }
+        const typename _Pair::first_type &operator()(const _Pair &__x) const
+        {
+            return (__x.first);
+        }
+    };
+
     template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc = std::allocator<_Val> >
     class red_black_tree
     {
@@ -232,28 +245,28 @@ namespace ft
             ++mImpl.mNodeCount;
             return (iterator(__z));
         }
-        // iterator mInsertLower(_Base_ptr __x, _Base_ptr __p, const value_type &__v)
-        // {
-        //     bool __insert_left = (__x != 0 || __p == mEnd() || mImpl.mKeyCompare(sKey(__p), _KeyOfValue()(__v)));
+        iterator mInsertLower(_Base_ptr __x, _Base_ptr __p, const value_type &__v)
+        {
+            bool __insert_left = (__x != 0 || __p == mEnd() || mImpl.mKeyCompare(sKey(__p), _KeyOfValue()(__v)));
 
-        //     _Link_type __z = mCreateNode(__v);
+            _Link_type __z = mCreateNode(__v);
 
-        //     rb_tree_insert_and_rebalance(__insert_left, __z, __p, this->mImpl.mHeader);
-        //     ++mImpl.mNodeCount;
-        //     return (iterator(__z));
-        // }
-        // iterator mInsertEqualLower(const value_type &__v)
-        // {
-        //     _Link_type __x = mBegin();
-        //     _Link_type __y = mEnd();
+            rb_tree_insert_and_rebalance(__insert_left, __z, __p, this->mImpl.mHeader);
+            ++mImpl.mNodeCount;
+            return (iterator(__z));
+        }
+        iterator mInsertEqualLower(const value_type &__v)
+        {
+            _Link_type __x = mBegin();
+            _Link_type __y = mEnd();
 
-        //     while (__x != 0)
-        //     {
-        //         __y = __x;
-        //         __x = !mImpl.mKeyCompare(sKey(__x), _KeyOfValue()(__v)) ? sLeft(__x) : sRight(__x);
-        //     }
-        //     return (mInsertLower(__x, __y, __v));
-        // }
+            while (__x != 0)
+            {
+                __y = __x;
+                __x = !mImpl.mKeyCompare(sKey(__x), _KeyOfValue()(__v)) ? sLeft(__x) : sRight(__x);
+            }
+            return (mInsertLower(__x, __y, __v));
+        }
         _Link_type mCopy(_Const_Link_type __x, _Link_type __p)
         {
             _Link_type __top = mCloneNode(__x);
@@ -519,18 +532,18 @@ namespace ft
                 return (std::pair<iterator, bool>(mInsert(__x, __y, __v), true));
             return (std::pair<iterator, bool>(__j, false));
         }
-        // iterator mInsertEqual(const value_type &__v)
-        // {
-        //     _Link_type __x = mBegin();
-        //     _Link_type __y = mEnd();
+        iterator mInsertEqual(const value_type &__v)
+        {
+            _Link_type __x = mBegin();
+            _Link_type __y = mEnd();
 
-        //     while (__x != 0)
-        //     {
-        //         __y = __x;
-        //         __x = mImpl.mKeyCompare(_KeyOfValue()(__v), sKey(__x)) ? sLeft(__x) : sRight(__x);
-        //     }
-        //     return (mInsert(__x, __y, __v));
-        // }
+            while (__x != 0)
+            {
+                __y = __x;
+                __x = mImpl.mKeyCompare(_KeyOfValue()(__v), sKey(__x)) ? sLeft(__x) : sRight(__x);
+            }
+            return (mInsert(__x, __y, __v));
+        }
         iterator mInsertUnique(const_iterator __position, const value_type &__v)
         {
             if (__position.mNode == mEnd())
@@ -575,65 +588,65 @@ namespace ft
             else
                 return (iterator(static_cast<_Link_type>(const_cast<_Base_ptr>(__position.mNode))));
         }
-        // iterator mInsertEqual(const_iterator __position, const value_type &__v)
-        // {
-        //     if (__position.mNode == mEnd())
-        //     {
-        //         if (size() > 0 && !mImpl.mKeyCompare(_KeyOfValue()(__v),
-        //                                              sKey(mRightMost())))
-        //             return mInsert(0, mRightMost(), __v);
-        //         else
-        //             return mInsertEqual(__v);
-        //     }
-        //     else if (!mImpl.mKeyCompare(sKey(__position.mNode),
-        //                                 _KeyOfValue()(__v)))
-        //     {
-        //         // First, try before...
-        //         const_iterator __before = __position;
-        //         if (__position.mNode == mLeftMost()) // begin()
-        //             return mInsert(mLeftMost(), mLeftMost(), __v);
-        //         else if (!mImpl.mKeyCompare(_KeyOfValue()(__v),
-        //                                     sKey((--__before).mNode)))
-        //         {
-        //             if (sRight(__before.mNode) == 0)
-        //                 return mInsert(0, __before.mNode, __v);
-        //             else
-        //                 return mInsert(__position.mNode,
-        //                                __position.mNode, __v);
-        //         }
-        //         else
-        //             return mInsertEqual(__v);
-        //     }
-        //     else
-        //     {
-        //         const_iterator __after = __position;
+        iterator mInsertEqual(const_iterator __position, const value_type &__v)
+        {
+            if (__position.mNode == mEnd())
+            {
+                if (size() > 0 && !mImpl.mKeyCompare(_KeyOfValue()(__v),
+                                                     sKey(mRightMost())))
+                    return mInsert(0, mRightMost(), __v);
+                else
+                    return mInsertEqual(__v);
+            }
+            else if (!mImpl.mKeyCompare(sKey(__position.mNode),
+                                        _KeyOfValue()(__v)))
+            {
+                // First, try before...
+                const_iterator __before = __position;
+                if (__position.mNode == mLeftMost()) // begin()
+                    return mInsert(mLeftMost(), mLeftMost(), __v);
+                else if (!mImpl.mKeyCompare(_KeyOfValue()(__v),
+                                            sKey((--__before).mNode)))
+                {
+                    if (sRight(__before.mNode) == 0)
+                        return mInsert(0, __before.mNode, __v);
+                    else
+                        return mInsert(__position.mNode,
+                                       __position.mNode, __v);
+                }
+                else
+                    return mInsertEqual(__v);
+            }
+            else
+            {
+                const_iterator __after = __position;
 
-        //         if (__position.mNode == mRightMost())
-        //             return mInsert(0, mRightMost(), __v);
-        //         else if (!mImpl.mKeyCompare(sKey((++__after).mNode),
-        //                                     _KeyOfValue()(__v)))
-        //         {
-        //             if (sRight(__position.mNode) == 0)
-        //                 return mInsert(0, __position.mNode, __v);
-        //             else
-        //                 return mInsert(__after.mNode, __after.mNode, __v);
-        //         }
-        //         else
-        //             return mInsertEquallower(__v);
-        //     }
-        // }
+                if (__position.mNode == mRightMost())
+                    return mInsert(0, mRightMost(), __v);
+                else if (!mImpl.mKeyCompare(sKey((++__after).mNode),
+                                            _KeyOfValue()(__v)))
+                {
+                    if (sRight(__position.mNode) == 0)
+                        return mInsert(0, __position.mNode, __v);
+                    else
+                        return mInsert(__after.mNode, __after.mNode, __v);
+                }
+                else
+                    return mInsertEqualLower(__v);
+            }
+        }
         template <typename _InputIterator>
         void mInsertUnique(_InputIterator __first, _InputIterator __last)
         {
             for (; __first != __last; ++__first)
                 mInsertUnique(end(), *__first);
         }
-        // template <typename _InputIterator>
-        // void mInsertEqual(_InputIterator __first, _InputIterator __last)
-        // {
-        //     for (; __first != __last; ++__first)
-        //         mInsertEqual(end(), *__first);
-        // }
+        template <typename _InputIterator>
+        void mInsertEqual(_InputIterator __first, _InputIterator __last)
+        {
+            for (; __first != __last; ++__first)
+                mInsertEqual(end(), *__first);
+        }
         void erase(iterator __position)
         {
             _Link_type __y =

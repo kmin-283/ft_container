@@ -5,7 +5,7 @@ CFLAGS = -std=c++98 -fsanitize=address
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 
 SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp main_map.cpp main_stack.cpp main_queue.cpp \
-								main_set.cpp)
+								main_set.cpp main_multimap.cpp)
 
 OBJS = $(SRCS:%.cpp=%.o)
 
@@ -15,6 +15,7 @@ MAP = $(addprefix ./tests/, main_map.cpp)
 STACK = $(addprefix ./tests/, main_stack.cpp)
 QUEUE = $(addprefix ./tests/, main_queue.cpp)
 SET = $(addprefix ./tests/, main_set.cpp)
+MULTIMAP = $(addprefix ./tests/, main_multimap.cpp)
 
 
 TEST_RESULT = $(addprefix ./result/, my stl)
@@ -55,6 +56,11 @@ set: $(OBJS)
 			./set_container
 			diff $(TEST_RESULT) > ./result/result || exit 0
 
+multimap: $(OBJS)
+			$(CC) $(CFLAGS) -o multimap_container $(MULTIMAP) -I ./MultiMap
+			./multimap_container
+			diff $(TEST_RESULT) > ./result/result || exit 0
+
 clean:
 			rm -rf $(OBJS)
 			
@@ -66,6 +72,7 @@ fclean: clean
 			rm -f stack_container
 			rm -f queue_container
 			rm -f set_container
+			rm -f multimap_container
 			rm -f $(TEST_RESULT)
 
 re: fclean all
@@ -81,5 +88,7 @@ restack : fclean stack
 requeue : fclean queue
 
 reset : fclean set
+
+remultimap: fclean multimap
 
 .PHONY: all clean fclean re
