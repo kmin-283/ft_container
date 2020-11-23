@@ -1,4 +1,4 @@
 1c1
-< myqueue testing
+< mystack testing
 ---
-> STLqueue testing
+> stlstack testing
