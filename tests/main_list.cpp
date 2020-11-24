@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 23:07:43 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/25 01:48:02 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,6 +255,11 @@ int main()
     --myit8;       // myit8 points now to the second 20            ^
                                                     // 1 10 20 30 30 20 2 3 4 5
                                                     //               ^
+
+    std::vector<int> myvec (15, 123);
+    std::vector<int>::iterator myvit = myvec.begin();
+    mylist8.insert(mylist8.begin(), myvit, myvec.end());
+    
     out1 << "mylist contains:";
     for (myit8=mylist8.begin(); myit8!=mylist8.end(); ++myit8)
         out1 << ' ' << *myit8;
@@ -376,10 +381,6 @@ int main()
     
     mylist13.unique (same_integral_part);  //  2.72,  3.14, 12.15
                                         // 15.3,  72.25, 73.0
-
-    for (ft::list<double>::iterator it=mylist13.begin(); it!=mylist13.end(); ++it)
-        std::cout << ' ' << *it;
-    std::cout << '\n';
 
     mylist13.unique (is_near());           //  2.72, 12.15, 72.25
 
@@ -647,6 +648,13 @@ int main()
 
                                                     // 1 10 20 30 30 20 2 3 4 5
                                                     //               ^
+
+    std::vector<int> stlvec (15, 123);
+    std::vector<int>::iterator stlvit = stlvec.begin();
+    
+    stllist8.insert(stllist8.begin(), stlvit, stlvec.end());
+
+
     out2 << "mylist contains:";
     for (stlit8=stllist8.begin(); stlit8!=stllist8.end(); ++stlit8)
         out2 << ' ' << *stlit8;

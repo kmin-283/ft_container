@@ -6,12 +6,13 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 21:35:19 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/25 01:55:53 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <memory>
+#include "../types/types.hpp"
 #include "../Iterator/VectorIterator.hpp"
 
 namespace ft
@@ -312,10 +313,11 @@ namespace ft
         {
             mFillInsert(__position, __n, __val);
         }
-        template <typename _InputIteraor>
-        void insert(iterator __position, _InputIteraor __first, _InputIteraor __last)
+        template <typename _InputIterator>
+        void insert(iterator __position, _InputIterator __first, _InputIterator __last)
         {
-            mInsertDispatch(__position, __first, __last);
+            typedef typename my_is_integral<_InputIterator>::true_or_false_type tf_type;
+            mInsertDispatch(__position, __first, __last, tf_type());
         }
         iterator erase(iterator __position)
         {
@@ -452,15 +454,13 @@ namespace ft
                 }
             }
         }
-        void mInsertDispatch(iterator __pos, size_type __n, value_type __val)
+        template <typename _Integer>
+        void mInsertDispatch(iterator __pos, _Integer __n, const _Integer __val, my_true_type)
         {
             mFillInsert(__pos, __n, __val);
         }
-        void mInsertDispatch(iterator __pos, const iterator __first, const iterator __last)
-        {
-            mRangeInsert(__pos, __first, __last);
-        }
-        void mInsertDispatch(iterator __pos, const pointer __first, const pointer __last)
+        template <typename _InputIterator>
+        void mInsertDispatch(iterator __pos, const _InputIterator __first, const _InputIterator __last, my_false_type)
         {
             mRangeInsert(__pos, __first, __last);
         }

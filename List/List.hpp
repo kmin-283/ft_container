@@ -6,18 +6,19 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 23:06:28 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/25 01:52:36 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <memory>
 #include <limits>
+#include "../types/types.hpp"
 #include "../Iterator/ListIterator.hpp"
 #include "../algorithms/algo.hpp"
 
 namespace ft
-{    
+{
     template <typename T, typename _Alloc>
     class ListBase
     {
@@ -299,7 +300,8 @@ namespace ft
         template <typename _InputIterator>
         void insert(iterator __position, _InputIterator __first, _InputIterator __last)
         {
-            mInsertDispatch(__position, __first, __last);
+            typedef typename my_is_integral<_InputIterator>::true_or_false_type tf_type;
+            mInsertDispatch(__position, __first, __last, tf_type());
         }
         iterator erase(iterator __position)
         {
@@ -496,16 +498,13 @@ namespace ft
             else
                 erase(i, end());
         }
-        // template <typename _Integral>
-        void mInsertDispatch(iterator __pos, size_type __n, const value_type &__v) // mac에서는 std::false_type
+        template <typename _Integral>
+        void mInsertDispatch(iterator __pos, _Integral __n, const _Integral &__v, my_true_type) // mac에서는 std::false_type
         {
             mFillInsert(__pos, __n, __v);
         }
-        void mInsertDispatch(iterator __pos, pointer __first, const pointer __last) // mac에서는 std::false_type
-        {
-            for (; __first != __last; ++__first)
-                mInsert(__pos, __first);
-        }void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
+        template <typename _InputIterator>
+        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last, my_false_type) // mac에서는 std::false_type
         {
             for (; __first != __last; ++__first)
                 mInsert(__pos, __first);
@@ -515,10 +514,6 @@ namespace ft
             for (; __n > 0; --__n)
                 mInsert(__pos, __x);   
         }
-        // void mTransferStartToEnd(iterator __position, iterator __first, iterator __last)
-        // {
-        //     __position.mNode->transfer_start_to_end(__first.mNode, __last.mNode);
-        // }
         void mTransferRange(iterator __position, iterator __first, iterator __last)
         {
             __position.mNode->transfer_range(__first.mNode, __last.mNode);
