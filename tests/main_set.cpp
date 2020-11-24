@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 15:23:56 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/23 16:41:52 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 20:34:51 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int main()
     std::ofstream out1("./result/my", std::ios_base::out);
     std::ofstream out2("./result/stl", std::ios_base::out);
 
-    out1 << "mystack testing" << std::endl;
+    out1 << "myset testing" << std::endl;
     out1 << std::endl;
 
     ft::set<int> myfirst;                           // empty set of ints
@@ -342,7 +342,7 @@ int main()
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    out2 << "stlstack testing" << std::endl;
+    out2 << "stlset testing" << std::endl;
     out2 << std::endl;
 
 

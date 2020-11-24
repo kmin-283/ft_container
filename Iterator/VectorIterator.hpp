@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:46:07 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 21:32:37 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,22 @@ namespace ft
         {
             return (this->mData != rhs.mData);
         }
+        bool operator<(const _Self &rhs) const
+        {
+            return (this->mData < rhs.mData);
+        }
+        bool operator<=(const _Self &rhs) const
+        {
+            return (this->mData <= rhs.mData);
+        }
+        bool operator>(const _Self &rhs) const
+        {
+            return (this->mData > rhs.mData);
+        }
+        bool operator>=(const _Self &rhs) const
+        {
+            return (this->mData >= rhs.mData);
+        }
         virtual ~VectorIterator() {}
     };
 
@@ -204,6 +220,22 @@ namespace ft
         bool operator!=(const _Self &rhs) const
         {
             return (this->mData != rhs.mData);
+        }
+        bool operator<(const _Self &rhs) const
+        {
+            return (this->mData < rhs.mData);
+        }
+        bool operator<=(const _Self &rhs) const
+        {
+            return (this->mData <= rhs.mData);
+        }
+        bool operator>(const _Self &rhs) const
+        {
+            return (this->mData > rhs.mData);
+        }
+        bool operator>=(const _Self &rhs) const
+        {
+            return (this->mData >= rhs.mData);
         }
         virtual ~ConstVectorIterator() {}
     };
@@ -302,6 +334,22 @@ namespace ft
         {
             return (this->mData != rhs.mData);
         }
+        bool operator<(const _Self &rhs) const
+        {
+            return (this->mData < rhs.mData);
+        }
+        bool operator<=(const _Self &rhs) const
+        {
+            return (this->mData <= rhs.mData);
+        }
+        bool operator>(const _Self &rhs) const
+        {
+            return (this->mData > rhs.mData);
+        }
+        bool operator>=(const _Self &rhs) const
+        {
+            return (this->mData >= rhs.mData);
+        }
         virtual ~ReverseVectorIterator() {}
     };
 
@@ -399,6 +447,22 @@ namespace ft
         {
             return (this->mData != rhs.mData);
         }
+        bool operator<(const _Self &rhs) const
+        {
+            return (this->mData < rhs.mData);
+        }
+        bool operator<=(const _Self &rhs) const
+        {
+            return (this->mData <= rhs.mData);
+        }
+        bool operator>(const _Self &rhs) const
+        {
+            return (this->mData > rhs.mData);
+        }
+        bool operator>=(const _Self &rhs) const
+        {
+            return (this->mData >= rhs.mData);
+        }
         virtual ~ConstReverseVectorIterator() {}
     };
     
@@ -421,7 +485,8 @@ namespace ft
     inline bool operator>=(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
     {
         return (x >= y);
-    }template <typename Val>
+    }
+    template <typename Val>
     inline bool operator<(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
     {
         return (x < y);

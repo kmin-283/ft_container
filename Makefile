@@ -1,16 +1,17 @@
 # NAME = container
 
 CC = clang++
-CFLAGS = -std=c++98 -g3 -fsanitize=address
+CFLAGS = -std=c++98 -g
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 
-SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp main_map.cpp main_stack.cpp main_queue.cpp \
+SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp main_vector_stl.cpp main_map.cpp main_stack.cpp main_queue.cpp \
 								main_set.cpp main_multimap.cpp main_multiset.cpp)
 
 OBJS = $(SRCS:%.cpp=%.o)
 
 LIST = $(addprefix ./tests/, main_list.cpp)
 VECTOR = $(addprefix ./tests/, main_vector.cpp)
+VECTOR_STL = $(addprefix ./tests/, main_vector_stl.cpp)
 MAP = $(addprefix ./tests/, main_map.cpp)
 STACK = $(addprefix ./tests/, main_stack.cpp)
 QUEUE = $(addprefix ./tests/, main_queue.cpp)
@@ -32,10 +33,14 @@ TEST_RESULT = $(addprefix ./result/, my stl)
 list: $(OBJS)
 			$(CC) $(CFLAGS) -o list_container $(LIST) -I ./List
 			./list_container
+			diff $(TEST_RESULT) > ./result/result || exit 0
 			
 vector: $(OBJS)
 			$(CC) $(CFLAGS) -o vector_container $(VECTOR) -I ./Vector
+			$(CC) $(CFLAGS) -o vector_stl_container $(VECTOR_STL)
 			./vector_container
+			./vector_stl_container
+			diff $(TEST_RESULT) > ./result/result || exit 0
 
 map: $(OBJS)
 			$(CC) $(CFLAGS) -o map_container $(MAP) -I ./Map
@@ -74,6 +79,7 @@ fclean: clean
 			rm -rf $(NAME)
 			rm -f list_container
 			rm -f vector_container
+			rm -f vector_stl_container
 			rm -f map_container
 			rm -f stack_container
 			rm -f queue_container

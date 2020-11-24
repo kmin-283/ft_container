@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 20:05:47 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 23:06:28 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 #include "../algorithms/algo.hpp"
 
 namespace ft
-{
+{    
     template <typename T, typename _Alloc>
     class ListBase
     {
@@ -292,7 +292,7 @@ namespace ft
             mInsert(__position, __x);
             return (begin());
         }
-        void insert(iterator __position, const size_type __n, const value_type &__x)
+        void insert(iterator __position, size_type __n, const value_type &__x)
         {
             mFillInsert(__position, __n, __x);
         }
@@ -384,7 +384,7 @@ namespace ft
                 if (start == finish)
                     break ;
                 if (next != finish && binary_pred(*start, *next))
-                    start = erase(--next);
+                    start = erase(next--);
                 else
                     ++start;
             }
@@ -496,12 +496,16 @@ namespace ft
             else
                 erase(i, end());
         }
-        void mInsertDispatch(iterator __pos, size_type __n, const value_type __v) // mac에서는 std::false_type
+        // template <typename _Integral>
+        void mInsertDispatch(iterator __pos, size_type __n, const value_type &__v) // mac에서는 std::false_type
         {
             mFillInsert(__pos, __n, __v);
         }
-        template <typename _InputIterator>
-        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last) // mac에서는 std::false_type
+        void mInsertDispatch(iterator __pos, pointer __first, const pointer __last) // mac에서는 std::false_type
+        {
+            for (; __first != __last; ++__first)
+                mInsert(__pos, __first);
+        }void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
         {
             for (; __first != __last; ++__first)
                 mInsert(__pos, __first);

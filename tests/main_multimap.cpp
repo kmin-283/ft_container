@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/23 23:52:44 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 20:34:12 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int main()
     std::ofstream out1("./result/my", std::ios_base::out);
     std::ofstream out2("./result/stl", std::ios_base::out);
 
-    out1 << "mymap testing" << std::endl;
+    out1 << "mymultimap testing" << std::endl;
     out1 << std::endl;
 
     ft::multimap<char,int> myyfirst;
@@ -316,7 +316,7 @@ int main()
 
     ///////////////////////////////////////////////////////////////////////////////////
 
-    out2 << "STLmap testing" << std::endl;
+    out2 << "STLmultimap testing" << std::endl;
     out2 << std::endl;
 
     std::multimap<char,int> stllfirst;

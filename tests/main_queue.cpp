@@ -6,11 +6,12 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 21:40:19 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/22 22:10:07 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 20:43:54 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../Queue/queue.hpp"
+#include <iostream>
 #include <queue>
 #include <fstream>
 

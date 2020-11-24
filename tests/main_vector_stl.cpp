@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_vector.cpp                                    :+:      :+:    :+:   */
+/*   main_vector_stl.cpp                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 10:06:39 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 21:34:27 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 21:35:34 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,38 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "../Vector/vector.hpp"
 
 int main()
 {
-    std::ofstream out1("./result/my", std::ios_base::out);
+    std::ofstream out1("./result/stl", std::ios_base::out);
 
-    out1 << "myvector testing" << std::endl;
+    out1 << "stlvector testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> first;                                // empty vector of ints
-    ft::vector<int> second (4,100);                       // four ints with value 100
-    ft::vector<int> third (second.begin(),second.end());  // iterating through second
-    ft::vector<int> fourth (third);                       // a copy of third
+
+    std::vector<int> first;                                // empty vector of ints
+    std::vector<int> second (4,100);                       // four ints with value 100
+    std::vector<int> third (second.begin(),second.end());  // iterating through second
+    std::vector<int> fourth (third);                       // a copy of third
 
     // the iterator constructor can also be used to construct from arrays:
     int myints[] = {16,2,77,29};
-    ft::vector<int> fifth (myints, myints + sizeof(myints) / sizeof(int) );
+    std::vector<int> fifth (myints, myints + sizeof(myints) / sizeof(int) );
 
     out1 << "The contents of fifth are:";
-    for (ft::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
+    for (std::vector<int>::iterator it = fifth.begin(); it != fifth.end(); ++it)
         out1 << ' ' << *it;
     out1 << '\n';
 
-    ft::vector<int> foo (3,0);
-    ft::vector<int> bar (5,0);
+    std::vector<int> foo (3,1);
+    std::vector<int> bar (5,2);
 
     bar = foo;
-    foo = ft::vector<int>();
+    foo = std::vector<int>();
 
     out1 << "Size of foo: " << int(foo.size()) << '\n';
     out1 << "Size of bar: " << int(bar.size()) << '\n';
-    ft::vector<int> myvector;
+    std::vector<int> myvector;
 
   // set some content in the vector:
 
@@ -60,7 +60,7 @@ int main()
     out1 << "resize testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector2;
+    std::vector<int> myvector2;
 
   // set some initial content:
     for (int i=1;i<10;i++) myvector2.push_back(i);
@@ -77,7 +77,7 @@ int main()
     out1 << "capacity testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector3;
+    std::vector<int> myvector3;
 
   // set some content in the vector:
     for (int i=0; i<100; i++) myvector3.push_back(i);
@@ -90,7 +90,7 @@ int main()
     out1 << std::endl;
 
 
-    ft::vector<int> myvector4;
+    std::vector<int> myvector4;
     int sum (0);
 
     for (int i=1;i<=10;i++) myvector4.push_back(i);
@@ -106,9 +106,9 @@ int main()
     out1 << "reserve testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int>::size_type sz;
+    std::vector<int>::size_type sz;
 
-    ft::vector<int> foo2;
+    std::vector<int> foo2;
     sz = foo2.capacity();
     out1 << "making foo2 grow:\n";
     for (int i=0; i<100; ++i) {
@@ -119,7 +119,7 @@ int main()
         }
     }
 
-    ft::vector<int> bar2;
+    std::vector<int> bar2;
     sz = bar2.capacity();
     bar2.reserve(200);   // this is the only difference with foo above
     out1 << "making bar2 grow:\n";
@@ -134,9 +134,9 @@ int main()
     out1 << "operator[] testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector5 (10);   // 10 zero-initialized elements
+    std::vector<int> myvector5 (10);   // 10 zero-initialized elements
 
-    ft::vector<int>::size_type sz5 = myvector5.size();
+    std::vector<int>::size_type sz5 = myvector5.size();
 
     // assign some values:
     for (unsigned i=0; i<sz5; i++) myvector5[i]=i;
@@ -159,7 +159,7 @@ int main()
     out1 << "at testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector8 (10);   // 10 zero-initialized ints
+    std::vector<int> myvector8 (10);   // 10 zero-initialized ints
 
   // assign some values:
     for (unsigned i=0; i<myvector8.size(); i++)
@@ -173,7 +173,7 @@ int main()
     out1 << "front testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector7;
+    std::vector<int> myvector7;
 
     myvector7.push_back(78);
     myvector7.push_back(16);
@@ -187,7 +187,7 @@ int main()
     out1 << "back testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector9;
+    std::vector<int> myvector9;
 
     myvector9.push_back(10);
 
@@ -205,13 +205,13 @@ int main()
     out1 << "assign testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> first10;
-    ft::vector<int> second10;
-    ft::vector<int> third10;
+    std::vector<int> first10;
+    std::vector<int> second10;
+    std::vector<int> third10;
 
     first10.assign (7,100);             // 7 ints with a value of 100
 
-    ft::vector<int>::iterator it;
+    std::vector<int>::iterator it;
     it=first10.begin()+1;
 
     second10.assign (it,first10.end()-1); // the 5 central values of first10
@@ -226,7 +226,7 @@ int main()
     out1 << "push_back testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector11;
+    std::vector<int> myvector11;
 
     out1 << "Please enter some integers (enter 0 to end):\n";
 
@@ -238,7 +238,7 @@ int main()
     out1 << "pop_back testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector12;
+    std::vector<int> myvector12;
     int sum12 (0);
     myvector12.push_back (100);
     myvector12.push_back (200);
@@ -256,8 +256,8 @@ int main()
     out1 << "insert testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector13 (3,100);
-    ft::vector<int>::iterator it13;
+    std::vector<int> myvector13 (3,100);
+    std::vector<int>::iterator it13;
 
     it13 = myvector13.begin();
     it13 = myvector13.insert ( it13 , 200 );
@@ -267,21 +267,21 @@ int main()
     // "it13" no longer valid, get a new one:
     it13 = myvector13.begin();
 
-    ft::vector<int> anothervector (2,400);
+    std::vector<int> anothervector (2,400);
     myvector13.insert (it13+2,anothervector.begin(),anothervector.end());
 
     int myarray [] = { 501,502,503 };
     myvector13.insert (myvector13.begin(), myarray, myarray+3);
 
     out1 << "myvector13 contains:";
-    for (it13=myvector13.begin(); it13 < myvector13.end(); it13++)
+    for (it13=myvector13.begin(); it13<myvector13.end(); it13++)
         out1 << ' ' << *it13;
     out1 << '\n';
 
     out1 << "erase testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector14;
+    std::vector<int> myvector14;
 
   // set some values (from 1 to 10)
     for (int i=1; i<=10; i++) myvector14.push_back(i);
@@ -300,8 +300,8 @@ int main()
     out1 << "swap testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> foo15 (3,100);   // three ints with a value of 100
-    ft::vector<int> bar15 (5,200);   // five ints with a value of 200
+    std::vector<int> foo15 (3,100);   // three ints with a value of 100
+    std::vector<int> bar15 (5,200);   // five ints with a value of 200
 
     foo15.swap(bar15);
 
@@ -319,7 +319,7 @@ int main()
     out1 << "clear testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> myvector16;
+    std::vector<int> myvector16;
     myvector16.push_back (100);
     myvector16.push_back (200);
     myvector16.push_back (300);
@@ -332,8 +332,8 @@ int main()
     out1 << "relational operator testing" << std::endl;
     out1 << std::endl;
 
-    ft::vector<int> foo17 (3,100);   // three ints with a value of 100
-    ft::vector<int> bar17 (2,200);   // two ints with a value of 200
+    std::vector<int> foo17 (3,100);   // three ints with a value of 100
+    std::vector<int> bar17 (2,200);   // two ints with a value of 200
 
     if (foo17==bar17) out1 << "foo17 and bar17 are equal\n";
     if (foo17!=bar17) out1 << "foo17 and bar17 are not equal\n";

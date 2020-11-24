@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 20:14:25 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 23:07:43 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ struct is_odd {
 };
 
 bool same_integral_part (double first, double second)
-{ return ( int(first)==int(second) ); }
+{ return ( (int)first==(int)second ); }
 
 // a binary predicate implemented as a class:
 struct is_near {
@@ -55,7 +55,7 @@ int main()
     std::ofstream out1("./result/my", std::ios_base::out);
     std::ofstream out2("./result/stl", std::ios_base::out);
 
-    out1 << "mymap testing" << std::endl;
+    out1 << "mylist testing" << std::endl;
     out1 << std::endl;
 
     ft::list<int> myfirst;                                // empty list of ints
@@ -253,9 +253,6 @@ int main()
     mylist8.insert (myit8,2,20);                      // 1 10 20 20 2 3 4 5
 
     --myit8;       // myit8 points now to the second 20            ^
-
-    std::vector<int> myvector8 (2,30);
-    mylist8.insert (myit8,myvector8.begin(),myvector8.end());
                                                     // 1 10 20 30 30 20 2 3 4 5
                                                     //               ^
     out1 << "mylist contains:";
@@ -372,12 +369,17 @@ int main()
     
     mylist13.sort();             //  2.72,  3.14, 12.15, 12.77, 12.77,
                                 // 15.3,  72.25, 72.25, 73.0,  73.35
+    
 
     mylist13.unique();           //  2.72,  3.14, 12.15, 12.77
                                 // 15.3,  72.25, 73.0,  73.35
-
+    
     mylist13.unique (same_integral_part);  //  2.72,  3.14, 12.15
                                         // 15.3,  72.25, 73.0
+
+    for (ft::list<double>::iterator it=mylist13.begin(); it!=mylist13.end(); ++it)
+        std::cout << ' ' << *it;
+    std::cout << '\n';
 
     mylist13.unique (is_near());           //  2.72, 12.15, 72.25
 
@@ -447,7 +449,7 @@ int main()
     out1.close();
     /////////////////////////////////////////////////////////////////////////////////////
     
-    out2 << "mymap testing" << std::endl;
+    out2 << "stllist testing" << std::endl;
     out2 << std::endl;
 
     std::list<int> stlfirst;                                // empty list of ints
@@ -472,21 +474,21 @@ int main()
         out2 << *it << " ";
     out2 << std::endl;
 
+    if (stlfourth == stlthird)
+        out2 << "fourth and thrid are same\n";
+    if (stlfirst != stlsecond)
+        out2 << "first and second are different\n";
+    if (stlfirst < stlsecond)
+        out2 << "first is are smaller than second\n";
+    if (stlfirst > stlsecond)
+        out2 << "first is larger than second\n";
+    if (stlfirst >= stlsecond)
+        out2 << "first is greater than or equal to second\n";
+    if (stlfirst <= stlsecond)
+        out2 << "first is smaller than or equal to second\n";
+
     std::list<int> stlfirst2 (3);      // list of 3 zero-initialized ints
     std::list<int> stlsecond2 (5);     // list of 5 zero-initialized ints
-
-    if (stlfourth == stlthird)
-        out1 << "fourth and thrid are same\n";
-    if (stlfirst != stlsecond)
-        out1 << "first and second are different\n";
-    if (stlfirst < stlsecond)
-        out1 << "first is are smaller than second\n";
-    if (stlfirst > stlsecond)
-        out1 << "first is larger than second\n";
-    if (stlfirst >= stlsecond)
-        out1 << "first is greater than or equal to second\n";
-    if (stlfirst <= stlsecond)
-        out1 << "first is smaller than or equal to second\n";
 
     stlsecond2 = stlfirst2;
     stlfirst2 = std::list<int>();
@@ -643,8 +645,6 @@ int main()
 
     --stlit8;       // stlit8 points now to the second 20            ^
 
-    std::vector<int> stlmyvector (2,30);
-    stllist8.insert (stlit8,stlmyvector.begin(),stlmyvector.end());
                                                     // 1 10 20 30 30 20 2 3 4 5
                                                     //               ^
     out2 << "mylist contains:";
@@ -833,8 +833,8 @@ int main()
     stllist15.reverse();
 
     for (stl15=stllist15.begin(); stl15!=stllist15.end(); ++stl15)
-        out1 << ' ' << *stl15;
-    out1 << '\n';
+        out2 << ' ' << *stl15;
+    out2 << '\n';
 
     out2.close();
     return (0);

@@ -6,14 +6,13 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:42:32 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 21:35:19 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <memory>
 #include "../Iterator/VectorIterator.hpp"
-#include <iostream>
 
 namespace ft
 {
@@ -132,9 +131,15 @@ namespace ft
         }
         vector &operator=(const vector &__x) // assign operator
         {
-            this->mImpl.mStart = mAllocate(__x.size());
-            this->mImpl.mFinish = std::uninitialized_copy(__x.begin(), __x.end(), this->mImpl.mStart);
-            this->mImpl.mEndOfStroage = this->mImpl.mStart + this->size();
+            if (this->size() < __x.size())
+            {
+                clear();
+                this->mImpl.mStart = mAllocate(__x.size());
+                this->mImpl.mFinish = std::uninitialized_copy(__x.begin(), __x.end(), this->mImpl.mStart);
+                this->mImpl.mEndOfStorage = this->mImpl.mStart + this->size();
+            }
+            else
+                this->mImpl.mFinish = this->mImpl.mStart + __x.size();
             return (*this);
         }
         virtual ~vector()
@@ -436,7 +441,7 @@ namespace ft
         {
             difference_type __n = __last - __first;
 
-            if (this->capacity() > __n)
+            if (this->capacity() > (unsigned long)__n)
                 mRangeInsert(begin(), __first, __last);
             else
             {
