@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 15:45:06 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/05 16:09:24 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:46:07 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -401,34 +401,35 @@ namespace ft
         }
         virtual ~ConstReverseVectorIterator() {}
     };
-}
+    
+    template <typename Val>
+    inline bool operator==(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
+    {
+        return (x == y);
+    }
+    template <typename Val>
+    inline bool operator!=(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
+    {
+        return (x != y);
+    }
+    template <typename Val>
+    inline bool operator>(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
+    {
+        return (x > y);
+    }
+    template <typename Val>
+    inline bool operator>=(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
+    {
+        return (x >= y);
+    }template <typename Val>
+    inline bool operator<(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
+    {
+        return (x < y);
+    }
+    template <typename Val>
+    inline bool operator<=(const VectorIterator<Val> &x, const ConstVectorIterator<Val> &y)
+    {
+        return (x <= y);
+    }
 
-template <typename Val>
-inline bool operator==(const ft::VectorIterator<Val> &x, const ft::ConstVectorIterator<Val> &y)
-{
-    return (x == y);
-}
-template <typename Val>
-inline bool operator!=(const ft::VectorIterator<Val> &x, const ft::ConstVectorIterator<Val> &y)
-{
-    return (x != y);
-}
-template <typename Val>
-inline bool operator>(const ft::VectorIterator<Val> &x, const ft::ConstVectorIterator<Val> &y)
-{
-    return (x > y);
-}
-template <typename Val>
-inline bool operator>=(const ft::VectorIterator<Val> &x, const ft::ConstVectorIterator<Val> &y)
-{
-    return (x >= y);
-}template <typename Val>
-inline bool operator<(const ft::VectorIterator<Val> &x, const ft::ConstVectorIterator<Val> &y)
-{
-    return (x < y);
-}
-template <typename Val>
-inline bool operator<=(const ft::VectorIterator<Val> &x, const ft::ConstVectorIterator<Val> &y)
-{
-    return (x <= y);
 }

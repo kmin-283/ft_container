@@ -1,11 +1,11 @@
 # NAME = container
 
 CC = clang++
-CFLAGS = -std=c++98 -fsanitize=address
+CFLAGS = -std=c++98 -g3 -fsanitize=address
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 
 SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp main_map.cpp main_stack.cpp main_queue.cpp \
-								main_set.cpp main_multimap.cpp)
+								main_set.cpp main_multimap.cpp main_multiset.cpp)
 
 OBJS = $(SRCS:%.cpp=%.o)
 
@@ -16,6 +16,7 @@ STACK = $(addprefix ./tests/, main_stack.cpp)
 QUEUE = $(addprefix ./tests/, main_queue.cpp)
 SET = $(addprefix ./tests/, main_set.cpp)
 MULTIMAP = $(addprefix ./tests/, main_multimap.cpp)
+MULTISET = $(addprefix ./tests/, main_multiset.cpp)
 
 
 TEST_RESULT = $(addprefix ./result/, my stl)
@@ -61,6 +62,11 @@ multimap: $(OBJS)
 			./multimap_container
 			diff $(TEST_RESULT) > ./result/result || exit 0
 
+multiset: $(OBJS)
+			$(CC) $(CFLAGS) -o multiset_container $(MULTISET) -I ./MultiSet
+			./multiset_container
+			diff $(TEST_RESULT) > ./result/result || exit 0
+
 clean:
 			rm -rf $(OBJS)
 			
@@ -73,6 +79,7 @@ fclean: clean
 			rm -f queue_container
 			rm -f set_container
 			rm -f multimap_container
+			rm -f multiset_container
 			rm -f $(TEST_RESULT)
 
 re: fclean all
@@ -90,5 +97,7 @@ requeue : fclean queue
 reset : fclean set
 
 remultimap: fclean multimap
+
+remultiset: fclean multiset
 
 .PHONY: all clean fclean re

@@ -6,10 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 20:53:02 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/23 23:47:03 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:44:18 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include <memory>
 #include "../Map/tree.hpp"
 
@@ -206,47 +207,48 @@ namespace ft
         ~multimap()
         {}
     };
-
+    
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    inline bool operator==(const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__x,
-                            const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__y)
+    inline bool operator==(const multimap<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const multimap<_Key, _Tp, _Compare, _Alloc> &__y)
     {
         return (__x.mTree == __y.mTree);
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    inline bool operator!=(const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__x,
-                            const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__y)
+    inline bool operator!=(const multimap<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const multimap<_Key, _Tp, _Compare, _Alloc> &__y)
     {
         return (!(__x == __y));
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    inline bool operator<(const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__x,
-                            const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__y)
+    inline bool operator<(const multimap<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const multimap<_Key, _Tp, _Compare, _Alloc> &__y)
     {
         return (__x.mTree < __y.mTree);
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    inline bool operator>(const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__x,
-                            const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__y)
+    inline bool operator>(const multimap<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const multimap<_Key, _Tp, _Compare, _Alloc> &__y)
     {
         return (__y.mTree < __x.mTree);
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    inline bool operator<=(const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__x,
-                            const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__y)
+    inline bool operator<=(const multimap<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const multimap<_Key, _Tp, _Compare, _Alloc> &__y)
     {
         return (!(__x.mTree < __y.mTree));
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    inline bool operator>=(const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__x,
-                            const ft::multimap<_Key, _Tp, _Compare, _Alloc> &__y)
+    inline bool operator>=(const multimap<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const multimap<_Key, _Tp, _Compare, _Alloc> &__y)
     {
         return (!(__y.mTree < __x.mTree));
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-    inline void swap(ft::multimap<_Key, _Tp, _Compare, _Alloc> &__x,
-                            ft::multimap<_Key, _Tp, _Compare, _Alloc> &__y)
+    inline void swap(multimap<_Key, _Tp, _Compare, _Alloc> &__x,
+                            multimap<_Key, _Tp, _Compare, _Alloc> &__y)
     {
         __x.swap(__y);
     }
 } // namespace ft
+

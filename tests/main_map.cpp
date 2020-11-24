@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/22 21:18:29 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:47:50 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int main()
     myfirst2['z'] = 32;
 
     mysecond2 = myfirst2;            // mysecond2 now contains 3 ints
+
     myfirst2 = ft::map<char, int>(); // and first is now empty
 
     out1 << "Size of first: " << myfirst2.size() << '\n';
@@ -373,7 +374,10 @@ int main()
     first2['y'] = 16;
     first2['z'] = 32;
 
+    
+
     second2 = first2;               // second2 now contains 3 ints
+
     first2 = std::map<char, int>(); // and first is now empty
 
     out2 << "Size of first: " << first2.size() << '\n';

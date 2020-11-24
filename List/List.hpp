@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/10 17:13:40 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 20:05:47 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ namespace ft
             try
             {
                 __p = this->mGetNode();
-                __p->mData = __x;
+                getAllocator().construct(&__p->mData, __x);
             }
             catch (...)
             {
@@ -166,12 +166,17 @@ namespace ft
         list &operator=(const list &__x) // assign operator
         {
             // iterator로 반복을 돌면서 __x의 크기만큼 Node<T>생성 //
+            clear();
             this->insert(begin(), __x.begin(), __x.end());
             return (*this);
         }
         void assign(size_type __n, const value_type &__val)
         {
             mFillAssign(__n, __val);
+        }
+        void assign(const pointer __first, const pointer __last)
+        {
+            mAssignDispatch(__first, __last);
         }
         void assign(const_iterator __first, const_iterator __last)
         {
@@ -287,7 +292,7 @@ namespace ft
             mInsert(__position, __x);
             return (begin());
         }
-        void insert(iterator __position, size_type __n, const value_type &__x)
+        void insert(iterator __position, const size_type __n, const value_type &__x)
         {
             mFillInsert(__position, __n, __x);
         }
@@ -307,6 +312,10 @@ namespace ft
             while (__first != __last)
                 __first = erase(__first);
             return (__last);
+        }
+        void swap(list &__x)
+        {
+            NodeBase::swap(this->mImpl.mNode, __x.mImpl.mNode);
         }
         void clear()
         {
@@ -453,7 +462,19 @@ namespace ft
         }
         virtual ~list() {}
     protected:
-        void mAssignDispatch(const_iterator __first, const_iterator __last) //mac에서는 std::__false_type, wsl에서는 std::__false_type
+        void mAssignDispatch(pointer __first, const pointer __last)
+        {
+            iterator i = begin();
+            for (; i != end() && __first != __last; ++__first, ++i)
+            {
+                *i = *__first;
+            }
+            if (__first != __last)
+                insert(end(), __first, __last);
+            else
+                erase(i, end());
+        }
+        void mAssignDispatch(const_iterator __first, const_iterator __last)
         {
             iterator i = begin();
             for (; i != end() && __first != __last; ++__first, ++i)
@@ -475,16 +496,15 @@ namespace ft
             else
                 erase(i, end());
         }
-        template <typename _Integer>
-        void mInsertDispatch(iterator __pos, _Integer __first, _Integer __last) // mac에서는 std::false_type
+        void mInsertDispatch(iterator __pos, size_type __n, const value_type __v) // mac에서는 std::false_type
         {
-            for (; __first != __last; ++__first)
-                mInsert(__pos, *__first);
+            mFillInsert(__pos, __n, __v);
         }
-        void mInsertDispatch(iterator __pos, const_iterator __first, const_iterator __last) // mac에서는 std::false_type
+        template <typename _InputIterator>
+        void mInsertDispatch(iterator __pos, _InputIterator __first, _InputIterator __last) // mac에서는 std::false_type
         {
             for (; __first != __last; ++__first)
-                mInsert(__pos, *__first);
+                mInsert(__pos, __first);
         }
         void mFillInsert(iterator __pos, size_type __n, const value_type &__x)
         {
@@ -503,13 +523,25 @@ namespace ft
         {
             __position.mNode->transfer(__first.mNode, __last.mNode);
         }
+        template <typename _InputIterator>
+        void mInsert(iterator __position, _InputIterator __first)
+        {
+            _Node *__tmp = mCreateNode(*__first);
+            if (__position == begin())
+            {
+                __tmp->hook_front(__position.mNode);
+            }
+            else if (__position == end())
+                __tmp->hook_end(__position.mNode);
+            else
+                __tmp->hook_front(__position.mNode);
+        }
         void mInsert(iterator __position, const value_type &__x)
         {
             _Node *__tmp = mCreateNode(__x);
             if (__position == begin())
             {
                 __tmp->hook_front(__position.mNode);
-                this->mImpl.mNode.mNext = __tmp;
             }
             else if (__position == end())
                 __tmp->hook_end(__position.mNode);
@@ -529,4 +561,52 @@ namespace ft
             mPutNode(__n);
         }
     };
+    template <typename _Tp, typename _Alloc>
+    inline bool operator==(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    {
+        typedef typename list<_Tp, _Alloc>::const_iterator const_iterator;
+        const_iterator __end1 = __x.end();
+        const_iterator __end2 = __y.end();
+
+        const_iterator __i1 = __x.begin();
+        const_iterator __i2 = __y.begin();
+
+        while (__i1 != __end1 && __i2 != __end2 && *__i1 == *__i2)
+        {
+            ++__i1;
+            ++__i2;
+        }
+        return (__i1 == __end1 && __i2 == __end2);
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator<(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    {
+        return (std::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end()));
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator!=(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    {
+        return !(__x == __y);
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator>(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    {
+        return (__y < __x);
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator<=(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    {
+        return !(__y == __x);
+    }
+    template <typename _Tp, typename _Alloc>
+    inline bool operator>=(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    {
+        return !(__x < __y);
+    }
+    template <typename _Tp, typename _Alloc>
+    inline void swap(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    {
+        __x.swap(__y);
+    }
 } // namespace ft
+

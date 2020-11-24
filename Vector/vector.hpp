@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/12 20:07:00 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:42:32 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -530,6 +530,7 @@ namespace ft
             this->mImpl.mFinish = __pos;
         }
     };
+    
     template <typename _Tp, typename _Alloc>
     inline bool operator==(const vector<_Tp, _Alloc>& __x, const vector<_Tp, _Alloc>& __y)
     {
@@ -548,21 +549,21 @@ namespace ft
     template <typename _Tp, typename _Alloc>
     inline bool operator<=(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
     {
-        return (!(__x <= __y));
+        return !(__y < __x);
     }
     template <typename _Tp, typename _Alloc>
     inline bool operator>(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
     {
-        return (!(__x > __y));
+        return (__y < __x);
     }
     template <typename _Tp, typename _Alloc>
     inline bool operator>=(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
     {
-        return (!(__x >= __y));
+        return (!(__x < __y));
     }
     template <typename _Tp, typename _Alloc>
     inline void swap(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
     {
         __x.swap(__y);
     }
-}
+} // namespace ft

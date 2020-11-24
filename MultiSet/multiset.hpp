@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set.hpp                                            :+:      :+:    :+:   */
+/*   multiset.hpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/11/23 13:38:35 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:46:57 by kmin             ###   ########.fr       */
+/*   Created: 2020/11/24 10:58:12 by kmin              #+#    #+#             */
+/*   Updated: 2020/11/24 16:47:33 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 namespace ft
 {
     template <typename _Key, typename _Compare = std::less<_Key>, typename _Alloc = std::allocator<_Key> >
-    class set
+    class multiset
     {
     public:
         typedef _Key                        key_type;
@@ -39,19 +39,19 @@ namespace ft
         typedef typename _Rep_type::const_reverse_iterator      const_reverse_iterator;
         typedef typename _Rep_type::size_type                   size_type;
         typedef typename _Rep_type::difference_type             difference_type;
-        explicit set(const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
+        explicit multiset(const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : mTree(__comp, __a)
         {}
         template <class InputIterator>
-        set (InputIterator __first, InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
+        multiset (InputIterator __first, InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : mTree(__comp, __a)
         {
-            mTree.mInsertUnique(__first, __last);
+            mTree.mInsertEqual(__first, __last);
         }
-        set (const set &__x)
+        multiset (const multiset &__x)
             : mTree(__x.mTree)
         {}
-        set& operator=(const set &__x)
+        multiset& operator=(const multiset &__x)
         {
             mTree = __x.mTree;
             return (*this);
@@ -112,23 +112,22 @@ namespace ft
         {
             return (mTree.max_size());
         }
-        void swap(set &__x)
+        void swap(multiset &__x)
         {
             mTree.swap(__x.mTree);
         }
-        std::pair<iterator, bool> insert(const value_type &__x)
+        iterator insert(const value_type &__x)
         {
-            std::pair<typename _Rep_type::iterator, bool> __p = mTree.mInsertUnique(__x);
-            return (std::pair<iterator, bool>(__p.first, __p.second));
+            return (mTree.mInsertEqual(__x));
         }
         iterator insert(iterator __position, const value_type &__x)
         {
-            return (mTree.mInsertUnique(__position, __x));
+            return (mTree.mInsertEqual(__position, __x));
         }
         template <typename _InputIteraror>
         void insert(_InputIteraror __first, _InputIteraror __last)
         {
-            mTree.mInsertUnique(__first, __last);
+            mTree.mInsertEqual(__first, __last);
         }
         void erase(iterator __position)
         {
@@ -182,41 +181,40 @@ namespace ft
         {
             return (mTree.equal_range(__x));
         }
-
         template<typename _K1, typename _C1, typename _A1>
-        friend bool operator==(const set<_K1, _C1, _A1> &__x, const set<_K1, _C1, _A1> &__y);
+        friend bool operator==(const multiset<_K1, _C1, _A1> &__x, const multiset<_K1, _C1, _A1> &__y);
         template<typename _K1, typename _C1, typename _A1>
-        friend bool operator<(const set<_K1, _C1, _A1> &__x, const set<_K1, _C1, _A1> &__y);
+        friend bool operator<(const multiset<_K1, _C1, _A1> &__x, const multiset<_K1, _C1, _A1> &__y);
     };
-    
     template<typename _Key, typename _Compare, typename _Alloc>
-    inline bool operator==(const set<_Key, _Compare, _Alloc> &__x, const set<_Key, _Compare, _Alloc> &__y)
+    inline bool operator==(const multiset<_Key, _Compare, _Alloc> &__x, const multiset<_Key, _Compare, _Alloc> &__y)
     {
         return (__x.mTree == __y.mTree);
     }
     template<typename _Key, typename _Compare, typename _Alloc>
-    inline bool operator<(const set<_Key, _Compare, _Alloc> &__x, const set<_Key, _Compare, _Alloc> &__y)
+    inline bool operator<(const multiset<_Key, _Compare, _Alloc> &__x, const multiset<_Key, _Compare, _Alloc> &__y)
     {
         return (__x.mTree < __y.mTree);
     }
     template<typename _Key, typename _Compare, typename _Alloc>
-    inline bool operator!=(const set<_Key, _Compare, _Alloc> &__x, const set<_Key, _Compare, _Alloc> &__y)
+    inline bool operator!=(const multiset<_Key, _Compare, _Alloc> &__x, const multiset<_Key, _Compare, _Alloc> &__y)
     {
         return !(__x == __y);
     }
     template<typename _Key, typename _Compare, typename _Alloc>
-    inline bool operator>(const set<_Key, _Compare, _Alloc> &__x, const set<_Key, _Compare, _Alloc> &__y)
+    inline bool operator>(const multiset<_Key, _Compare, _Alloc> &__x, const multiset<_Key, _Compare, _Alloc> &__y)
     {
         return (__y < __x);
     }
     template<typename _Key, typename _Compare, typename _Alloc>
-    inline bool operator<=(const set<_Key, _Compare, _Alloc> &__x, const set<_Key, _Compare, _Alloc> &__y)
+    inline bool operator<=(const multiset<_Key, _Compare, _Alloc> &__x, const multiset<_Key, _Compare, _Alloc> &__y)
     {
         return !(__y < __x);
     }
     template<typename _Key, typename _Compare, typename _Alloc>
-    inline bool operator>=(const set<_Key, _Compare, _Alloc> &__x, const set<_Key, _Compare, _Alloc> &__y)
+    inline bool operator>=(const multiset<_Key, _Compare, _Alloc> &__x, const multiset<_Key, _Compare, _Alloc> &__y)
     {
         return !(__x < __y);
     }
 } // namespace ft
+

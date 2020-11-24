@@ -6,9 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/22 21:40:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/22 22:07:54 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:43:30 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 #include "../Vector/vector.hpp"
 
@@ -62,7 +64,7 @@ namespace ft
             c.erase(c.begin());
         }
     };
-
+    
     template <typename _Tp, typename _Seq>
     inline bool operator==(const queue<_Tp, _Seq> &__x, const queue<_Tp, _Seq> &__y)
     {
@@ -93,4 +95,4 @@ namespace ft
     {
         return !(__y < __x);
     }
-}
+} // namespace ft

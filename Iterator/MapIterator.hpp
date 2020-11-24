@@ -6,10 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/05 10:31:47 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/23 22:43:42 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:46:06 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include "../Node/MapNode.hpp"
 
 namespace ft
@@ -337,15 +338,16 @@ namespace ft
         }
         virtual ~ConstReverseMapIterator() {}
     };
+        template <typename _Val>
+    inline bool operator==(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode == y.mNode);
+    }
+    template <typename _Val>
+    inline bool operator!=(const MapIterator<_Val> &x, const ConstMapIterator<_Val> &y)
+    {
+        return (x.mNode != y.mNode);
+    }
+
 } // namespace ft
 
-template <typename _Val>
-inline bool operator==(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode == y.mNode);
-}
-template <typename _Val>
-inline bool operator!=(const ft::MapIterator<_Val> &x, const ft::ConstMapIterator<_Val> &y)
-{
-    return (x.mNode != y.mNode);
-}

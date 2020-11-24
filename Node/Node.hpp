@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:31:13 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/04 19:27:28 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 19:46:24 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ namespace ft
 
         void hook_front(NodeBase *const __position)
         {
+            __position->mPrev->mNext = this;
             this->mPrev = __position->mPrev;
             __position->mPrev = this;
             this->mNext = __position;
@@ -67,6 +68,25 @@ namespace ft
             this->mPrev->mNext = __first;
             __first->mNext = this;
             this->mPrev = __first;
+        }
+
+        static void swap(NodeBase &__x, NodeBase &__y)
+        {
+            NodeBase tmp;
+
+            __x.mNext->mPrev = &__y;
+            __y.mNext->mPrev = &__x;
+            __x.mPrev->mNext = &__y;
+            __y.mPrev->mNext = &__x;
+
+            tmp.mNext = __x.mNext;
+            tmp.mPrev = __x.mPrev;
+
+            __x.mNext = __y.mNext;
+            __y.mNext = tmp.mNext;
+
+            __y.mPrev = &__x;
+            __x.mPrev = &__y;
         }
     };
 

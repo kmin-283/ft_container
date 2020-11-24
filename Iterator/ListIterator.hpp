@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:41:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/10/31 14:20:41 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:46:08 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,34 +317,17 @@ namespace ft
         }
         virtual ~ConstReverseListIterator() {}
     };
-} // namespace ft
+    
+    template <typename Val>
+    inline bool operator==(const ListIterator<Val> &x, const ConstListIterator<Val> &y)
+    {
+        return (x.mNode == y.mNode);
+    }
+    template <typename Val>
+    inline bool operator!=(const ListIterator<Val> &x, const ConstListIterator<Val> &y)
+    {
+        return (x.mNode != y.mNode);
+    }
 
-template <typename Val>
-inline bool operator==(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
-{
-    return (x.mNode == y.mNode);
-}
-template <typename Val>
-inline bool operator!=(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
-{
-    return (x.mNode != y.mNode);
-}
-template <typename Val>
-inline bool operator>(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
-{
-    return (x.mNode > y.mNode);
-}
-template <typename Val>
-inline bool operator>=(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
-{
-    return (x.mNode >= y.mNode);
-}template <typename Val>
-inline bool operator<(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
-{
-    return (x.mNode < y.mNode);
-}
-template <typename Val>
-inline bool operator<=(const ft::ListIterator<Val> &x, const ft::ConstListIterator<Val> &y)
-{
-    return (x.mNode <= y.mNode);
-}
+
+} // namespace ft

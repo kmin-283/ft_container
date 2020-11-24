@@ -6,10 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/23 21:27:10 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:46:10 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include <memory>
 #include "./tree.hpp"
 
@@ -60,7 +61,7 @@ namespace ft
         typedef typename _Rep_type::difference_type                     difference_type;
         typedef typename _Rep_type::reverse_iterator                    reverse_iterator;
         typedef typename _Rep_type::const_reverse_iterator              const_reverse_iterator;
-
+    
         explicit map(const _Compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : mTree(__comp, __a)
         {}
@@ -213,53 +214,56 @@ namespace ft
         }
 
         template<typename _K1, typename _T1, typename _C1, typename _A1>
-        friend bool operator==(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
+        friend bool operator==(const ft::map<_K1, _T1, _C1, _A1> &, const ft::map<_K1, _T1, _C1, _A1> &);
         template<typename _K1, typename _T1, typename _C1, typename _A1>
-        friend bool operator<(const map<_K1, _T1, _C1, _A1>&, const map<_K1, _T1, _C1, _A1>&);
+        friend bool operator<(const map<_K1, _T1, _C1, _A1> &, const map<_K1, _T1, _C1, _A1> &);
+        
         ~map()
         {}
     };
-}
+    
+    template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+    inline bool operator==(const map<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const map<_Key, _Tp, _Compare, _Alloc> &__y)
+    {
+        return (__x.mTree == __y.mTree);
+    }
+    template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+    inline bool operator!=(const map<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const map<_Key, _Tp, _Compare, _Alloc> &__y)
+    {
+        return (!(__x == __y));
+    }
+    template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+    inline bool operator<(const map<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const map<_Key, _Tp, _Compare, _Alloc> &__y)
+    {
+        return (__x.mTree < __y.mTree);
+    }
+    template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+    inline bool operator>(const map<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const map<_Key, _Tp, _Compare, _Alloc> &__y)
+    {
+        return (__y < __x);
+    }
+    template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+    inline bool operator<=(const map<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const map<_Key, _Tp, _Compare, _Alloc> &__y)
+    {
+        return (!(__x < __y));
+    }
+    template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+    inline bool operator>=(const map<_Key, _Tp, _Compare, _Alloc> &__x,
+                            const map<_Key, _Tp, _Compare, _Alloc> &__y)
+    {
+        return (!(__y < __x));
+    }
+    template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
+    inline void swap(map<_Key, _Tp, _Compare, _Alloc> &__x,
+                            map<_Key, _Tp, _Compare, _Alloc> &__y)
+    {
+        __x.swap(__y);
+    }
+} //namespace ft
 
-template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-inline bool operator==(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
-                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
-{
-    return (__x.mTree == __y.mTree);
-}
-template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-inline bool operator!=(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
-                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
-{
-    return (!(__x == __y));
-}
-template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-inline bool operator<(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
-                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
-{
-    return (__x.mTree < __y.mTree);
-}
-template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-inline bool operator>(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
-                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
-{
-    return (__y.mTree < __x.mTree);
-}
-template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-inline bool operator<=(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
-                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
-{
-    return (!(__x.mTree < __y.mTree));
-}
-template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-inline bool operator>=(const ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
-                        const ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
-{
-    return (!(__y.mTree < __x.mTree));
-}
-template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
-inline void swap(ft::map<_Key, _Tp, _Compare, _Alloc> &__x,
-                        ft::map<_Key, _Tp, _Compare, _Alloc> &__y)
-{
-    __x.swap(__y);
-}
+

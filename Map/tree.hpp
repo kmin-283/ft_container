@@ -6,10 +6,11 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/23 22:57:32 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/24 16:46:11 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#pragma once
 #include "../Iterator/MapIterator.hpp"
 #include <exception>
 #include <functional>
@@ -777,79 +778,48 @@ namespace ft
             }
             return (std::pair<const_iterator, const_iterator>(const_iterator(__y), const_iterator(__y)));
         }
-        // bool __rb_verify() const
-        // {
-        //     if (mImpl.mNodeCount == 0 || begin() == end())
-        //         return mImpl.mNodeCount == 0 && begin() == end() && this->mImpl.mHeader._M_left == mEnd() && this->mImpl.mHeader._M_right == mEnd();
-
-        //     unsigned int __len = red_black_tree_black_count(mLeftMost(), mRoot());
-        //     for (const_iterator __it = begin(); __it != end(); ++__it)
-        //     {
-        //         _Const_Link_type __x = static_cast<_Const_Link_type>(__it.mNode);
-        //         _Const_Link_type __L = sLeft(__x);
-        //         _Const_Link_type __R = sRight(__x);
-
-        //         if (__x->mColor == RED)
-        //             if ((__L && __L->mColor == RED) || (__R && __R->mColor == RED))
-        //                 return false;
-
-        //         if (__L && mImpl.mKeyCompare(sKey(__x), sKey(__L)))
-        //             return false;
-        //         if (__R && mImpl.mKeyCompare(sKey(__R), sKey(__x)))
-        //             return false;
-
-        //         if (!__L && !__R && red_black_tree_black_count(__x, mRoot()) != __len)
-        //             return false;
-        //     }
-
-        //     if (mLeftMost() != rb_tree_node_base::S_minimum(mRoot()))
-        //         return false;
-        //     if (mRightMost() != rb_tree_node_base::S_maximum(mRoot()))
-        //         return false;
-        //     return true;
-        // }
     };
-} // namespace ft
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    inline bool operator==(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
+                        const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
+    {
+        return (__x.size() == __y.size() && std::equal(__x.begin(), __x.end(), __y.begin()));
+    }
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    inline bool operator<(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
+                        const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
+    {
+        return (std::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end()));
+    }
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    inline bool operator!=(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
+                        const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
+    {
+        return (!(__x == __y));
+    }
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    inline bool operator>(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
+                        const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
+    {
+        return (__y < __x);
+    }
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    inline bool operator<=(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
+                        const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
+    {
+        return (!(__y < __x));
+    }
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    inline bool operator>=(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
+                        const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
+    {
+        return (!(__x < __y));
+    }
+    template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
+    inline void swap(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
+                    const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
+    {
+        __x.swap(__y);
+    }
 
-template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-inline bool operator==(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
-                       const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
-{
-    return (__x.size() == __y.size() && std::equal(__x.begin(), __x.end(), __y.begin()));
-}
-template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-inline bool operator<(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
-                      const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
-{
-    return (std::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end()));
-}
-template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-inline bool operator!=(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
-                       const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
-{
-    return (!(__x == __y));
-}
-template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-inline bool operator>(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
-                      const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
-{
-    return (__y < __x);
-}
-template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-inline bool operator<=(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
-                       const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
-{
-    return (!(__y < __x));
-}
-template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-inline bool operator>=(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
-                       const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
-{
-    return (!(__x < __y));
-}
-template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
-inline void swap(const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
-                 const ft::red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
-{
-    __x.swap(__y);
-}
+} // namespace ft
