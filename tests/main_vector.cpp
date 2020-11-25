@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/26 10:06:39 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 21:34:27 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/25 20:27:45 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,10 @@ int main()
 
     out1 << "myvector testing" << std::endl;
     out1 << std::endl;
+
+    ft::vector<ft::vector<int> > v;
+    v.reserve(5);
+    ft::vector<int>* vp = &v[0];
 
     ft::vector<int> first;                                // empty vector of ints
     ft::vector<int> second (4,100);                       // four ints with value 100
