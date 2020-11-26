@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 16:02:36 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/25 20:39:06 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/26 19:40:28 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,12 @@ namespace ft
         {
             return *this += -__n;
         }
+        _Self operator-(difference_type __n) const
+        {
+            _Self __tmp = *this;
+            
+            return (__tmp -= __n);
+        }
         reference operator[](difference_type __n) const
         {
             return (*(*this + __n));
@@ -254,6 +260,12 @@ namespace ft
         {
             return *this += -__n;
         }
+        _Self operator-(difference_type __n) const
+        {
+            _Self __tmp = *this;
+            
+            return (__tmp -= __n);
+        }
         reference operator[](difference_type __n) const
         {
             return (*(*this + __n));
@@ -325,5 +337,24 @@ namespace ft
     inline bool operator>=(const DequeIterator<T, _RefL, _PtrL> &__x, const DequeIterator<T, _RefR, _PtrR> &__y)
     {
         return !(__x < __y);
+    }
+    template <typename T, typename _Ref, typename _Ptr>
+    inline typename DequeIterator<T, _Ref, _Ptr>::difference_type \
+    operator-(const DequeIterator<T, _Ref, _Ptr> &__x, const DequeIterator<T, _Ref, _Ptr> &__y)
+    {
+        return typename DequeIterator<T, _Ref, _Ptr>::difference_type(DequeIterator<T, _Ref, _Ptr>::sBufferSize()) \
+        * (__x.mNode - __y.mNode - 1) + (__x.mCur - __x.mFirst) + (__y.mLast - __y.mCur);
+    }
+    template <typename T, typename _RefL, typename _PtrL, typename _RefR, typename _PtrR>
+    inline typename DequeIterator<T, _RefL, _PtrL>::difference_type \
+    operator-(const DequeIterator<T, _RefL, _PtrL> &__x, const DequeIterator<T, _RefR, _PtrR> &__y)
+    {
+        return typename DequeIterator<T, _RefL, _PtrL>::difference_type(DequeIterator<T, _RefL, _PtrL>::sBufferSize()) \
+        * (__x.mNode - __y.mNode - 1) + (__x.mCur - __x.mFirst) + (__y.mLast - __y.mCur);
+    }
+    template<typename T, typename _Ref, typename _Ptr>
+    inline DequeIterator<T, _Ref, _Ptr> operator+(typename DequeIterator<T, _Ref, _Ptr>::difference_type __n, const DequeIterator<T, _Ref, _Ptr> &__x)
+    {
+        return __x + __n;
     }
 } // namespace ft
