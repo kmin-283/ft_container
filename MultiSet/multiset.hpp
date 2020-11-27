@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 10:58:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/27 15:14:42 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:59:01 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ namespace ft
         typedef _Alloc                      allocator_type;
     private:
         typedef typename _Alloc::template rebind<_Key>::other _Key_alloc_type;
-        typedef red_black_tree<key_type, value_type, std::_Identity<value_type>, key_compare, _Key_alloc_type> _Rep_type;
+        typedef red_black_tree<key_type, value_type, ft::_Identity<value_type>, key_compare, _Key_alloc_type> _Rep_type;
         _Rep_type mTree;
     public:
         typedef typename _Key_alloc_type::pointer               pointer;

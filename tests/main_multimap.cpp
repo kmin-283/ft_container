@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 20:34:12 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/28 00:05:59 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,20 +297,26 @@ int main()
     out1 << "equal_range check" << std::endl;
     out1 << std::endl;
 
-    ft::multimap<char, int> mymap9;
+    ft::multimap<char,int> myymm;
 
-    mymap9.insert(std::pair<char, int> ('a', 10));
-    mymap9.insert(std::pair<char, int>('b', 15));
-    mymap9.insert(std::pair<char, int>('b', 30));
+    myymm.insert(std::pair<char,int>('a',10));
+    myymm.insert(std::pair<char,int>('b',20));
+    myymm.insert(std::pair<char,int>('b',30));
+    myymm.insert(std::pair<char,int>('b',40));
+    myymm.insert(std::pair<char,int>('c',50));
+    myymm.insert(std::pair<char,int>('c',60));
+    myymm.insert(std::pair<char,int>('d',60));
 
-    std::pair<ft::multimap<char, int>::iterator, ft::multimap<char, int>::iterator> ret9;
-    ret9 = mymap9.equal_range('b');
-
-    out1 << "lower bound points to: ";
-    out1 << ret9.first->first << " => " << ret9.first->second << '\n';
-
-    out1 << "upper bound points to: ";
-    out1 << ret9.second->first << " => " << ret9.second->second << '\n';
+    out1 << "mymm contains:\n";
+    for (char ch='a'; ch<='d'; ch++)
+    {
+        std::pair <ft::multimap<char,int>::iterator, ft::multimap<char,int>::iterator> myyyret;
+        myyyret = myymm.equal_range(ch);
+        out1 << ch << " =>";
+        for (ft::multimap<char,int>::iterator it=myyyret.first; it!=myyyret.second; ++it)
+        out1 << ' ' << it->second;
+        out1 << '\n';
+    }
 
     out1.close();
 
@@ -580,21 +586,26 @@ int main()
     out2 << "equal_range check" << std::endl;
     out2 << std::endl;
 
-    std::multimap<char, int> stlmap9;
+    std::multimap<char,int> stllmm;
 
-    stlmap9.insert(std::pair<char, int> ('a', 10));
-    stlmap9.insert(std::pair<char, int>('b', 15));
-    stlmap9.insert(std::pair<char, int>('b', 30));
+    stllmm.insert(std::pair<char,int>('a',10));
+    stllmm.insert(std::pair<char,int>('b',20));
+    stllmm.insert(std::pair<char,int>('b',30));
+    stllmm.insert(std::pair<char,int>('b',40));
+    stllmm.insert(std::pair<char,int>('c',50));
+    stllmm.insert(std::pair<char,int>('c',60));
+    stllmm.insert(std::pair<char,int>('d',60));
 
-    std::pair<std::multimap<char, int>::iterator, std::multimap<char, int>::iterator> stlret9;
-    stlret9 = stlmap9.equal_range('b');
-
-    out2 << "lower bound points to: ";
-    out2 << stlret9.first->first << " => " << stlret9.first->second << '\n';
-
-    out2 << "upper bound points to: ";
-    out2 << stlret9.second->first << " => " << stlret9.second->second << '\n';
-
+    out2 << "mymm contains:\n";
+    for (char ch='a'; ch<='d'; ch++)
+    {
+        std::pair <std::multimap<char,int>::iterator, std::multimap<char,int>::iterator> stllret;
+        stllret = stllmm.equal_range(ch);
+        out2 << ch << " =>";
+        for (std::multimap<char,int>::iterator it=stllret.first; it!=stllret.second; ++it)
+        out2 << ' ' << it->second;
+        out2 << '\n';
+    }
     out2.close();
     return (0);
 }

@@ -1,4 +1,4 @@
 1c1
-< myset testing
+< mymultimap testing
 ---
-> stlset testing
+> STLmultimap testing
