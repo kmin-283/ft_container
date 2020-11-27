@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/27 23:31:40 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:57:25 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,18 @@ namespace ft
         {
             return (__x.first);
         }
+    };
+
+    template<typename _Pair>
+    struct _Identity : public std::unary_function<_Pair, _Pair>
+    {
+      _Pair&
+      operator()(_Pair& __x) const
+      { return __x; }
+
+      const _Pair&
+      operator()(const _Pair& __x) const
+      { return __x; }
     };
 
     template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc = std::allocator<_Val> >
