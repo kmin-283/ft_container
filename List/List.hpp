@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/25 01:52:36 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 22:21:43 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -595,7 +595,7 @@ namespace ft
     template <typename _Tp, typename _Alloc>
     inline bool operator<=(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
     {
-        return !(__y == __x);
+        return !(__y < __x);
     }
     template <typename _Tp, typename _Alloc>
     inline bool operator>=(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
@@ -603,7 +603,7 @@ namespace ft
         return !(__x < __y);
     }
     template <typename _Tp, typename _Alloc>
-    inline void swap(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
+    inline void swap(list<_Tp, _Alloc> &__x, list<_Tp, _Alloc> &__y)
     {
         __x.swap(__y);
     }

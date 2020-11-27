@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:05 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:47:50 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 22:30:08 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -305,6 +305,19 @@ int main()
     out1 << "upper bound points to: ";
     out1 << ret9.second->first << " => " << ret9.second->second << '\n';
 
+    if (mymap9==mymap8)
+        out1 << "a and b are same\n";
+    if (mymap9!=mymap8)
+        out1 << "a and b are not the same\n";
+    if (mymap9<mymap8)
+        out1 << "a is smaller than b\n";
+    if (mymap9<=mymap8)
+        out1 << "a is smaller than or equal to b\n";
+    if (mymap9>mymap8)
+        out1 << "a is larger than b\n";
+    if (mymap9>=mymap8)
+        out1 << "a is larger than or equal to b\n";
+
     out1.close();
 
     ///////////////////////////////////////////////////////////////////////////////////
@@ -581,6 +594,19 @@ int main()
 
     out2 << "upper bound points to: ";
     out2 << stlret9.second->first << " => " << stlret9.second->second << '\n';
+
+    if (stlmap9==stlmap8)
+        out2 << "a and b are same\n";
+    if (stlmap9!=stlmap8)
+        out2 << "a and b are not the same\n";
+    if (stlmap9<stlmap8)
+        out2 << "a is smaller than b\n";
+    if (stlmap9<=stlmap8)
+        out2 << "a is smaller than or equal to b\n";
+    if (stlmap9>stlmap8)
+        out2 << "a is larger than b\n";
+    if (stlmap9>=stlmap8)
+        out2 << "a is larger than or equal to b\n";
 
     out2.close();
     return (0);

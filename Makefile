@@ -1,11 +1,11 @@
 # NAME = container
 
 CC = clang++
-CFLAGS = -std=c++98 -g
+CFLAGS = -std=c++98 -Wall -Werror -Wextra
 INCS =	Node/Node.hpp Iterator/Iterator.hpp List/List.hpp
 
 SRCS = $(addprefix ./tests/, main_list.cpp main_vector.cpp main_vector_stl.cpp main_map.cpp main_stack.cpp main_queue.cpp \
-								main_set.cpp main_multimap.cpp main_multiset.cpp main_deque.cpp)
+								main_set.cpp main_multimap.cpp main_multiset.cpp)
 
 OBJS = $(SRCS:%.cpp=%.o)
 
@@ -18,7 +18,6 @@ QUEUE = $(addprefix ./tests/, main_queue.cpp)
 SET = $(addprefix ./tests/, main_set.cpp)
 MULTIMAP = $(addprefix ./tests/, main_multimap.cpp)
 MULTISET = $(addprefix ./tests/, main_multiset.cpp)
-DEQUE = $(addprefix ./tests/, main_deque.cpp)
 
 TEST_RESULT = $(addprefix ./result/, my stl)
 
@@ -70,11 +69,6 @@ multimap: $(OBJS)
 multiset: $(OBJS)
 			$(CC) $(CFLAGS) -o multiset_container $(MULTISET) -I ./MultiSet
 			./multiset_container
-			diff $(TEST_RESULT) > ./result/result || exit 0
-
-deque: $(OBJS)
-			$(CC) $(CFLAGS) -o deque_container $(DEQUE) -I ./Deque
-			./deque_container
 			diff $(TEST_RESULT) > ./result/result || exit 0
 
 clean:

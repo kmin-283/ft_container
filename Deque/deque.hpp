@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 12:28:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/26 21:37:03 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/26 21:56:24 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,7 +161,7 @@ namespace ft
             mInitializeDispatch(__first, __last, tf_type());
         }
         deque(const deque &__x)
-            : _Base(__x.mGetTpAllocator(), __x.size())
+            : _Base(__x.getAllocator(), __x.size())
         {
             std::uninitialized_copy(__x.begin(), __x.end(), this->mImpl.mStart);
         }

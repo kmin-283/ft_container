@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 10:58:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:47:33 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 15:14:42 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ namespace ft
         }
         multiset (const multiset &__x)
             : mTree(__x.mTree)
+        {}
+        ~multiset()
         {}
         multiset& operator=(const multiset &__x)
         {

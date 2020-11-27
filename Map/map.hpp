@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 11:20:31 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:46:10 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 22:31:42 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,13 +250,13 @@ namespace ft
     inline bool operator<=(const map<_Key, _Tp, _Compare, _Alloc> &__x,
                             const map<_Key, _Tp, _Compare, _Alloc> &__y)
     {
-        return (!(__x < __y));
+        return (!(__y < __x));
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
     inline bool operator>=(const map<_Key, _Tp, _Compare, _Alloc> &__x,
                             const map<_Key, _Tp, _Compare, _Alloc> &__y)
     {
-        return (!(__y < __x));
+        return (!(__x < __y));
     }
     template <typename _Key, typename _Tp, typename _Compare, typename _Alloc>
     inline void swap(map<_Key, _Tp, _Compare, _Alloc> &__x,

@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:05:25 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/25 01:48:02 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 22:20:41 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -447,6 +447,47 @@ int main()
         out1 << ' ' << *it15;
     out1 << '\n';
 
+    out1 << "relational operators testing" << std::endl;
+    out1 << std::endl;
+
+    ft::list<int> aa;
+    aa.push_back(10);
+    aa.push_back(20);
+    aa.push_back(30);
+    ft::list<int> bb;
+    bb.push_back(10);
+    bb.push_back(20);
+    bb.push_back(30);
+    ft::list<int> cc;
+    cc.push_back(30);
+    cc.push_back(20);
+    cc.push_back(10);
+
+    if (aa==bb) out1 << "a and b are equal\n";
+    if (bb!=cc) out1 << "b and c are not equal\n";
+    if (bb<cc) out1 << "b is less than c\n";
+    if (cc>bb) out1 << "c is greater than b\n";
+    if (aa<=bb) out1 << "a is less than or equal to b\n";
+    if (aa>=bb) out1 << "a is greater than or equal to b\n";
+
+    out1 << "non-member swap testing" << std::endl;
+    out1 << std::endl;
+
+    ft::list<int> myffoo (3,100);   // three ints with a value of 100
+    ft::list<int> mybbar (5,200);   // five ints with a value of 200
+
+    ft::swap(myffoo,mybbar);
+
+    out1 << "foo contains:";
+    for (ft::list<int>::iterator it = myffoo.begin(); it!=myffoo.end(); ++it)
+        out1 << ' ' << *it;
+    out1 << '\n';
+
+    out1 << "bar contains:";
+    for (ft::list<int>::iterator it = mybbar.begin(); it!=mybbar.end(); ++it)
+        out1 << ' ' << *it;
+    out1 << '\n';
+
     out1.close();
     /////////////////////////////////////////////////////////////////////////////////////
     
@@ -842,6 +883,47 @@ int main()
 
     for (stl15=stllist15.begin(); stl15!=stllist15.end(); ++stl15)
         out2 << ' ' << *stl15;
+    out2 << '\n';
+
+    out2 << "relational operators testing" << std::endl;
+    out2 << std::endl;
+
+    std::list<int> stlaa;
+    stlaa.push_back(10);
+    stlaa.push_back(20);
+    stlaa.push_back(30);
+    std::list<int> stlbb;
+    stlbb.push_back(10);
+    stlbb.push_back(20);
+    stlbb.push_back(30);
+    std::list<int> stlcc;
+    stlcc.push_back(30);
+    stlcc.push_back(20);
+    stlcc.push_back(10);
+
+    if (stlaa==stlbb) out2 << "a and b are equal\n";
+    if (stlbb!=stlcc) out2 << "b and c are not equal\n";
+    if (stlbb<stlcc) out2 << "b is less than c\n";
+    if (stlcc>stlbb) out2 << "c is greater than b\n";
+    if (stlaa<=stlbb) out2 << "a is less than or equal to b\n";
+    if (stlaa>=stlbb) out2 << "a is greater than or equal to b\n";
+
+    out2 << "non-member swap testing" << std::endl;
+    out2 << std::endl;
+
+    std::list<int> stllfoo (3,100);   // three ints with a value of 100
+    std::list<int> stllbar (5,200);   // five ints with a value of 200
+
+    std::swap(stllfoo,stllbar);
+
+    out2 << "foo contains:";
+    for (std::list<int>::iterator it = stllfoo.begin(); it!=stllfoo.end(); ++it)
+        out2 << ' ' << *it;
+    out2 << '\n';
+
+    out2 << "bar contains:";
+    for (std::list<int>::iterator it = stllbar.begin(); it!=stllbar.end(); ++it)
+        out2 << ' ' << *it;
     out2 << '\n';
 
     out2.close();

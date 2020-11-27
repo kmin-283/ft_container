@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:38:35 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:46:57 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 15:14:10 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,15 @@ namespace ft
             : mTree(__comp, __a)
         {}
         template <class InputIterator>
-        set (InputIterator __first, InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
+        set(InputIterator __first, InputIterator __last, const key_compare &__comp = key_compare(), const allocator_type &__a = allocator_type())
             : mTree(__comp, __a)
         {
             mTree.mInsertUnique(__first, __last);
         }
-        set (const set &__x)
+        set(const set &__x)
             : mTree(__x.mTree)
+        {}
+        ~set()
         {}
         set& operator=(const set &__x)
         {
