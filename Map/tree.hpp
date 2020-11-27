@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/27 23:24:51 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:31:40 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -783,7 +783,23 @@ namespace ft
     inline bool operator==(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
                         const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
     {
-        return (__x.size() == __y.size() && std::equal(__x.begin(), __x.end(), __y.begin()));
+        typedef typename red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator const_iterator;
+
+        bool ret = true;
+        const_iterator begin_x = __x.begin();
+        const_iterator end_x = __x.end();
+        const_iterator begin_y = __y.begin();
+
+        for (; begin_x != end_x; ++begin_x, ++begin_y)
+        {
+            if (*begin_x == *begin_y)
+            {
+                ret = false;
+                break ;
+            }
+        }
+
+        return (__x.size() == __y.size() && ret);
     }
     template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
     inline bool operator<(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
@@ -791,16 +807,16 @@ namespace ft
     {
         typedef typename red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator const_iterator;
 
-        const_iterator it1 = __x.begin();
-        const_iterator end1 = __x.end();
-        const_iterator it3 = __y.begin();
-        const_iterator end2 = __y.end();
+        const_iterator begin_x = __x.begin();
+        const_iterator end_x = __x.end();
+        const_iterator begin_y = __y.begin();
+        const_iterator end_y = __y.end();
 
-        for (; it3 != end2; ++it1, ++it3)
+        for (; begin_y != end_y; ++begin_x, ++begin_y)
         {
-            if (it1 == end1 || *it1 < *it3)
+            if (begin_x == end_x || *begin_x < *begin_y)
                 return (true);
-            if (*it3 < *it1)
+            if (*begin_y < *begin_x)
                 return (false);
         }
         return (false);
