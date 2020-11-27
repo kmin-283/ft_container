@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/27 22:21:43 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:23:36 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -580,7 +580,21 @@ namespace ft
     template <typename _Tp, typename _Alloc>
     inline bool operator<(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)
     {
-        return (std::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end()));
+        typedef typename list<_Tp, _Alloc>::const_iterator const_iterator;
+
+        const_iterator it1 = __x.begin();
+        const_iterator end1 = __x.end();
+        const_iterator it3 = __y.begin();
+        const_iterator end2 = __y.end();
+
+        for (; it3 != end2; ++it1, ++it3)
+        {
+            if (it1 == end1 || *it1 < *it3)
+                return (true);
+            if (*it3 < *it1)
+                return (false);
+        }
+        return (false);
     }
     template <typename _Tp, typename _Alloc>
     inline bool operator!=(const list<_Tp, _Alloc> &__x, const list<_Tp, _Alloc> &__y)

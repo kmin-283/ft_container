@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/02 15:02:26 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:46:11 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:24:51 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -789,7 +789,21 @@ namespace ft
     inline bool operator<(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,
                         const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__y)
     {
-        return (std::lexicographical_compare(__x.begin(), __x.end(), __y.begin(), __y.end()));
+        typedef typename red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc>::const_iterator const_iterator;
+
+        const_iterator it1 = __x.begin();
+        const_iterator end1 = __x.end();
+        const_iterator it3 = __y.begin();
+        const_iterator end2 = __y.end();
+
+        for (; it3 != end2; ++it1, ++it3)
+        {
+            if (it1 == end1 || *it1 < *it3)
+                return (true);
+            if (*it3 < *it1)
+                return (false);
+        }
+        return (false);
     }
     template <typename _Key, typename _Val, typename _KeyOfValue, typename _Compare, typename _Alloc>
     inline bool operator!=(const red_black_tree<_Key, _Val, _KeyOfValue, _Compare, _Alloc> &__x,

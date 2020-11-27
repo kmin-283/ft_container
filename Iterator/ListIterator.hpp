@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 14:41:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/24 16:46:08 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:23:08 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ namespace ft
 
         typedef ListIterator<T> _Self;
         typedef Node<T> _Node;
+        
 #ifdef __MAC__
         typedef ptrdiff_t difference_type; //mac에서 사용할 때
 #endif
