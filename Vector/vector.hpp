@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/27 23:23:58 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:35:14 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -539,7 +539,23 @@ namespace ft
     template <typename _Tp, typename _Alloc>
     inline bool operator==(const vector<_Tp, _Alloc>& __x, const vector<_Tp, _Alloc>& __y)
     {
-        return (__x.size() == __y.size() && std::equal(__x.begin(), __x.end(), __y.begin()));
+        typedef typename vector<_Tp, _Alloc>::const_iterator const_iterator;
+
+        bool ret = true;
+        const_iterator begin_x = __x.begin();
+        const_iterator end_x = __x.end();
+        const_iterator begin_y = __y.begin();
+
+        for (; begin_x != end_x; ++begin_x, ++begin_y)
+        {
+            if (*begin_x == *begin_y)
+            {
+                ret = false;
+                break ;
+            }
+        }
+
+        return (__x.size() == __y.size() && ret);
     }
     template <typename _Tp, typename _Alloc>
     inline bool operator<(const vector<_Tp, _Alloc> &__x, const vector<_Tp, _Alloc> &__y)
