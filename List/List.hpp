@@ -6,7 +6,7 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/12 13:19:12 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/27 23:23:36 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:42:46 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -582,16 +582,16 @@ namespace ft
     {
         typedef typename list<_Tp, _Alloc>::const_iterator const_iterator;
 
-        const_iterator it1 = __x.begin();
-        const_iterator end1 = __x.end();
-        const_iterator it3 = __y.begin();
-        const_iterator end2 = __y.end();
+        const_iterator begin_x = __x.begin();
+        const_iterator end_x = __x.end();
+        const_iterator begin_y = __y.begin();
+        const_iterator end_y = __y.end();
 
-        for (; it3 != end2; ++it1, ++it3)
+        for (; begin_y != end_y; ++begin_x, ++begin_y)
         {
-            if (it1 == end1 || *it1 < *it3)
+            if (begin_x == end_x || *begin_x < *begin_y)
                 return (true);
-            if (*it3 < *it1)
+            if (*begin_y < *begin_x)
                 return (false);
         }
         return (false);

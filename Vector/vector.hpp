@@ -6,12 +6,13 @@
 /*   By: kmin <kmin@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/19 14:33:58 by kmin              #+#    #+#             */
-/*   Updated: 2020/11/27 23:35:14 by kmin             ###   ########.fr       */
+/*   Updated: 2020/11/27 23:43:59 by kmin             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 #include <memory>
+#include "../algorithms/algo.hpp"
 #include "../types/types.hpp"
 #include "../Iterator/VectorIterator.hpp"
 
@@ -521,7 +522,7 @@ namespace ft
         {
             if (max_size() - size() < __n)
                 std::__throw_length_error(__s);
-            const size_type __len = size() + std::max(size(), __n);
+            const size_type __len = size() + ft::mymax(size(), __n);
             return (__len < size() || __len > max_size()) ? max_size() : __len;
         }
         void mEraseAtEnd(pointer __pos)
