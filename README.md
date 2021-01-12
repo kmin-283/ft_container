@@ -14,6 +14,16 @@ make list / relist
 make vector / revector
 
 make map / remap
+
+make stack / restack
+
+make queue / requeue
+
+make set / reset
+
+make multimap / remultimap
+
+make multiset / remultiset
 ```
 
 Studying STL
