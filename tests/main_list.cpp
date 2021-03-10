@@ -489,8 +489,23 @@ int main()
     out1 << '\n';
 
     out1.close();
+
+
+
+
+
+
+
     /////////////////////////////////////////////////////////////////////////////////////
     
+
+
+
+
+
+
+
+
     out2 << "stllist testing" << std::endl;
     out2 << std::endl;
 
@@ -586,7 +601,7 @@ int main()
     out2 << "front and back testing" << std::endl;
     out2 << std::endl;
 
-    ft::list<int> stllist5;
+    std::list<int> stllist5;
 
     stllist5.push_back(77);
     stllist5.push_back(22);
@@ -605,7 +620,7 @@ int main()
     }
 
     out2 << "mylist contains:";
-    for (ft::list<int>::iterator it=stllist5.begin(); it!=stllist5.end() ; ++it)
+    for (std::list<int>::iterator it=stllist5.begin(); it!=stllist5.end() ; ++it)
         out2 << ' ' << *it;
 
     out2 << '\n';

@@ -19,19 +19,12 @@ namespace ft
         NodeBase *mNext;
         NodeBase *mPrev;
 
-        void hook_front(NodeBase *const __position)
+        void hooking(NodeBase *const __position)
         {
             __position->mPrev->mNext = this;
             this->mPrev = __position->mPrev;
             __position->mPrev = this;
             this->mNext = __position;
-        }
-        void hook_end(NodeBase *const __position)
-        {
-            __position->mPrev->mNext = this;
-            this->mNext = __position;
-            this->mPrev = __position->mPrev;
-            __position->mPrev = this;
         }
         void unhook()
         {

@@ -526,26 +526,12 @@ namespace ft
         void mInsert(iterator __position, _InputIterator __first)
         {
             _Node *__tmp = mCreateNode(*__first);
-            if (__position == begin())
-            {
-                __tmp->hook_front(__position.mNode);
-            }
-            else if (__position == end())
-                __tmp->hook_end(__position.mNode);
-            else
-                __tmp->hook_front(__position.mNode);
+            __tmp->hooking(__position.mNode);
         }
         void mInsert(iterator __position, const value_type &__x)
         {
             _Node *__tmp = mCreateNode(__x);
-            if (__position == begin())
-            {
-                __tmp->hook_front(__position.mNode);
-            }
-            else if (__position == end())
-                __tmp->hook_end(__position.mNode);
-            else
-                __tmp->hook_front(__position.mNode);
+            __tmp->hooking(__position.mNode);
         }
         void mErase(iterator __position)
         {
